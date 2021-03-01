@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Data.Doublets.Xml", "csharp\Platform.Data\Platform.Data.Doublets.Xml.csproj", "{22C60EAA-7A49-44B2-BC9F-2D67C0390526}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Data.Doublets.Xml", "csharp\Platform.Data.Doublets.Xml\Platform.Data.Doublets.Xml.csproj", "{22C60EAA-7A49-44B2-BC9F-2D67C0390526}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Data.Doublets.Xml.Tests", "csharp\Platform.Data.Tests\Platform.Data.Doublets.Xml.Tests.csproj", "{795DFCBA-54B4-4EC2-BC2D-C1A461864118}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Data.Doublets.Xml.Tests", "csharp\Platform.Data.Doublets.Xml.Tests\Platform.Data.Doublets.Xml.Tests.csproj", "{795DFCBA-54B4-4EC2-BC2D-C1A461864118}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
