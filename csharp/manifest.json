@@ -25,6 +25,126 @@
       "version": ""
     },
     {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html",
+          "hash": "mttUWSMjrzijsRMq1hLYQg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.ICommandLineInterface.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.ICommandLineInterface.html",
+          "hash": "y4jYDFHe6BiHGAa0oUyZqA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.IXmlStorage-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.IXmlStorage-1.html",
+          "hash": "gToHN+IBycMNMxDtiBnQ0g=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlElementCounter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.XmlElementCounter.html",
+          "hash": "534XUy1eKW7LY6o7M3Uxjw=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlElementCounterCLI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.XmlElementCounterCLI.html",
+          "hash": "uvnrm/dkrabZPy+qjqUWGg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlImporter-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.XmlImporter-1.html",
+          "hash": "ef/954AR0/XzPLw1P1DtxQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlImporterCLI.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.XmlImporterCLI.html",
+          "hash": "cdw/hbwNX4437NlZnel35w=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlIndexer-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.XmlIndexer-1.html",
+          "hash": "WOI+2x4gx2AaEAF+NtAnmQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Platform.Data.Doublets.Xml.html",
+          "hash": "28mUvE7QRP/Eeqc4VuUCPA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "obj/api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "5b/06mU5F7vg35IKKJmerA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "log_codes": [
         "InvalidFileLink"
       ],
@@ -33,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "5lNHzhcCKtnTZ2sVSPZLgQ=="
+          "hash": "5ugfHq7LsjZ6YPrItuWYrg=="
         }
       },
       "is_incremental": false,
@@ -55,6 +175,12 @@
           "can_incremental": false,
           "incrementalPhase": "build",
           "total_file_count": 1,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 9,
           "skipped_file_count": 0
         },
         "TocDocumentProcessor": {
