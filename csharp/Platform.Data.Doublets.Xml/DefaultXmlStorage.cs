@@ -46,11 +46,11 @@ namespace Platform.Data.Doublets.Xml
         {
             var markerIndex = _one;
             var meaningRoot = links.GetOrCreate(markerIndex, markerIndex);
-            _unicodeSymbolMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(markerIndex));
-            _unicodeSequenceMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(markerIndex));
-            _elementMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(markerIndex));
-            _textElementMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(markerIndex));
-            _documentMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(markerIndex));
+            _unicodeSymbolMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
+            _unicodeSequenceMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
+            _elementMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
+            _textElementMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
+            _documentMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
         }
 
         public TLink CreateDocument(string name) => Create(_documentMarker, name);
