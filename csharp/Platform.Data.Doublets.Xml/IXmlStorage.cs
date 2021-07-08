@@ -7,6 +7,9 @@ namespace Platform.Data.Doublets.Xml
         TLink CreateDocument(string name);
         TLink CreateElement(string name);
         TLink CreateTextElement(string content);
+        TLink GetDocument(string name);
+        TLink GetElement(string name);
+        TLink GetTextElement(string content);
         void AttachElementToParent(TLink elementToAttach, TLink parent);
     }
 }

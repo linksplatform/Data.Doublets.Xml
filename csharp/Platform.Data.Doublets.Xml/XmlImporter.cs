@@ -98,10 +98,7 @@ namespace Platform.Data.Doublets.Xml {
         {
             public readonly TLink Parent;
 
-            public ElementContext(TLink parent)
-            {
-                Parent = parent;
-            }
+            public ElementContext(TLink parent) => Parent = parent;
         }
     }
 }
