@@ -252,6 +252,57 @@ references:
   fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).CreateTextElement
   nameWithType: IXmlStorage<TLink>.CreateTextElement
   nameWithType.vb: IXmlStorage(Of TLink).CreateTextElement
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetDocument(System.String)
+  name: GetDocument(String)
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetDocument_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.IXmlStorage`1.GetDocument(System.String)
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetDocument(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetDocument(System.String)
+  nameWithType: IXmlStorage<TLink>.GetDocument(String)
+  nameWithType.vb: IXmlStorage(Of TLink).GetDocument(String)
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetDocument*
+  name: GetDocument
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetDocument_
+  commentId: Overload:Platform.Data.Doublets.Xml.IXmlStorage`1.GetDocument
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetDocument
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetDocument
+  nameWithType: IXmlStorage<TLink>.GetDocument
+  nameWithType.vb: IXmlStorage(Of TLink).GetDocument
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetElement(System.String)
+  name: GetElement(String)
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetElement_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.IXmlStorage`1.GetElement(System.String)
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetElement(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetElement(System.String)
+  nameWithType: IXmlStorage<TLink>.GetElement(String)
+  nameWithType.vb: IXmlStorage(Of TLink).GetElement(String)
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetElement*
+  name: GetElement
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetElement_
+  commentId: Overload:Platform.Data.Doublets.Xml.IXmlStorage`1.GetElement
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetElement
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetElement
+  nameWithType: IXmlStorage<TLink>.GetElement
+  nameWithType.vb: IXmlStorage(Of TLink).GetElement
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetTextElement(System.String)
+  name: GetTextElement(String)
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetTextElement_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.IXmlStorage`1.GetTextElement(System.String)
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetTextElement(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetTextElement(System.String)
+  nameWithType: IXmlStorage<TLink>.GetTextElement(String)
+  nameWithType.vb: IXmlStorage(Of TLink).GetTextElement(String)
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetTextElement*
+  name: GetTextElement
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetTextElement_
+  commentId: Overload:Platform.Data.Doublets.Xml.IXmlStorage`1.GetTextElement
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetTextElement
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetTextElement
+  nameWithType: IXmlStorage<TLink>.GetTextElement
+  nameWithType.vb: IXmlStorage(Of TLink).GetTextElement
 - uid: Platform.Data.Doublets.Xml.XmlElementCounter
   name: XmlElementCounter
   href: api/Platform.Data.Doublets.Xml.XmlElementCounter.html
