@@ -102,6 +102,57 @@ references:
   fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).CreateTextElement
   nameWithType: DefaultXmlStorage<TLink>.CreateTextElement
   nameWithType.vb: DefaultXmlStorage(Of TLink).CreateTextElement
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetDocument(System.String)
+  name: GetDocument(String)
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetDocument_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetDocument(System.String)
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetDocument(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetDocument(System.String)
+  nameWithType: DefaultXmlStorage<TLink>.GetDocument(String)
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetDocument(String)
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetDocument*
+  name: GetDocument
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetDocument_
+  commentId: Overload:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetDocument
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetDocument
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetDocument
+  nameWithType: DefaultXmlStorage<TLink>.GetDocument
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetDocument
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetElement(System.String)
+  name: GetElement(String)
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetElement_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetElement(System.String)
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetElement(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetElement(System.String)
+  nameWithType: DefaultXmlStorage<TLink>.GetElement(String)
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetElement(String)
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetElement*
+  name: GetElement
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetElement_
+  commentId: Overload:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetElement
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetElement
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetElement
+  nameWithType: DefaultXmlStorage<TLink>.GetElement
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetElement
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetTextElement(System.String)
+  name: GetTextElement(String)
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetTextElement_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetTextElement(System.String)
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetTextElement(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetTextElement(System.String)
+  nameWithType: DefaultXmlStorage<TLink>.GetTextElement(String)
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetTextElement(String)
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetTextElement*
+  name: GetTextElement
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetTextElement_
+  commentId: Overload:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetTextElement
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetTextElement
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetTextElement
+  nameWithType: DefaultXmlStorage<TLink>.GetTextElement
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetTextElement
 - uid: Platform.Data.Doublets.Xml.ICommandLineInterface
   name: ICommandLineInterface
   href: api/Platform.Data.Doublets.Xml.ICommandLineInterface.html
