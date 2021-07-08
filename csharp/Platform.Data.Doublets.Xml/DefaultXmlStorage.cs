@@ -28,7 +28,7 @@ namespace Platform.Data.Doublets.Xml
         {
             public bool Add(IList<TLink> sequence) => true;
             public bool MightContain(IList<TLink> sequence) => true;
-        }
+        }  
 
         public DefaultXmlStorage(ILinks<TLink> links, bool indexSequenceBeforeCreation, LinkFrequenciesCache<TLink> frequenciesCache)
         {
@@ -55,15 +55,19 @@ namespace Platform.Data.Doublets.Xml
 
         public TLink CreateDocument(string name) => Create(_documentMarker, name);
 
+        public TLink GetDocument(string name) => Get(_documentMarker, name);
+
         public TLink CreateElement(string name) => Create(_elementMarker, name);
+
+        public TLink GetElement(string name) => Get(_elementMarker, name);
 
         public TLink CreateTextElement(string content) => Create(_textElementMarker, content);
 
-        private TLink Create(TLink marker, string content)
-        {
-            var contentSequence = _stringToUnicodeSequenceConverter.Convert(content);
-            return _links.GetOrCreate(marker, contentSequence);
-        }
+        public TLink GetTextElement(string content) => Get(_textElementMarker, content);
+
+        private TLink Create(TLink marker, string content) => _links.GetOrCreate(marker, _stringToUnicodeSequenceConverter.Convert(content)); 
+
+        private TLink Get(TLink marker, string content) => _links.SearchOrDefault(marker, _stringToUnicodeSequenceConverter.Convert(content));
 
         public void AttachElementToParent(TLink elementToAttach, TLink parent) => _links.GetOrCreate(parent, elementToAttach);
     }
