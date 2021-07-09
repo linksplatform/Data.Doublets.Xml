@@ -52,23 +52,21 @@ namespace Platform.Data.Doublets.Xml
             _textElementMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
             _documentMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
         }
-
         public TLink CreateDocument(string name) => Create(_documentMarker, name);
+        public TLink CreateElement(string name) => Create(_elementMarker, name);
+        public TLink CreateTextElement(string content) => Create(_textElementMarker, content);
+        private TLink Create(TLink marker, string content) => _links.GetOrCreate(marker, _stringToUnicodeSequenceConverter.Convert(content));
+        public void AttachElementToParent(TLink elementToAttach, TLink parent) => _links.GetOrCreate(parent, elementToAttach);
 
         public TLink GetDocument(string name) => Get(_documentMarker, name);
-
-        public TLink CreateElement(string name) => Create(_elementMarker, name);
-
-        public TLink GetElement(string name) => Get(_elementMarker, name);
-
-        public TLink CreateTextElement(string content) => Create(_textElementMarker, content);
-
         public TLink GetTextElement(string content) => Get(_textElementMarker, content);
-
-        private TLink Create(TLink marker, string content) => _links.GetOrCreate(marker, _stringToUnicodeSequenceConverter.Convert(content)); 
-
+        public TLink GetElement(string name) => Get(_elementMarker, name);
         private TLink Get(TLink marker, string content) => _links.SearchOrDefault(marker, _stringToUnicodeSequenceConverter.Convert(content));
+        public IList<IList<TLink>> GetChildren(TLink parent) => _links.All(new Link<TLink>(_links.Constants.Any, parent, _links.Constants.Any));
+        
 
-        public void AttachElementToParent(TLink elementToAttach, TLink parent) => _links.GetOrCreate(parent, elementToAttach);
+
+
     }
 }
+   
