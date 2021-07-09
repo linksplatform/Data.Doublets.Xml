@@ -18,7 +18,32 @@ namespace Platform.Data.Doublets.Xml
 
         public XmlExporter(IXmlStorage<TLink> storage) => _storage = storage;
 
-        public Task Export(string file, CancellationToken token) { return default; }
+        public Task Export(string documentName, string fileName, CancellationToken token) 
+        {
+            return Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var document = _storage.GetDocument(documentName);
+                    using (var writer = XmlWriter.Create(fileName))
+                    {
+                        Write(writer, token, new ElementContext(document));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToStringWithAllInnerExceptions());
+                }
+            }, token);
+        }
+
+        private void Write(XmlWriter reader, CancellationToken token, ElementContext context)
+        {
+            var parentContexts = new Stack<ElementContext>();
+            var elements = new Stack<string>(); // Path
+                                                // TODO: If path was loaded previously, skip it.
+
+        }
 
         private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
         
