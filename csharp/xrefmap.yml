@@ -102,6 +102,23 @@ references:
   fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).CreateTextElement
   nameWithType: DefaultXmlStorage<TLink>.CreateTextElement
   nameWithType.vb: DefaultXmlStorage(Of TLink).CreateTextElement
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetChildren(`0)
+  name: GetChildren(TLink)
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetChildren__0_
+  commentId: M:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetChildren(`0)
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetChildren(TLink)
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetChildren(TLink)
+  nameWithType: DefaultXmlStorage<TLink>.GetChildren(TLink)
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetChildren(TLink)
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetChildren*
+  name: GetChildren
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetChildren_
+  commentId: Overload:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetChildren
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.GetChildren
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).GetChildren
+  nameWithType: DefaultXmlStorage<TLink>.GetChildren
+  nameWithType.vb: DefaultXmlStorage(Of TLink).GetChildren
 - uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.GetDocument(System.String)
   name: GetDocument(String)
   href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1_GetDocument_System_String_
@@ -252,6 +269,23 @@ references:
   fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).CreateTextElement
   nameWithType: IXmlStorage<TLink>.CreateTextElement
   nameWithType.vb: IXmlStorage(Of TLink).CreateTextElement
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetChildren(`0)
+  name: GetChildren(TLink)
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetChildren__0_
+  commentId: M:Platform.Data.Doublets.Xml.IXmlStorage`1.GetChildren(`0)
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetChildren(TLink)
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetChildren(TLink)
+  nameWithType: IXmlStorage<TLink>.GetChildren(TLink)
+  nameWithType.vb: IXmlStorage(Of TLink).GetChildren(TLink)
+- uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetChildren*
+  name: GetChildren
+  href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetChildren_
+  commentId: Overload:Platform.Data.Doublets.Xml.IXmlStorage`1.GetChildren
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.IXmlStorage<TLink>.GetChildren
+  fullName.vb: Platform.Data.Doublets.Xml.IXmlStorage(Of TLink).GetChildren
+  nameWithType: IXmlStorage<TLink>.GetChildren
+  nameWithType.vb: IXmlStorage(Of TLink).GetChildren
 - uid: Platform.Data.Doublets.Xml.IXmlStorage`1.GetDocument(System.String)
   name: GetDocument(String)
   href: api/Platform.Data.Doublets.Xml.IXmlStorage-1.html#Platform_Data_Doublets_Xml_IXmlStorage_1_GetDocument_System_String_
@@ -535,6 +569,74 @@ references:
   fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).CreateTextElement
   nameWithType: XmlIndexer<TLink>.CreateTextElement
   nameWithType.vb: XmlIndexer(Of TLink).CreateTextElement
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetChildren(`0)
+  name: GetChildren(TLink)
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetChildren__0_
+  commentId: M:Platform.Data.Doublets.Xml.XmlIndexer`1.GetChildren(`0)
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetChildren(TLink)
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetChildren(TLink)
+  nameWithType: XmlIndexer<TLink>.GetChildren(TLink)
+  nameWithType.vb: XmlIndexer(Of TLink).GetChildren(TLink)
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetChildren*
+  name: GetChildren
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetChildren_
+  commentId: Overload:Platform.Data.Doublets.Xml.XmlIndexer`1.GetChildren
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetChildren
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetChildren
+  nameWithType: XmlIndexer<TLink>.GetChildren
+  nameWithType.vb: XmlIndexer(Of TLink).GetChildren
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetDocument(System.String)
+  name: GetDocument(String)
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetDocument_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.XmlIndexer`1.GetDocument(System.String)
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetDocument(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetDocument(System.String)
+  nameWithType: XmlIndexer<TLink>.GetDocument(String)
+  nameWithType.vb: XmlIndexer(Of TLink).GetDocument(String)
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetDocument*
+  name: GetDocument
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetDocument_
+  commentId: Overload:Platform.Data.Doublets.Xml.XmlIndexer`1.GetDocument
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetDocument
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetDocument
+  nameWithType: XmlIndexer<TLink>.GetDocument
+  nameWithType.vb: XmlIndexer(Of TLink).GetDocument
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetElement(System.String)
+  name: GetElement(String)
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetElement_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.XmlIndexer`1.GetElement(System.String)
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetElement(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetElement(System.String)
+  nameWithType: XmlIndexer<TLink>.GetElement(String)
+  nameWithType.vb: XmlIndexer(Of TLink).GetElement(String)
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetElement*
+  name: GetElement
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetElement_
+  commentId: Overload:Platform.Data.Doublets.Xml.XmlIndexer`1.GetElement
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetElement
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetElement
+  nameWithType: XmlIndexer<TLink>.GetElement
+  nameWithType.vb: XmlIndexer(Of TLink).GetElement
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetTextElement(System.String)
+  name: GetTextElement(String)
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetTextElement_System_String_
+  commentId: M:Platform.Data.Doublets.Xml.XmlIndexer`1.GetTextElement(System.String)
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetTextElement(System.String)
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetTextElement(System.String)
+  nameWithType: XmlIndexer<TLink>.GetTextElement(String)
+  nameWithType.vb: XmlIndexer(Of TLink).GetTextElement(String)
+- uid: Platform.Data.Doublets.Xml.XmlIndexer`1.GetTextElement*
+  name: GetTextElement
+  href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_GetTextElement_
+  commentId: Overload:Platform.Data.Doublets.Xml.XmlIndexer`1.GetTextElement
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.XmlIndexer<TLink>.GetTextElement
+  fullName.vb: Platform.Data.Doublets.Xml.XmlIndexer(Of TLink).GetTextElement
+  nameWithType: XmlIndexer<TLink>.GetTextElement
+  nameWithType.vb: XmlIndexer(Of TLink).GetTextElement
 - uid: Platform.Data.Doublets.Xml.XmlIndexer`1.ToElements(System.String)
   name: ToElements(String)
   href: api/Platform.Data.Doublets.Xml.XmlIndexer-1.html#Platform_Data_Doublets_Xml_XmlIndexer_1_ToElements_System_String_
