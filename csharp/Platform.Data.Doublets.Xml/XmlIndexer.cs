@@ -76,5 +76,25 @@ namespace Platform.Data.Doublets.Xml
             _index.Add(ToElements(content));
             return _nullConstant;
         }
+
+        public TLink GetDocument(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public TLink GetElement(string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public TLink GetTextElement(string content)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IList<IList<TLink>> GetChildren(TLink parent)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
