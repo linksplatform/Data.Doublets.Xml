@@ -62,11 +62,14 @@ namespace Platform.Data.Doublets.Xml
         public TLink GetTextElement(string content) => Get(_textElementMarker, content);
         public TLink GetElement(string name) => Get(_elementMarker, name);
         private TLink Get(TLink marker, string content) => _links.SearchOrDefault(marker, _stringToUnicodeSequenceConverter.Convert(content));
-        public IList<IList<TLink>> GetChildren(TLink parent) => _links.All(new Link<TLink>(_links.Constants.Any, parent, _links.Constants.Any));
-        
-
-
-
+        public IList<TLink> GetChildren(TLink parent) {
+            var childrens = new List<TLink>();
+            _links.Each((link) => {
+                childrens.Add(_links.GetTarget(link));
+                return this._links.Constants.Continue;
+            }, new Link<TLink>(_links.Constants.Any, parent, _links.Constants.Any));
+            return childrens;
+        }
     }
 }
    

@@ -12,7 +12,7 @@ namespace Platform.Data.Doublets.Xml
         TLink GetDocument(string name);
         TLink GetElement(string name);
         TLink GetTextElement(string content);
-        public IList<IList<TLink>> GetChildren(TLink parent);
+        IList<IList<TLink>> GetChildren(TLink parent);
         void AttachElementToParent(TLink elementToAttach, TLink parent);
     }
 }

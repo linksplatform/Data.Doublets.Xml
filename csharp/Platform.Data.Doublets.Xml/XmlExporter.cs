@@ -5,8 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using Platform.Exceptions;
-using Platform.Collections;
-using Platform.IO;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
@@ -37,15 +35,16 @@ namespace Platform.Data.Doublets.Xml
             }, token);
         }
 
-        private void Write(XmlWriter reader, CancellationToken token, ElementContext context)
+        private void Write(XmlWriter writer, CancellationToken token, ElementContext context)
         {
             var parentContexts = new Stack<ElementContext>();
             var elements = new Stack<string>(); // Path
                                                 // TODO: If path was loaded previously, skip it.
-
+            foreach(TLink lvl in _storage.GetChildren(parent: context.Parent))
+            {
+                Write(writer: writer, token: token, context: new ElementContext(lvl));
+            }
         }
-
-        private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
         
         private class ElementContext : XmlElementContext
         {
