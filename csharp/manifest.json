@@ -30,7 +30,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html",
-          "hash": "zkJVDIBUMxcs3YnMjLhMOQ=="
+          "hash": "pusyDYz3ZKcfVyhEmhZokQ=="
         }
       },
       "is_incremental": false,
@@ -42,7 +42,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.ICommandLineInterface.html",
-          "hash": "kyEy1lbrWQzVWGkVfokOrA=="
+          "hash": "Ch+i6ae7vl6IsdJ8fmwEPw=="
         }
       },
       "is_incremental": false,
@@ -54,7 +54,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.IXmlStorage-1.html",
-          "hash": "shVgEHDhUQJrQdb+7IgGDw=="
+          "hash": "Jr2psQOwUfBmrz/DdOcCSQ=="
         }
       },
       "is_incremental": false,
@@ -66,7 +66,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.XmlElementCounter.html",
-          "hash": "rt8khkkhG4GPPmhB3o0Q/Q=="
+          "hash": "FaAKAJEOxdm9mQLlXKMIlg=="
         }
       },
       "is_incremental": false,
@@ -78,7 +78,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.XmlElementCounterCLI.html",
-          "hash": "CvTHHHa2c3HEh27Nrz17BQ=="
+          "hash": "KP7pWn7sSS0tVWxqex40Ow=="
         }
       },
       "is_incremental": false,
@@ -90,7 +90,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.XmlImporter-1.html",
-          "hash": "fVqa7CUCz18rbxqDhDpsow=="
+          "hash": "TwIzMyivl17uQNQUKUOdGA=="
         }
       },
       "is_incremental": false,
@@ -102,7 +102,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.XmlImporterCLI.html",
-          "hash": "ru5bAVnuqJoaCSis7aOJBw=="
+          "hash": "hJkpedYx1/Kep5H5+1901A=="
         }
       },
       "is_incremental": false,
@@ -114,7 +114,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Platform.Data.Doublets.Xml.XmlIndexer-1.html",
-          "hash": "8JJQDgsmV88D+mYAyftEPg=="
+          "hash": "H7v8q6QVweEm5vRfwOx4LA=="
         }
       },
       "is_incremental": false,
