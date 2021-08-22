@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Platform.IO;
 
@@ -6,8 +6,25 @@ using Platform.IO;
 
 namespace Platform.Data.Doublets.Xml
 {
+    /// <summary>
+    /// <para>
+    /// Represents the xml element counter cli.
+    /// </para>
+    /// <para></para>
+    /// </summary>
+    /// <seealso cref="ICommandLineInterface"/>
     public class XmlElementCounterCLI : ICommandLineInterface
     {
+        /// <summary>
+        /// <para>
+        /// Runs the args.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="args">
+        /// <para>The args.</para>
+        /// <para></para>
+        /// </param>
         public void Run(params string[] args)
         {
             var file = ConsoleHelpers.GetOrReadArgument(0, "Xml file", args);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,12 +10,52 @@ using Platform.Exceptions;
 
 namespace Platform.Data.Doublets.Xml
 {
+    /// <summary>
+    /// <para>
+    /// Represents the xml exporter.
+    /// </para>
+    /// <para></para>
+    /// </summary>
     class XmlExporter<TLink>
     {
+        /// <summary>
+        /// <para>
+        /// The storage.
+        /// </para>
+        /// <para></para>
+        /// </summary>
         private readonly IXmlStorage<TLink> _storage;
 
+        /// <summary>
+        /// <para>
+        /// Initializes a new <see cref="XmlExporter"/> instance.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="storage">
+        /// <para>A storage.</para>
+        /// <para></para>
+        /// </param>
         public XmlExporter(IXmlStorage<TLink> storage) => _storage = storage;
 
+        /// <summary>
+        /// <para>
+        /// Exports the document name.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="documentName">
+        /// <para>The document name.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="fileName">
+        /// <para>The file name.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="token">
+        /// <para>The token.</para>
+        /// <para></para>
+        /// </param>
         public Task Export(string documentName, string fileName, CancellationToken token) 
         {
             return Task.Factory.StartNew(() =>
@@ -35,6 +75,24 @@ namespace Platform.Data.Doublets.Xml
             }, token);
         }
 
+        /// <summary>
+        /// <para>
+        /// Writes the writer.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="writer">
+        /// <para>The writer.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="token">
+        /// <para>The token.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="context">
+        /// <para>The context.</para>
+        /// <para></para>
+        /// </param>
         private void Write(XmlWriter writer, CancellationToken token, ElementContext context)
         {
             var parentContexts = new Stack<ElementContext>();
@@ -46,10 +104,33 @@ namespace Platform.Data.Doublets.Xml
             }
         }
         
+        /// <summary>
+        /// <para>
+        /// Represents the element context.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <seealso cref="XmlElementContext"/>
         private class ElementContext : XmlElementContext
         {
+            /// <summary>
+            /// <para>
+            /// The parent.
+            /// </para>
+            /// <para></para>
+            /// </summary>
             public readonly TLink Parent;
 
+            /// <summary>
+            /// <para>
+            /// Initializes a new <see cref="ElementContext"/> instance.
+            /// </para>
+            /// <para></para>
+            /// </summary>
+            /// <param name="parent">
+            /// <para>A parent.</para>
+            /// <para></para>
+            /// </param>
             public ElementContext(TLink parent) => Parent = parent;
         }
 

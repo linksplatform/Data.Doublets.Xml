@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,10 +11,40 @@ using Platform.IO;
 
 namespace Platform.Data.Doublets.Xml
 {
+    /// <summary>
+    /// <para>
+    /// Represents the xml element counter.
+    /// </para>
+    /// <para></para>
+    /// </summary>
     public class XmlElementCounter
     {
+        /// <summary>
+        /// <para>
+        /// Initializes a new <see cref="XmlElementCounter"/> instance.
+        /// </para>
+        /// <para></para>
+        /// </summary>
         public XmlElementCounter() { }
 
+        /// <summary>
+        /// <para>
+        /// Counts the file.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="file">
+        /// <para>The file.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="elementName">
+        /// <para>The element name.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="token">
+        /// <para>The token.</para>
+        /// <para></para>
+        /// </param>
         public Task Count(string file, string elementName, CancellationToken token)
         {
             return Task.Factory.StartNew(() =>
@@ -35,6 +65,28 @@ namespace Platform.Data.Doublets.Xml
             }, token);
         }
 
+        /// <summary>
+        /// <para>
+        /// Counts the reader.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="reader">
+        /// <para>The reader.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="elementNameToCount">
+        /// <para>The element name to count.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="token">
+        /// <para>The token.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="context">
+        /// <para>The context.</para>
+        /// <para></para>
+        /// </param>
         private void Count(XmlReader reader, string elementNameToCount, CancellationToken token, XmlElementContext context)
         {
             var rootContext = (RootElementContext)context;
@@ -95,11 +147,44 @@ namespace Platform.Data.Doublets.Xml
             }
         }
 
+        /// <summary>
+        /// <para>
+        /// Returns the x path using the specified path.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="path">
+        /// <para>The path.</para>
+        /// <para></para>
+        /// </param>
+        /// <returns>
+        /// <para>The string</para>
+        /// <para></para>
+        /// </returns>
         private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
 
+        /// <summary>
+        /// <para>
+        /// Represents the root element context.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <seealso cref="XmlElementContext"/>
         private class RootElementContext : XmlElementContext
         {
+            /// <summary>
+            /// <para>
+            /// The total elements.
+            /// </para>
+            /// <para></para>
+            /// </summary>
             public ulong TotalElements;
+            /// <summary>
+            /// <para>
+            /// The total contents length.
+            /// </para>
+            /// <para></para>
+            /// </summary>
             public ulong TotalContentsLength;
         }
     }

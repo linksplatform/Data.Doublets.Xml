@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Platform.IO;
 using Platform.Data.Doublets.Memory.United.Generic;
@@ -7,8 +7,25 @@ using Platform.Data.Doublets.Memory.United.Generic;
 
 namespace Platform.Data.Doublets.Xml
 {
+    /// <summary>
+    /// <para>
+    /// Represents the xml importer cli.
+    /// </para>
+    /// <para></para>
+    /// </summary>
+    /// <seealso cref="ICommandLineInterface"/>
     public class XmlImporterCLI : ICommandLineInterface
     {
+        /// <summary>
+        /// <para>
+        /// Runs the args.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="args">
+        /// <para>The args.</para>
+        /// <para></para>
+        /// </param>
         public void Run(params string[] args)
         {
             var linksFile = ConsoleHelpers.GetOrReadArgument(0, "Links file", args);

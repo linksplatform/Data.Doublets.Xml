@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,12 +11,48 @@ using Platform.IO;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace Platform.Data.Doublets.Xml { 
+    /// <summary>
+    /// <para>
+    /// Represents the xml importer.
+    /// </para>
+    /// <para></para>
+    /// </summary>
     public class XmlImporter<TLink>
     {
+        /// <summary>
+        /// <para>
+        /// The storage.
+        /// </para>
+        /// <para></para>
+        /// </summary>
         private readonly IXmlStorage<TLink> _storage;
 
+        /// <summary>
+        /// <para>
+        /// Initializes a new <see cref="XmlImporter"/> instance.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="storage">
+        /// <para>A storage.</para>
+        /// <para></para>
+        /// </param>
         public XmlImporter(IXmlStorage<TLink> storage) => _storage = storage;
 
+        /// <summary>
+        /// <para>
+        /// Imports the file.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="file">
+        /// <para>The file.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="token">
+        /// <para>The token.</para>
+        /// <para></para>
+        /// </param>
         public Task Import(string file, CancellationToken token)
         {
             return Task.Factory.StartNew(() =>
@@ -38,6 +74,24 @@ namespace Platform.Data.Doublets.Xml {
             }, token);
         }
 
+        /// <summary>
+        /// <para>
+        /// Reads the reader.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="reader">
+        /// <para>The reader.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="token">
+        /// <para>The token.</para>
+        /// <para></para>
+        /// </param>
+        /// <param name="context">
+        /// <para>The context.</para>
+        /// <para></para>
+        /// </param>
         private void Read(XmlReader reader, CancellationToken token, ElementContext context)
         {
             var parentContexts = new Stack<ElementContext>();
@@ -92,12 +146,49 @@ namespace Platform.Data.Doublets.Xml {
             }
         }
 
+        /// <summary>
+        /// <para>
+        /// Returns the x path using the specified path.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="path">
+        /// <para>The path.</para>
+        /// <para></para>
+        /// </param>
+        /// <returns>
+        /// <para>The string</para>
+        /// <para></para>
+        /// </returns>
         private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
 
+        /// <summary>
+        /// <para>
+        /// Represents the element context.
+        /// </para>
+        /// <para></para>
+        /// </summary>
+        /// <seealso cref="XmlElementContext"/>
         private class ElementContext : XmlElementContext
         {
+            /// <summary>
+            /// <para>
+            /// The parent.
+            /// </para>
+            /// <para></para>
+            /// </summary>
             public readonly TLink Parent;
 
+            /// <summary>
+            /// <para>
+            /// Initializes a new <see cref="ElementContext"/> instance.
+            /// </para>
+            /// <para></para>
+            /// </summary>
+            /// <param name="parent">
+            /// <para>A parent.</para>
+            /// <para></para>
+            /// </param>
             public ElementContext(TLink parent) => Parent = parent;
         }
     }
