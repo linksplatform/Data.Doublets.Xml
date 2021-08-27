@@ -116,7 +116,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para>A list of i list t link</para>
         /// <para></para>
         /// </returns>
-        IList<IList<TLink>> GetChildren(TLink parent);
+        IList<TLink> GetChildren(TLink parent);
         /// <summary>
         /// <para>
         /// Attaches the element to parent using the specified element to attach.
