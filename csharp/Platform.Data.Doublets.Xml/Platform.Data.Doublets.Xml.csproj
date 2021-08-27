@@ -4,7 +4,7 @@
     <Description>LinksPlatform's Platform.Data.Doublets.Xml Class Library</Description>
     <Copyright>Konstantin Diachenko;mrMask</Copyright>
     <AssemblyTitle>Platform.Data.Doublets.Xml</AssemblyTitle>
-    <VersionPrefix>0.0.2</VersionPrefix>
+    <VersionPrefix>0.0.3</VersionPrefix>
     <Authors>Konstantin Diachenko;mrMask</Authors>    
     <TargetFrameworks>net472;netstandard2.0;netstandard2.1</TargetFrameworks>
     <AssemblyName>Platform.Data.Doublets.Xml</AssemblyName>
@@ -24,7 +24,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <LangVersion>latest</LangVersion>
-    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <PackageReleaseNotes>Platform.Data.Doublets.Sequences dependency is used instead of Platform.Data.Doublets.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) AND '$(MSBuildRuntimeType)' == 'Core' AND '$(OS)' != 'Windows_NT'">
@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Platform.Data.Doublets" Version="0.7.0" />
+    <PackageReference Include="Platform.Data.Doublets.Sequences" Version="0.0.1" />
   </ItemGroup>
 
 </Project>
