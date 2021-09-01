@@ -400,6 +400,50 @@ references:
   isSpec: "True"
   fullName: Platform.Data.Doublets.Xml.XmlElementCounterCLI.Run
   nameWithType: XmlElementCounterCLI.Run
+- uid: Platform.Data.Doublets.Xml.XmlExporter`1
+  name: XmlExporter<TLink>
+  href: api/Platform.Data.Doublets.Xml.XmlExporter-1.html
+  commentId: T:Platform.Data.Doublets.Xml.XmlExporter`1
+  name.vb: XmlExporter(Of TLink)
+  fullName: Platform.Data.Doublets.Xml.XmlExporter<TLink>
+  fullName.vb: Platform.Data.Doublets.Xml.XmlExporter(Of TLink)
+  nameWithType: XmlExporter<TLink>
+  nameWithType.vb: XmlExporter(Of TLink)
+- uid: Platform.Data.Doublets.Xml.XmlExporter`1.#ctor(Platform.Data.Doublets.Xml.IXmlStorage{`0})
+  name: XmlExporter(IXmlStorage<TLink>)
+  href: api/Platform.Data.Doublets.Xml.XmlExporter-1.html#Platform_Data_Doublets_Xml_XmlExporter_1__ctor_Platform_Data_Doublets_Xml_IXmlStorage__0__
+  commentId: M:Platform.Data.Doublets.Xml.XmlExporter`1.#ctor(Platform.Data.Doublets.Xml.IXmlStorage{`0})
+  name.vb: XmlExporter(IXmlStorage(Of TLink))
+  fullName: Platform.Data.Doublets.Xml.XmlExporter<TLink>.XmlExporter(Platform.Data.Doublets.Xml.IXmlStorage<TLink>)
+  fullName.vb: Platform.Data.Doublets.Xml.XmlExporter(Of TLink).XmlExporter(Platform.Data.Doublets.Xml.IXmlStorage(Of TLink))
+  nameWithType: XmlExporter<TLink>.XmlExporter(IXmlStorage<TLink>)
+  nameWithType.vb: XmlExporter(Of TLink).XmlExporter(IXmlStorage(Of TLink))
+- uid: Platform.Data.Doublets.Xml.XmlExporter`1.#ctor*
+  name: XmlExporter
+  href: api/Platform.Data.Doublets.Xml.XmlExporter-1.html#Platform_Data_Doublets_Xml_XmlExporter_1__ctor_
+  commentId: Overload:Platform.Data.Doublets.Xml.XmlExporter`1.#ctor
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.XmlExporter<TLink>.XmlExporter
+  fullName.vb: Platform.Data.Doublets.Xml.XmlExporter(Of TLink).XmlExporter
+  nameWithType: XmlExporter<TLink>.XmlExporter
+  nameWithType.vb: XmlExporter(Of TLink).XmlExporter
+- uid: Platform.Data.Doublets.Xml.XmlExporter`1.Export(System.String,System.String,System.Threading.CancellationToken)
+  name: Export(String, String, CancellationToken)
+  href: api/Platform.Data.Doublets.Xml.XmlExporter-1.html#Platform_Data_Doublets_Xml_XmlExporter_1_Export_System_String_System_String_System_Threading_CancellationToken_
+  commentId: M:Platform.Data.Doublets.Xml.XmlExporter`1.Export(System.String,System.String,System.Threading.CancellationToken)
+  fullName: Platform.Data.Doublets.Xml.XmlExporter<TLink>.Export(System.String, System.String, System.Threading.CancellationToken)
+  fullName.vb: Platform.Data.Doublets.Xml.XmlExporter(Of TLink).Export(System.String, System.String, System.Threading.CancellationToken)
+  nameWithType: XmlExporter<TLink>.Export(String, String, CancellationToken)
+  nameWithType.vb: XmlExporter(Of TLink).Export(String, String, CancellationToken)
+- uid: Platform.Data.Doublets.Xml.XmlExporter`1.Export*
+  name: Export
+  href: api/Platform.Data.Doublets.Xml.XmlExporter-1.html#Platform_Data_Doublets_Xml_XmlExporter_1_Export_
+  commentId: Overload:Platform.Data.Doublets.Xml.XmlExporter`1.Export
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.XmlExporter<TLink>.Export
+  fullName.vb: Platform.Data.Doublets.Xml.XmlExporter(Of TLink).Export
+  nameWithType: XmlExporter<TLink>.Export
+  nameWithType.vb: XmlExporter(Of TLink).Export
 - uid: Platform.Data.Doublets.Xml.XmlExporterCLI
   name: XmlExporterCLI
   href: api/Platform.Data.Doublets.Xml.XmlExporterCLI.html
