@@ -16,6 +16,15 @@ references:
   fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink)
   nameWithType: DefaultXmlStorage<TLink>
   nameWithType.vb: DefaultXmlStorage(Of TLink)
+- uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.#ctor(ILinks{`0},System.Boolean)
+  name: DefaultXmlStorage(ILinks<TLink>, Boolean)
+  href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1__ctor_ILinks__0__System_Boolean_
+  commentId: M:Platform.Data.Doublets.Xml.DefaultXmlStorage`1.#ctor(ILinks{`0},System.Boolean)
+  name.vb: DefaultXmlStorage(ILinks(Of TLink), Boolean)
+  fullName: Platform.Data.Doublets.Xml.DefaultXmlStorage<TLink>.DefaultXmlStorage(ILinks<TLink>, System.Boolean)
+  fullName.vb: Platform.Data.Doublets.Xml.DefaultXmlStorage(Of TLink).DefaultXmlStorage(ILinks(Of TLink), System.Boolean)
+  nameWithType: DefaultXmlStorage<TLink>.DefaultXmlStorage(ILinks<TLink>, Boolean)
+  nameWithType.vb: DefaultXmlStorage(Of TLink).DefaultXmlStorage(ILinks(Of TLink), Boolean)
 - uid: Platform.Data.Doublets.Xml.DefaultXmlStorage`1.#ctor(ILinks{`0},System.Boolean,LinkFrequenciesCache{`0})
   name: DefaultXmlStorage(ILinks<TLink>, Boolean, LinkFrequenciesCache<TLink>)
   href: api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html#Platform_Data_Doublets_Xml_DefaultXmlStorage_1__ctor_ILinks__0__System_Boolean_LinkFrequenciesCache__0__
@@ -391,6 +400,28 @@ references:
   isSpec: "True"
   fullName: Platform.Data.Doublets.Xml.XmlElementCounterCLI.Run
   nameWithType: XmlElementCounterCLI.Run
+- uid: Platform.Data.Doublets.Xml.XmlExporterCLI
+  name: XmlExporterCLI
+  href: api/Platform.Data.Doublets.Xml.XmlExporterCLI.html
+  commentId: T:Platform.Data.Doublets.Xml.XmlExporterCLI
+  fullName: Platform.Data.Doublets.Xml.XmlExporterCLI
+  nameWithType: XmlExporterCLI
+- uid: Platform.Data.Doublets.Xml.XmlExporterCLI.Run(System.String[])
+  name: Run(String[])
+  href: api/Platform.Data.Doublets.Xml.XmlExporterCLI.html#Platform_Data_Doublets_Xml_XmlExporterCLI_Run_System_String___
+  commentId: M:Platform.Data.Doublets.Xml.XmlExporterCLI.Run(System.String[])
+  name.vb: Run(String())
+  fullName: Platform.Data.Doublets.Xml.XmlExporterCLI.Run(System.String[])
+  fullName.vb: Platform.Data.Doublets.Xml.XmlExporterCLI.Run(System.String())
+  nameWithType: XmlExporterCLI.Run(String[])
+  nameWithType.vb: XmlExporterCLI.Run(String())
+- uid: Platform.Data.Doublets.Xml.XmlExporterCLI.Run*
+  name: Run
+  href: api/Platform.Data.Doublets.Xml.XmlExporterCLI.html#Platform_Data_Doublets_Xml_XmlExporterCLI_Run_
+  commentId: Overload:Platform.Data.Doublets.Xml.XmlExporterCLI.Run
+  isSpec: "True"
+  fullName: Platform.Data.Doublets.Xml.XmlExporterCLI.Run
+  nameWithType: XmlExporterCLI.Run
 - uid: Platform.Data.Doublets.Xml.XmlImporter`1
   name: XmlImporter<TLink>
   href: api/Platform.Data.Doublets.Xml.XmlImporter-1.html
