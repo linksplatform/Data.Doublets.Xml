@@ -16,14 +16,8 @@ namespace Platform.Data.Doublets.Xml
     /// </para>
     /// <para></para>
     /// </summary>
-    class XmlExporter<TLink>
+    public class XmlExporter<TLink>
     {
-        /// <summary>
-        /// <para>
-        /// The storage.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private readonly IXmlStorage<TLink> _storage;
 
         /// <summary>

@@ -64,29 +64,7 @@ namespace Platform.Data.Doublets.Xml
                 }
             }, token);
         }
-
-        /// <summary>
-        /// <para>
-        /// Counts the reader.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <param name="reader">
-        /// <para>The reader.</para>
-        /// <para></para>
-        /// </param>
-        /// <param name="elementNameToCount">
-        /// <para>The element name to count.</para>
-        /// <para></para>
-        /// </param>
-        /// <param name="token">
-        /// <para>The token.</para>
-        /// <para></para>
-        /// </param>
-        /// <param name="context">
-        /// <para>The context.</para>
-        /// <para></para>
-        /// </param>
+        
         private void Count(XmlReader reader, string elementNameToCount, CancellationToken token, XmlElementContext context)
         {
             var rootContext = (RootElementContext)context;
@@ -146,30 +124,9 @@ namespace Platform.Data.Doublets.Xml
                 }
             }
         }
-
-        /// <summary>
-        /// <para>
-        /// Returns the x path using the specified path.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <param name="path">
-        /// <para>The path.</para>
-        /// <para></para>
-        /// </param>
-        /// <returns>
-        /// <para>The string</para>
-        /// <para></para>
-        /// </returns>
+        
         private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
-
-        /// <summary>
-        /// <para>
-        /// Represents the root element context.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <seealso cref="XmlElementContext"/>
+        
         private class RootElementContext : XmlElementContext
         {
             /// <summary>

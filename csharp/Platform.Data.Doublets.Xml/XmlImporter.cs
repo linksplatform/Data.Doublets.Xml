@@ -19,12 +19,6 @@ namespace Platform.Data.Doublets.Xml {
     /// </summary>
     public class XmlImporter<TLink>
     {
-        /// <summary>
-        /// <para>
-        /// The storage.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private readonly IXmlStorage<TLink> _storage;
 
         /// <summary>
@@ -73,25 +67,7 @@ namespace Platform.Data.Doublets.Xml {
 
             }, token);
         }
-
-        /// <summary>
-        /// <para>
-        /// Reads the reader.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <param name="reader">
-        /// <para>The reader.</para>
-        /// <para></para>
-        /// </param>
-        /// <param name="token">
-        /// <para>The token.</para>
-        /// <para></para>
-        /// </param>
-        /// <param name="context">
-        /// <para>The context.</para>
-        /// <para></para>
-        /// </param>
+        
         private void Read(XmlReader reader, CancellationToken token, ElementContext context)
         {
             var parentContexts = new Stack<ElementContext>();
@@ -146,49 +122,12 @@ namespace Platform.Data.Doublets.Xml {
             }
         }
 
-        /// <summary>
-        /// <para>
-        /// Returns the x path using the specified path.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <param name="path">
-        /// <para>The path.</para>
-        /// <para></para>
-        /// </param>
-        /// <returns>
-        /// <para>The string</para>
-        /// <para></para>
-        /// </returns>
         private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
 
-        /// <summary>
-        /// <para>
-        /// Represents the element context.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <seealso cref="XmlElementContext"/>
+        
         private class ElementContext : XmlElementContext
         {
-            /// <summary>
-            /// <para>
-            /// The parent.
-            /// </para>
-            /// <para></para>
-            /// </summary>
             public readonly TLink Parent;
-
-            /// <summary>
-            /// <para>
-            /// Initializes a new <see cref="ElementContext"/> instance.
-            /// </para>
-            /// <para></para>
-            /// </summary>
-            /// <param name="parent">
-            /// <para>A parent.</para>
-            /// <para></para>
-            /// </param>
             public ElementContext(TLink parent) => Parent = parent;
         }
     }

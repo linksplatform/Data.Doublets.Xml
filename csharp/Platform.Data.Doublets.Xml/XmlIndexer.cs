@@ -20,48 +20,11 @@ namespace Platform.Data.Doublets.Xml
     /// <seealso cref="IXmlStorage{TLink}"/>
     public class XmlIndexer<TLink> : IXmlStorage<TLink>
     {
-        /// <summary>
-        /// <para>
-        /// The zero.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private static readonly TLink _zero = default;
-        /// <summary>
-        /// <para>
-        /// The zero.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private static readonly TLink _one = Arithmetic.Increment(_zero);
-
-        /// <summary>
-        /// <para>
-        /// The index.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private readonly CachedFrequencyIncrementingSequenceIndex<TLink> _index;
-        /// <summary>
-        /// <para>
-        /// The char to unicode symbol converter.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private readonly CharToUnicodeSymbolConverter<TLink> _charToUnicodeSymbolConverter;
-        /// <summary>
-        /// <para>
-        /// The unicode symbol marker.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private TLink _unicodeSymbolMarker;
-        /// <summary>
-        /// <para>
-        /// The null constant.
-        /// </para>
-        /// <para></para>
-        /// </summary>
         private readonly TLink _nullConstant;
 
         /// <summary>
@@ -92,17 +55,7 @@ namespace Platform.Data.Doublets.Xml
             InitConstants(links);
             _charToUnicodeSymbolConverter = new CharToUnicodeSymbolConverter<TLink>(links, addressToRawNumberConverter, _unicodeSymbolMarker);
         }
-
-        /// <summary>
-        /// <para>
-        /// Inits the constants using the specified links.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <param name="links">
-        /// <para>The links.</para>
-        /// <para></para>
-        /// </param>
+        
         private void InitConstants(ILinks<TLink> links)
         {
             var markerIndex = _one;
@@ -303,7 +256,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para>A list of i list t link</para>
         /// <para></para>
         /// </returns>
-        public IList<IList<TLink>> GetChildren(TLink parent)
+        public IList<TLink> GetChildren(TLink parent)
         {
             throw new System.NotImplementedException();
         }
