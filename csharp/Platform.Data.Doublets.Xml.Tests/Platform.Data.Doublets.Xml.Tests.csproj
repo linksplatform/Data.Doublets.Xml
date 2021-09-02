@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Platform.Data\Platform.Data.Doublets.Xml.csproj" />
+    <ProjectReference Include="..\Platform.Data.Doublets.Xml\Platform.Data.Doublets.Xml.csproj" />
   </ItemGroup>
 
 </Project>
