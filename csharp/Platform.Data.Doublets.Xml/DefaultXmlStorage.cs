@@ -30,41 +30,13 @@ namespace Platform.Data.Doublets.Xml
         private TLink _elementMarker;
         private TLink _textElementMarker;
         private TLink _documentMarker;
-        
+
         private class Unindex : ISequenceIndex<TLink>
         {
-            /// <summary>
-            /// <para>
-            /// Determines whether this instance add.
-            /// </para>
-            /// <para></para>
-            /// </summary>
-            /// <param name="sequence">
-            /// <para>The sequence.</para>
-            /// <para></para>
-            /// </param>
-            /// <returns>
-            /// <para>The bool</para>
-            /// <para></para>
-            /// </returns>
             public bool Add(IList<TLink> sequence) => true;
-            
-            /// <summary>
-            /// <para>
-            /// Determines whether this instance might contain.
-            /// </para>
-            /// <para></para>
-            /// </summary>
-            /// <param name="sequence">
-            /// <para>The sequence.</para>
-            /// <para></para>
-            /// </param>
-            /// <returns>
-            /// <para>The bool</para>
-            /// <para></para>
-            /// </returns>
+
             public bool MightContain(IList<TLink> sequence) => true;
-        }  
+        }
 
         /// <summary>
         /// <para>
@@ -96,9 +68,9 @@ namespace Platform.Data.Doublets.Xml
             _links = links;
         }
 
-        public DefaultXmlStorage(ILinks<TLink> links, bool indexSequenceBeforeCreation = false) : 
-            this(links, indexSequenceBeforeCreation, 
-                new LinkFrequenciesCache<TLink>(links, 
+        public DefaultXmlStorage(ILinks<TLink> links, bool indexSequenceBeforeCreation = false) :
+            this(links, indexSequenceBeforeCreation,
+                new LinkFrequenciesCache<TLink>(links,
                     new TotalSequenceSymbolFrequencyCounter<TLink>(links))) { }
 
         private void InitConstants(ILinks<TLink> links)
@@ -111,7 +83,7 @@ namespace Platform.Data.Doublets.Xml
             _textElementMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
             _documentMarker = links.GetOrCreate(meaningRoot, Arithmetic.Increment(ref markerIndex));
         }
-        
+
         /// <summary>
         /// <para>
         /// Creates the document using the specified name.
@@ -127,7 +99,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         public TLink CreateDocument(string name) => Create(_documentMarker, name);
-        
+
         /// <summary>
         /// <para>
         /// Creates the element using the specified name.
@@ -143,7 +115,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         public TLink CreateElement(string name) => Create(_elementMarker, name);
-        
+
         /// <summary>
         /// <para>
         /// Creates the text element using the specified content.
@@ -159,9 +131,9 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         public TLink CreateTextElement(string content) => Create(_textElementMarker, content);
-        
+
         private TLink Create(TLink marker, string content) => _links.GetOrCreate(marker, _stringToUnicodeSequenceConverter.Convert(content));
-        
+
         /// <summary>
         /// <para>
         /// Attaches the element to parent using the specified element to attach.
@@ -193,7 +165,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         public TLink GetDocument(string name) => Get(_documentMarker, name);
-        
+
         /// <summary>
         /// <para>
         /// Gets the text element using the specified content.
@@ -209,6 +181,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         public TLink GetTextElement(string content) => Get(_textElementMarker, content);
+
         /// <summary>
         /// <para>
         /// Gets the element using the specified name.
@@ -224,9 +197,9 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         public TLink GetElement(string name) => Get(_elementMarker, name);
-        
+
         private TLink Get(TLink marker, string content) => _links.SearchOrDefault(marker, _stringToUnicodeSequenceConverter.Convert(content));
-       
+
         /// <summary>
         /// <para>
         /// Gets the children using the specified parent.
@@ -241,7 +214,8 @@ namespace Platform.Data.Doublets.Xml
         /// <para>The childrens.</para>
         /// <para></para>
         /// </returns>
-        public IList<TLink> GetChildren(TLink parent) {
+        public IList<TLink> GetChildren(TLink parent)
+        {
             List<TLink> childrens = new List<TLink>();
             _links.Each((link) => {
                 childrens.Add(_links.GetTarget(link));
@@ -251,4 +225,3 @@ namespace Platform.Data.Doublets.Xml
         }
     }
 }
-   

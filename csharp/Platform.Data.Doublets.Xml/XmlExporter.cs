@@ -50,7 +50,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para>The token.</para>
         /// <para></para>
         /// </param>
-        public Task Export(string documentName, string fileName, CancellationToken token) 
+        public Task Export(string documentName, string fileName, CancellationToken token)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -68,7 +68,7 @@ namespace Platform.Data.Doublets.Xml
                 }
             }, token);
         }
-        
+
         private void Write(XmlWriter writer, CancellationToken token, ElementContext context)
         {
             var parentContexts = new Stack<ElementContext>();

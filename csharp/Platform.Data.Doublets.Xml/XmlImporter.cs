@@ -10,7 +10,7 @@ using Platform.IO;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
-namespace Platform.Data.Doublets.Xml { 
+namespace Platform.Data.Doublets.Xml {
     /// <summary>
     /// <para>
     /// Represents the xml importer.
@@ -67,7 +67,7 @@ namespace Platform.Data.Doublets.Xml {
 
             }, token);
         }
-        
+
         private void Read(XmlReader reader, CancellationToken token, ElementContext context)
         {
             var parentContexts = new Stack<ElementContext>();
@@ -124,7 +124,6 @@ namespace Platform.Data.Doublets.Xml {
 
         private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
 
-        
         private class ElementContext : XmlElementContext
         {
             public readonly TLink Parent;

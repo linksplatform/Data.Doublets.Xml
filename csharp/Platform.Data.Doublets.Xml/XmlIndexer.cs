@@ -55,7 +55,7 @@ namespace Platform.Data.Doublets.Xml
             InitConstants(links);
             _charToUnicodeSymbolConverter = new CharToUnicodeSymbolConverter<TLink>(links, addressToRawNumberConverter, _unicodeSymbolMarker);
         }
-        
+
         private void InitConstants(ILinks<TLink> links)
         {
             var markerIndex = _one;

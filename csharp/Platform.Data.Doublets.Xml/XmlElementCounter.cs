@@ -64,7 +64,7 @@ namespace Platform.Data.Doublets.Xml
                 }
             }, token);
         }
-        
+
         private void Count(XmlReader reader, string elementNameToCount, CancellationToken token, XmlElementContext context)
         {
             var rootContext = (RootElementContext)context;
@@ -124,24 +124,12 @@ namespace Platform.Data.Doublets.Xml
                 }
             }
         }
-        
+
         private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
-        
+
         private class RootElementContext : XmlElementContext
         {
-            /// <summary>
-            /// <para>
-            /// The total elements.
-            /// </para>
-            /// <para></para>
-            /// </summary>
             public ulong TotalElements;
-            /// <summary>
-            /// <para>
-            /// The total contents length.
-            /// </para>
-            /// <para></para>
-            /// </summary>
             public ulong TotalContentsLength;
         }
     }

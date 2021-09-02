@@ -12,7 +12,7 @@ namespace Platform.Data.Doublets.Xml
     /// </summary>
     internal class XmlElementContext
     {
-        public readonly Dictionary<string, int> ChildrenNamesCounts; 
+        public readonly Dictionary<string, int> ChildrenNamesCounts;
         public int TotalChildren;
 
         public XmlElementContext() => ChildrenNamesCounts = new Dictionary<string, int>();

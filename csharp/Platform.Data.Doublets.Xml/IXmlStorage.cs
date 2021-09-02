@@ -27,6 +27,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         TLink CreateDocument(string name);
+
         /// <summary>
         /// <para>
         /// Creates the element using the specified name.
@@ -42,6 +43,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         TLink CreateElement(string name);
+
         /// <summary>
         /// <para>
         /// Creates the text element using the specified content.
@@ -57,6 +59,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         TLink CreateTextElement(string content);
+
         /// <summary>
         /// <para>
         /// Gets the document using the specified name.
@@ -72,6 +75,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         TLink GetDocument(string name);
+
         /// <summary>
         /// <para>
         /// Gets the element using the specified name.
@@ -87,6 +91,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         TLink GetElement(string name);
+
         /// <summary>
         /// <para>
         /// Gets the text element using the specified content.
@@ -102,6 +107,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         TLink GetTextElement(string content);
+
         /// <summary>
         /// <para>
         /// Gets the children using the specified parent.
@@ -117,6 +123,7 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </returns>
         IList<TLink> GetChildren(TLink parent);
+
         /// <summary>
         /// <para>
         /// Attaches the element to parent using the specified element to attach.

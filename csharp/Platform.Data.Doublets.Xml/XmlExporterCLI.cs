@@ -13,7 +13,7 @@ namespace Platform.Data.Doublets.Xml
         {
             var linksFile = ConsoleHelpers.GetOrReadArgument(0, "Links file", args);
             var exportFile = ConsoleHelpers.GetOrReadArgument(1, "Xml file", args);
-            
+
             if (File.Exists(exportFile))
             {
                 Console.WriteLine("Entered xml file does already exists.");
