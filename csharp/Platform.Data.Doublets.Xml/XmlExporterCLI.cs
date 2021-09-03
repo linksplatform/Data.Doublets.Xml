@@ -15,27 +15,18 @@ namespace Platform.Data.Doublets.Xml
             var exportFile = ConsoleHelpers.GetOrReadArgument(1, "Xml file", args);
 
             if (File.Exists(exportFile))
-            {
                 Console.WriteLine("Entered xml file does already exists.");
-            }
             else
             {
-                using (var cancellation = new ConsoleCancellation())
-                {
-                    using (var memoryAdapter = new UnitedMemoryLinks<uint>(linksFile))
-                    {
-                        {
-                            Console.WriteLine("Press CTRL+C to stop.");
-                            var links = memoryAdapter.DecorateWithAutomaticUniquenessAndUsagesResolution();
-                            if (cancellation.NotRequested)
-                            {
-                                var storage = new DefaultXmlStorage<uint>(links);
-                                var exporter = new XmlExporter<uint>(storage);
-                                exporter.Export(linksFile, exportFile, cancellation.Token).Wait();
-                            }
-                        }
-                    }
-                }
+                using var cancellation = new ConsoleCancellation();
+                var linksConstants = new LinksConstants<ulong>(enableExternalReferencesSupport: true);
+                using var memoryAdapter = new UnitedMemoryLinks<uint>(linksFile);
+                Console.WriteLine("Press CTRL+C to stop.");
+                var links = memoryAdapter.DecorateWithAutomaticUniquenessAndUsagesResolution();
+                if (!cancellation.NotRequested) return;
+                var storage = new DefaultXmlStorage<uint>(links);
+                var exporter = new XmlExporter<uint>(storage);
+                exporter.Export(linksFile, exportFile, cancellation.Token).Wait();
             }
         }
     }
