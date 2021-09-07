@@ -57,10 +57,8 @@ namespace Platform.Data.Doublets.Xml
                 try
                 {
                     var document = _storage.GetDocument(documentName);
-                    using (var writer = XmlWriter.Create(fileName))
-                    {
-                        Write(writer, token, new ElementContext(document));
-                    }
+                    using var writer = XmlWriter.Create(fileName);
+                    Write(writer, token, new ElementContext(document));
                 }
                 catch (Exception ex)
                 {
@@ -74,9 +72,13 @@ namespace Platform.Data.Doublets.Xml
             var parentContexts = new Stack<ElementContext>();
             var elements = new Stack<string>(); // Path
                                                 // TODO: If path was loaded previously, skip it.
+            
+                                                
+            
             foreach(TLink lvl in _storage.GetChildren(parent: context.Parent))
             {
                 Write(writer: writer, token: token, context: new ElementContext(lvl));
+                
             }
         }
         

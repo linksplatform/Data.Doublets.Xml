@@ -39,11 +39,9 @@ namespace Platform.Data.Doublets.Xml
             }
             else
             {
-                using (var cancellation = new ConsoleCancellation())
-                {
-                    Console.WriteLine("Press CTRL+C to stop.");
-                    new XmlElementCounter().Count(file, elementName, cancellation.Token).Wait();
-                }
+                using var cancellation = new ConsoleCancellation();
+                Console.WriteLine("Press CTRL+C to stop.");
+                new XmlElementCounter().Count(file, elementName, cancellation.Token).Wait();
             }
         }
     }

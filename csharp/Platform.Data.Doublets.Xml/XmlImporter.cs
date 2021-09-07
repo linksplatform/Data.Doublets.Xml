@@ -1,12 +1,16 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using Platform.Exceptions;
 using Platform.Collections;
+using Platform.Data.Doublets.Memory;
+using Platform.Data.Doublets.Memory.United.Generic;
 using Platform.IO;
+using Platform.Memory;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
@@ -47,18 +51,14 @@ namespace Platform.Data.Doublets.Xml {
         /// <para>The token.</para>
         /// <para></para>
         /// </param>
-        public Task Import(string file, CancellationToken token)
-        {
-            return Task.Factory.StartNew(() =>
+        public Task Import(string file, CancellationToken token) =>
+            Task.Factory.StartNew(() =>
             {
                 try
                 {
                     var document = _storage.CreateDocument(file);
-
-                    using (var reader = XmlReader.Create(file))
-                    {
-                        Read(reader, token, new ElementContext(document));
-                    }
+                    using var reader = XmlReader.Create(file);
+                    Read(reader, token, new ElementContext(document));
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +66,22 @@ namespace Platform.Data.Doublets.Xml {
                 }
 
             }, token);
-        }
+        
+        public Task Import(XmlReader reader, string documentName, CancellationToken token) =>
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var document = _storage.CreateDocument(documentName);
+                    Read(reader, token, new ElementContext(document));
+                    
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToStringWithAllInnerExceptions());
+                }
+
+            }, token);
 
         private void Read(XmlReader reader, CancellationToken token, ElementContext context)
         {
