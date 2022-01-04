@@ -25,7 +25,7 @@ namespace Platform.Data.Doublets.Xml
     /// <para></para>
     /// </summary>
     /// <seealso cref="IXmlStorage{TLink}"/>
-    public class DefaultXmlStorage<TLink> where TLink : struct
+    public class DefaultXmlStorage<TLink> : IXmlStorage<TLink> where TLink : struct
     {
         private static readonly TLink _zero = default;
         private static readonly TLink _one = Arithmetic.Increment(_zero);
