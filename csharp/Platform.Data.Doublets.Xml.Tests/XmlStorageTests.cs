@@ -23,7 +23,8 @@ namespace Platform.Data.Doublets.Xml.Tests
         private static ILinks<ulong> CreateLinks() => CreateLinks<ulong>(new Platform.IO.TemporaryFile());
 
         [Fact]
-        public void CreateDocumentTest(){
+        public void CreateDocumentTest()
+        {
             var links = CreateLinks();
             var defaultXmlStorage = new DefaultXmlStorage<ulong>(links);
             defaultXmlStorage.CreateDocument("documentFilename");
