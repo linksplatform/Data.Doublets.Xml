@@ -235,6 +235,8 @@ public interface IXmlStorage<TLink> where TLink : struct
 
         TLink CreateElement(string name);
 
+        TLink CreateTextElement(string content);
+
         /// <summary>
         /// <para>
         /// Creates the object.
