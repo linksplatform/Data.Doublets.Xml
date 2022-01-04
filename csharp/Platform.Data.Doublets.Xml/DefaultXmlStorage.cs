@@ -476,6 +476,12 @@ namespace Platform.Data.Doublets.Xml
             return Links.GetOrCreate(DocumentMarker, documentName);
         }
 
+        public TLink CreateElement(string name)
+        {
+            var elementName = CreateString(name);
+            return Links.GetOrCreate(ElementMarker, elementName);
+        }
+
         /// <summary>
         /// <para>
         /// Creates the object.
