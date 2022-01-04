@@ -21,7 +21,7 @@ namespace Platform.Data.Doublets.Xml {
     /// </para>
     /// <para></para>
     /// </summary>
-    public class XmlImporter<TLink>
+    public class XmlImporter<TLink> where TLink : struct
     {
         private readonly IXmlStorage<TLink> _storage;
 

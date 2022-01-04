@@ -16,7 +16,7 @@ namespace Platform.Data.Doublets.Xml
     /// </para>
     /// <para></para>
     /// </summary>
-    public class XmlExporter<TLink>
+    public class XmlExporter<TLink> where TLink : struct
     {
         private readonly IXmlStorage<TLink> _storage;
 
