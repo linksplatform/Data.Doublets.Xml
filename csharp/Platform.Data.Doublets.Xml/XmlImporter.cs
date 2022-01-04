@@ -76,9 +76,9 @@ namespace Platform.Data.Doublets.Xml {
                     Read(reader, token, new ElementContext(document));
                     
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    Console.WriteLine(ex.ToStringWithAllInnerExceptions());
+                    Console.WriteLine(exception.ToStringWithAllInnerExceptions());
                 }
 
             }, token);
