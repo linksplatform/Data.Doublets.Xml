@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Platform.Data.Doublets.Xml.Tests
 {
-    public class XMLStorageTests
+    public class XmlStorageTests
     {
         [Fact]
         public void CounstructorTest()
