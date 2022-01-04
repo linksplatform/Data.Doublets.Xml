@@ -7,27 +7,26 @@ namespace Platform.Data.Doublets.Xml.Tests
 {
     public class XmlStorageTests
     {
-        [Fact]
-        public void CounstructorTest()
+        private void CounstructorTest()
         {
             var links = CreateLinks();
             new DefaultXmlStorage<ulong>(links);
         }
-        
-        [Fact]
-        public void CreateDocumentTest(){
-            var links = CreateLinks();
-            var defaultXmlStorage = new DefaultXmlStorage<ulong>(links);
-            defaultXmlStorage.CreateDocument("documentFilename"); 
-        }
-        
-        public static ILinks<TLink> CreateLinks<TLink>(string linksDbFilename)
+
+        private static ILinks<TLink> CreateLinks<TLink>(string linksDbFilename)
         {
             var linksConstants = new LinksConstants<TLink>(enableExternalReferencesSupport: true);
             return new UnitedMemoryLinks<TLink>(new FileMappedResizableDirectMemory(linksDbFilename),
                 UnitedMemoryLinks<TLink>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
         }
 
-        public static ILinks<ulong> CreateLinks() => CreateLinks<ulong>(new Platform.IO.TemporaryFile());
+        private static ILinks<ulong> CreateLinks() => CreateLinks<ulong>(new Platform.IO.TemporaryFile());
+
+        [Fact]
+        public void CreateDocumentTest(){
+            var links = CreateLinks();
+            var defaultXmlStorage = new DefaultXmlStorage<ulong>(links);
+            defaultXmlStorage.CreateDocument("documentFilename");
+        }
     }
 }
