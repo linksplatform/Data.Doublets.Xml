@@ -33,9 +33,6 @@ namespace Platform.Data.Doublets.Xml
         private readonly ILinks<TLink> _links;
         private TLink _unicodeSymbolMarker;
         private TLink _unicodeSequenceMarker;
-        private TLink _elementMarker;
-        private TLink _textElementMarker;
-        private TLink _documentMarker;
 
         private class Unindex : ISequenceIndex<TLink>
         {
@@ -196,6 +193,10 @@ namespace Platform.Data.Doublets.Xml
         /// <para></para>
         /// </summary>
         public TLink DocumentMarker { get; }
+
+        public TLink ElementMarker { get; }
+
+        public TLink TextElementMarker { get; }
 
         /// <summary>
         /// <para>
