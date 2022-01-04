@@ -67,21 +67,24 @@ namespace Platform.Data.Doublets.Xml {
 
             }, token);
         
-        public Task Import(XmlReader reader, string documentName, CancellationToken token) =>
-            Task.Factory.StartNew(() =>
+        public Task<TLink> Import(XmlReader reader, string documentName, CancellationToken token)
+        {
+            return Task.Factory.StartNew(() =>
             {
+                TLink document = default;
                 try
                 {
-                    var document = _storage.CreateDocument(documentName);
+                    document = _storage.CreateDocument(documentName);
                     Read(reader, token, new ElementContext(document));
-                    
                 }
                 catch (Exception exception)
                 {
                     Console.WriteLine(exception.ToStringWithAllInnerExceptions());
                 }
-
+                return document;
             }, token);
+        }
+
 
         private void Read(XmlReader reader, CancellationToken token, ElementContext context)
         {
@@ -100,41 +103,60 @@ namespace Platform.Data.Doublets.Xml {
                         var elementName = reader.Name;
                         context.IncrementChildNameCount(elementName);
                         elementName = $"{elementName}[{context.ChildrenNamesCounts[elementName]}]";
-                        if (!reader.IsEmptyElement)
-                        {
-                            elements.Push(elementName);
-                            ConsoleHelpers.Debug("{0} starting...", elements.Count <= 20 ? ToXPath(elements) : elementName); // XPath
-                            var element = _storage.CreateElement(name: elementName);
-                            parentContexts.Push(context);
-                            _storage.AttachElementToParent(elementToAttach: element, parent: context.Parent);
-                            context = new ElementContext(element);
-                        }
-                        else
-                        {
-                            ConsoleHelpers.Debug("{0} finished.", elementName);
-                        }
+                        elements.Push(elementName);
+                        ConsoleHelpers.Debug("{0} import is started.", elements.Count <= 20 ? ToXPath(elements) : elementName); // XPath
+                        var element = _storage.CreateElement(elementName);
+                        parentContexts.Push(context);
+                        // TODO: Do not attach child directly. Create a List for all child elements and then use BanacedVariantConverter to convert that list to sequence link
+                        _storage.Attach(context.Parent, element);
+                        context = new ElementContext(element);
                         break;
                     case XmlNodeType.EndElement:
-                        ConsoleHelpers.Debug("{0} finished.", elements.Count <= 20 ? ToXPath(elements) : elements.Peek()); // XPath
+                        ConsoleHelpers.Debug("{0} import is finished.", elements.Count <= 20 ? ToXPath(elements) : elements.Peek()); // XPath
                         elements.Pop();
                         // Restoring scope
                         context = parentContexts.Pop();
-                        if (elements.Count == 1)
-                        {
-                            if (context.TotalChildren % 10 == 0)
-                            {
-                                Console.WriteLine(context.TotalChildren);
-                            }
-                        }
                         break;
                     case XmlNodeType.Text:
-                        ConsoleHelpers.Debug("Starting text element...");
+                        ConsoleHelpers.Debug("Text element import is started.");
                         var content = reader.Value;
                         ConsoleHelpers.Debug("Content: {0}{1}", content.Truncate(50), content.Length >= 50 ? "..." : "");
-                        var textElement = _storage.CreateTextElement(content: content);
-                        _storage.AttachElementToParent(textElement, context.Parent);
-                        ConsoleHelpers.Debug("Text element finished.");
+                        var textElement = _storage.CreateTextElement(content);
+                        _storage.Attach(context.Parent, textElement);
+                        ConsoleHelpers.Debug("Text element import is finished.");
                         break;
+                    case XmlNodeType.None:
+                        break;
+                    case XmlNodeType.Attribute:
+                        break;
+                    case XmlNodeType.CDATA:
+                        break;
+                    case XmlNodeType.EntityReference:
+                        break;
+                    case XmlNodeType.Entity:
+                        break;
+                    case XmlNodeType.ProcessingInstruction:
+                        break;
+                    case XmlNodeType.Comment:
+                        break;
+                    case XmlNodeType.Document:
+                        break;
+                    case XmlNodeType.DocumentType:
+                        break;
+                    case XmlNodeType.DocumentFragment:
+                        break;
+                    case XmlNodeType.Notation:
+                        break;
+                    case XmlNodeType.Whitespace:
+                        break;
+                    case XmlNodeType.SignificantWhitespace:
+                        break;
+                    case XmlNodeType.EndEntity:
+                        break;
+                    case XmlNodeType.XmlDeclaration:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }
