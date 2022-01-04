@@ -122,7 +122,9 @@ namespace Platform.Data.Doublets.Xml {
                         if (elements.Count == 1)
                         {
                             if (context.TotalChildren % 10 == 0)
+                            {
                                 Console.WriteLine(context.TotalChildren);
+                            }
                         }
                         break;
                     case XmlNodeType.Text:
