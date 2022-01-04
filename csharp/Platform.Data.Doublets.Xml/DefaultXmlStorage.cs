@@ -488,6 +488,24 @@ namespace Platform.Data.Doublets.Xml
             return Links.GetOrCreate(TextElementMarker, contentLink);
         }
 
+        public List<TLink> GetChildrenElements(TLink element)
+        {
+            var parentAndChildrenElementsQuery = new Link<TLink>(element, _links.Constants.Any);
+            var childElements = new List<TLink>();
+            _links.Each(parentAndChildLink =>
+            {
+                var childElement = _links.GetTarget(parentAndChildLink);
+                var childElementSource = _links.GetSource(childElement);
+                if (!EqualityComparer.Equals(ElementMarker, childElementSource))
+                {
+                    return _links.Constants.Continue;
+                }
+                childElements.Add(childElement);
+                return _links.Constants.Continue;
+            }, parentAndChildrenElementsQuery);
+            return childElements;
+        }
+
         /// <summary>
         /// <para>
         /// Creates the object.
