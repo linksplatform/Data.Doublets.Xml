@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -19,6 +20,7 @@ namespace Platform.Data.Doublets.Xml
     public class XmlExporter<TLink> where TLink : struct
     {
         private readonly IXmlStorage<TLink> _storage;
+        private EqualityComparer<TLink> _defaultEqualityComparer = EqualityComparer<TLink>.Default;
 
         /// <summary>
         /// <para>
@@ -50,38 +52,31 @@ namespace Platform.Data.Doublets.Xml
         /// <para>The token.</para>
         /// <para></para>
         /// </param>
-        public Task Export(string documentName, string fileName, CancellationToken token)
+        public Task Export(string documentName, Stream stream, CancellationToken token) => Export(_storage.GetDocumentOrDefault(documentName), stream, token);
+
+        public Task Export(TLink document, Stream stream, CancellationToken token)
         {
             return Task.Factory.StartNew(() =>
             {
-                try
-                {
-                    var document = _storage.GetDocument(documentName);
-                    using var writer = XmlWriter.Create(fileName);
-                    Write(writer, token, new ElementContext(document));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToStringWithAllInnerExceptions());
-                }
+            if (_defaultEqualityComparer.Equals(default, document))
+            {
+                throw new Exception("The document does not exist.");
+            }
+            using var writer = XmlWriter.Create(stream);
+            Write(writer, document, token);
             }, token);
         }
 
-        private void Write(XmlWriter writer, CancellationToken token, ElementContext context)
+        private void Write(XmlWriter writer, TLink context, CancellationToken token) => Write(writer, new ElementContext(context), token);
+
+        private void Write(XmlWriter writer, ElementContext context, CancellationToken token)
         {
-            var parentContexts = new Stack<ElementContext>();
-            var elements = new Stack<string>(); // Path
-                                                // TODO: If path was loaded previously, skip it.
-            
-                                                
-            
-            foreach(TLink lvl in _storage.GetChildren(parent: context.Parent))
+            foreach(TLink child in _storage.GetChildrenElements(context.Parent))
             {
-                Write(writer: writer, token: token, context: new ElementContext(lvl));
-                
+                Write(writer, child, token);
             }
         }
-        
+
         private class ElementContext : XmlElementContext
         {
             public readonly TLink Parent;
