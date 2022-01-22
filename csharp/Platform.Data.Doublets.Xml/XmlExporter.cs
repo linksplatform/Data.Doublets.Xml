@@ -11,47 +11,11 @@ using Platform.Exceptions;
 
 namespace Platform.Data.Doublets.Xml
 {
-    /// <summary>
-    /// <para>
-    /// Represents the xml exporter.
-    /// </para>
-    /// <para></para>
-    /// </summary>
     public class XmlExporter<TLink> where TLink : struct
     {
         private readonly IXmlStorage<TLink> _storage;
         private EqualityComparer<TLink> _defaultEqualityComparer = EqualityComparer<TLink>.Default;
-
-        /// <summary>
-        /// <para>
-        /// Initializes a new <see cref="XmlExporter"/> instance.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <param name="storage">
-        /// <para>A storage.</para>
-        /// <para></para>
-        /// </param>
         public XmlExporter(IXmlStorage<TLink> storage) => _storage = storage;
-
-        /// <summary>
-        /// <para>
-        /// Exports the document name.
-        /// </para>
-        /// <para></para>
-        /// </summary>
-        /// <param name="documentName">
-        /// <para>The document name.</para>
-        /// <para></para>
-        /// </param>
-        /// <param name="fileName">
-        /// <para>The file name.</para>
-        /// <para></para>
-        /// </param>
-        /// <param name="token">
-        /// <para>The token.</para>
-        /// <para></para>
-        /// </param>
         public Task Export(string documentName, Stream stream, CancellationToken token) => Export(_storage.GetDocumentOrDefault(documentName), stream, token);
 
         public Task Export(TLink document, Stream stream, CancellationToken token)
@@ -67,21 +31,14 @@ namespace Platform.Data.Doublets.Xml
             }, token);
         }
 
-        private void Write(XmlWriter writer, TLink context, CancellationToken token) => Write(writer, new ElementContext(context), token);
+        private void Write(XmlWriter writer, TLink context, CancellationToken token) => Write(writer, new XmlElement<TLink>{Parent = {Link = context} }, token);
 
-        private void Write(XmlWriter writer, ElementContext context, CancellationToken token)
+        private void Write(XmlWriter writer, XmlElement<TLink> context, CancellationToken token)
         {
-            foreach(TLink child in _storage.GetChildrenElements(context.Parent))
+            foreach(TLink child in _storage.GetChildrenElements(context.Parent.Link))
             {
                 Write(writer, child, token);
             }
         }
-
-        private class ElementContext : XmlElementContext
-        {
-            public readonly TLink Parent;
-            public ElementContext(TLink parent) => Parent = parent;
-        }
-
     }
 }
