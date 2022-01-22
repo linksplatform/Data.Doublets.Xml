@@ -16,17 +16,17 @@ namespace Platform.Data.Doublets.Xml.Tests
     public class XmlImportAndExportTests
     {
         private const string XmlPrefixTag = "<?xml version=\"1.0\"?>";
-        public static BalancedVariantConverter<TLink> BalancedVariantConverter;
+        private static Platform.Data.Doublets.Sequences.Converters.BalancedVariantConverter<TLink> _balancedVariantConverter;
 
         public static ILinks<TLink> CreateLinks() => CreateLinks<TLink>(new IO.TemporaryFile());
 
-        public static ILinks<TLink> CreateLinks<TLink>(string dataDBFilename)
+        public static ILinks<TLink> CreateLinks<TLink>(string dataDbFilename)
         {
             var linksConstants = new LinksConstants<TLink>(enableExternalReferencesSupport: true);
-            return new UnitedMemoryLinks<TLink>(new FileMappedResizableDirectMemory(dataDBFilename), UnitedMemoryLinks<TLink>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
+            return new UnitedMemoryLinks<TLink>(new FileMappedResizableDirectMemory(dataDbFilename), UnitedMemoryLinks<TLink>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
         }
 
-        public static DefaultXmlStorage<TLink> CreateXmlStorage(ILinks<TLink> links) => new (links, BalancedVariantConverter);
+        public static DefaultXmlStorage<TLink> CreateXmlStorage(ILinks<TLink> links) => new (links, _balancedVariantConverter);
 
         public TLink Import(IXmlStorage<TLink> storage, string documentName, Stream xmlStream)
         {
@@ -34,7 +34,7 @@ namespace Platform.Data.Doublets.Xml.Tests
             XmlImporter<TLink> jsonImporter = new(storage);
             CancellationTokenSource importCancellationTokenSource = new();
             CancellationToken cancellationToken = importCancellationTokenSource.Token;
-            return jsonImporter.Import(utf8XmlReader, documentName, cancellationToken).AwaitResult();
+            return jsonImporter.Import(utf8XmlReader, documentName, cancellationToken);
         }
 
         public void Export(TLink documentLink, IXmlStorage<TLink> storage, MemoryStream stream)
@@ -46,11 +46,12 @@ namespace Platform.Data.Doublets.Xml.Tests
         }
 
         [Theory]
+        [InlineData($"{XmlPrefixTag}<book><author>Gambardella</author><author>Matthew</author></book>")]
         [InlineData($"{XmlPrefixTag}<catalog><book><author>Gambardella, Matthew</author></book></catalog>")]
         public void Test(string initialXml)
         {
             var links = CreateLinks();
-            BalancedVariantConverter = new(links);
+            _balancedVariantConverter = new(links);
             var storage = CreateXmlStorage(links);
             var encodedXml = Encoding.UTF8.GetBytes(initialXml);
             var encodedXmlStream = new MemoryStream(encodedXml);
