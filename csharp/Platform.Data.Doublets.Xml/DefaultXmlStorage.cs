@@ -29,7 +29,7 @@ namespace Platform.Data.Doublets.Xml
 
         private class Unindex : ISequenceIndex<TLink>
         {
-            public bool Add(IList<TLink> sequence) => true;
+            public bool Add(IList<TLink>? sequence) => true;
 
             public bool MightContain(IList<TLink> sequence) => true;
         }

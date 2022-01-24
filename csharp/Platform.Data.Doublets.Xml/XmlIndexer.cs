@@ -99,7 +99,7 @@
 //         /// <para>The elements.</para>
 //         /// <para></para>
 //         /// </returns>
-//         public IList<TLink> ToElements(string @string)
+//         public IList<TLink>? ToElements(string @string)
 //         {
 //             var elements = new TLink[@string.Length];
 //             for (int i = 0; i < @string.Length; i++)

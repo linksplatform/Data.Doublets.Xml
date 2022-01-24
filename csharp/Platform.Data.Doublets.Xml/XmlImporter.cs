@@ -113,10 +113,11 @@ namespace Platform.Data.Doublets.Xml {
             for (int i = 0, depth = 0; i < elements.Count; i++)
             {
                 var element = elements[i];
-                if (element.Depth < elements[i+1].Depth)
+                if (element.Depth <= elements[i+1].Depth)
                 {
                     continue;
                 }
+                var children = new List<TLink>();
                 for (int j = i; element.Depth == elements[i].Depth ; j--)
                 {
                     switch (elements[j].Type)
@@ -128,6 +129,7 @@ namespace Platform.Data.Doublets.Xml {
                         case XmlNodeType.Attribute:
                             break;
                         case XmlNodeType.Text:
+                            var content = _storage.CreateTextElement()
                             break;
                         case XmlNodeType.CDATA:
                             break;

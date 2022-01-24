@@ -37,7 +37,7 @@ public interface IXmlStorage<TLink> where TLink : struct
         List<TLink> GetChildrenElements(TLink element);
         TLink CreateObject();
         TLink CreateObjectValue();
-        TLink CreateArray(IList<TLink> array);
+        TLink CreateArray(IList<TLink>? array);
         TLink CreateArray(TLink sequence);
         TLink CreateArrayValue(IList<TLink> array);
         TLink CreateArrayValue(TLink sequence);
