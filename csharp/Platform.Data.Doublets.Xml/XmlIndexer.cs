@@ -17,15 +17,15 @@
 //     /// </para>
 //     /// <para></para>
 //     /// </summary>
-//     /// <seealso cref="IXmlStorage{TLink}"/>
-//     public class XmlIndexer<TLink> : IXmlStorage<TLink>
+//     /// <seealso cref="IXmlStorage{TLinkAddress}"/>
+//     public class XmlIndexer<TLinkAddress> : IXmlStorage<TLinkAddress>
 //     {
-//         private static readonly TLink _zero = default;
-//         private static readonly TLink _one = Arithmetic.Increment(_zero);
-//         private readonly CachedFrequencyIncrementingSequenceIndex<TLink> _index;
-//         private readonly CharToUnicodeSymbolConverter<TLink> _charToUnicodeSymbolConverter;
-//         private TLink _unicodeSymbolMarker;
-//         private readonly TLink _nullConstant;
+//         private static readonly TLinkAddress _zero = default;
+//         private static readonly TLinkAddress _one = Arithmetic.Increment(_zero);
+//         private readonly CachedFrequencyIncrementingSequenceIndex<TLinkAddress> _index;
+//         private readonly CharToUnicodeSymbolConverter<TLinkAddress> _charToUnicodeSymbolConverter;
+//         private TLinkAddress _unicodeSymbolMarker;
+//         private readonly TLinkAddress _nullConstant;
 //
 //         /// <summary>
 //         /// <para>
@@ -33,7 +33,7 @@
 //         /// </para>
 //         /// <para></para>
 //         /// </summary>
-//         public LinkFrequenciesCache<TLink> Cache { get; }
+//         public LinkFrequenciesCache<TLinkAddress> Cache { get; }
 //
 //         /// <summary>
 //         /// <para>
@@ -45,18 +45,18 @@
 //         /// <para>A links.</para>
 //         /// <para></para>
 //         /// </param>
-//         public XmlIndexer(ILinks<TLink> links)
+//         public XmlIndexer(ILinks<TLinkAddress> links)
 //         {
 //             _nullConstant = links.Constants.Null;
-//             var totalSequenceSymbolFrequencyCounter = new TotalSequenceSymbolFrequencyCounter<TLink>(links);
-//             Cache = new LinkFrequenciesCache<TLink>(links, totalSequenceSymbolFrequencyCounter);
-//             _index = new CachedFrequencyIncrementingSequenceIndex<TLink>(Cache);
-//             var addressToRawNumberConverter = new AddressToRawNumberConverter<TLink>();
+//             var totalSequenceSymbolFrequencyCounter = new TotalSequenceSymbolFrequencyCounter<TLinkAddress>(links);
+//             Cache = new LinkFrequenciesCache<TLinkAddress>(links, totalSequenceSymbolFrequencyCounter);
+//             _index = new CachedFrequencyIncrementingSequenceIndex<TLinkAddress>(Cache);
+//             var addressToRawNumberConverter = new AddressToRawNumberConverter<TLinkAddress>();
 //             InitConstants(links);
-//             _charToUnicodeSymbolConverter = new CharToUnicodeSymbolConverter<TLink>(links, addressToRawNumberConverter, _unicodeSymbolMarker);
+//             _charToUnicodeSymbolConverter = new CharToUnicodeSymbolConverter<TLinkAddress>(links, addressToRawNumberConverter, _unicodeSymbolMarker);
 //         }
 //
-//         private void InitConstants(ILinks<TLink> links)
+//         private void InitConstants(ILinks<TLinkAddress> links)
 //         {
 //             var markerIndex = _one;
 //             var meaningRoot = links.GetOrCreate(markerIndex, markerIndex);
@@ -81,7 +81,7 @@
 //         /// <para>The parent.</para>
 //         /// <para></para>
 //         /// </param>
-//         public void AttachElementToParent(TLink elementToAttach, TLink parent)
+//         public void AttachElementToParent(TLinkAddress elementToAttach, TLinkAddress parent)
 //         {
 //         }
 //
@@ -99,9 +99,9 @@
 //         /// <para>The elements.</para>
 //         /// <para></para>
 //         /// </returns>
-//         public IList<TLink>? ToElements(string @string)
+//         public IList<TLinkAddress>? ToElements(string @string)
 //         {
-//             var elements = new TLink[@string.Length];
+//             var elements = new TLinkAddress[@string.Length];
 //             for (int i = 0; i < @string.Length; i++)
 //             {
 //                 elements[i] = _charToUnicodeSymbolConverter.Convert(@string[i]);
@@ -123,7 +123,7 @@
 //         /// <para>The null constant.</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLink CreateDocument(string name)
+//         public TLinkAddress CreateDocument(string name)
 //         {
 //             _index.Add(ToElements(name));
 //             return _nullConstant;
@@ -143,7 +143,7 @@
 //         /// <para>The null constant.</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLink CreateElement(string name)
+//         public TLinkAddress CreateElement(string name)
 //         {
 //             _index.Add(ToElements(name));
 //             return _nullConstant;
@@ -163,7 +163,7 @@
 //         /// <para>The null constant.</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLink CreateTextElement(string content)
+//         public TLinkAddress CreateTextElement(string content)
 //         {
 //             _index.Add(ToElements(content));
 //             return _nullConstant;
@@ -187,7 +187,7 @@
 //         /// <para>The link</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLink GetDocument(string name)
+//         public TLinkAddress GetDocument(string name)
 //         {
 //             throw new System.NotImplementedException();
 //         }
@@ -210,7 +210,7 @@
 //         /// <para>The link</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLink GetElement(string name)
+//         public TLinkAddress GetElement(string name)
 //         {
 //             throw new System.NotImplementedException();
 //         }
@@ -233,7 +233,7 @@
 //         /// <para>The link</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLink GetTextElement(string content)
+//         public TLinkAddress GetTextElement(string content)
 //         {
 //             throw new System.NotImplementedException();
 //         }
@@ -256,7 +256,7 @@
 //         /// <para>A list of i list t link</para>
 //         /// <para></para>
 //         /// </returns>
-//         public IList<TLink>? GetChildren(TLink parent)
+//         public IList<TLinkAddress>? GetChildren(TLinkAddress parent)
 //         {
 //             throw new System.NotImplementedException();
 //         }

@@ -11,14 +11,14 @@ using Platform.Exceptions;
 
 namespace Platform.Data.Doublets.Xml
 {
-    public class XmlExporter<TLink> where TLink : struct
+    public class XmlExporter<TLinkAddress> where TLinkAddress : struct
     {
-        private readonly IXmlStorage<TLink> _storage;
-        private EqualityComparer<TLink> _defaultEqualityComparer = EqualityComparer<TLink>.Default;
-        public XmlExporter(IXmlStorage<TLink> storage) => _storage = storage;
+        private readonly IXmlStorage<TLinkAddress> _storage;
+        private EqualityComparer<TLinkAddress> _defaultEqualityComparer = EqualityComparer<TLinkAddress>.Default;
+        public XmlExporter(IXmlStorage<TLinkAddress> storage) => _storage = storage;
         public Task Export(string documentName, Stream stream, CancellationToken token) => Export(_storage.GetDocumentOrDefault(documentName), stream, token);
 
-        public Task Export(TLink document, Stream stream, CancellationToken token)
+        public Task Export(TLinkAddress document, Stream stream, CancellationToken token)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -31,11 +31,11 @@ namespace Platform.Data.Doublets.Xml
             }, token);
         }
 
-        private void Write(XmlWriter writer, TLink context, CancellationToken token) => Write(writer, new XmlElement<TLink>{Parent = {Link = context} }, token);
+        private void Write(XmlWriter writer, TLinkAddress context, CancellationToken token) => Write(writer, new XmlElement<TLinkAddress>{Parent = {Link = context} }, token);
 
-        private void Write(XmlWriter writer, XmlElement<TLink> context, CancellationToken token)
+        private void Write(XmlWriter writer, XmlElement<TLinkAddress> context, CancellationToken token)
         {
-            foreach(TLink child in _storage.GetChildrenElements(context.Parent.Link))
+            foreach(TLinkAddress child in _storage.GetChildrenElements(context.Parent.Link))
             {
                 Write(writer, child, token);
             }

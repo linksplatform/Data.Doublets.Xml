@@ -7,38 +7,38 @@ using Platform.Data.Doublets.Sequences.Walkers;
 using Platform.Memory;
 using Xunit;
 using Xunit.Abstractions;
-using TLink = System.UInt64;
+using TLinkAddress = System.UInt64;
 
 namespace Platform.Data.Doublets.Xml.Tests
 {
 public class XmlStorageTests
     {
         private readonly ITestOutputHelper output;
-        public static BalancedVariantConverter<TLink> BalancedVariantConverter;
+        public static BalancedVariantConverter<TLinkAddress> BalancedVariantConverter;
 
         public XmlStorageTests(ITestOutputHelper output)
         {
             this.output = output;
         }
 
-        public static ILinks<TLink> CreateLinks() => CreateLinks<TLink>(new Platform.IO.TemporaryFile());
+        public static ILinks<TLinkAddress> CreateLinks() => CreateLinks<TLinkAddress>(new Platform.IO.TemporaryFile());
 
-        public static ILinks<TLink> CreateLinks<TLink>(string dataDBFilename)
+        public static ILinks<TLinkAddress> CreateLinks<TLinkAddress>(string dataDBFilename)
         {
-            var linksConstants = new LinksConstants<TLink>(enableExternalReferencesSupport: true);
-            return new UnitedMemoryLinks<TLink>(new FileMappedResizableDirectMemory(dataDBFilename), UnitedMemoryLinks<TLink>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
+            var linksConstants = new LinksConstants<TLinkAddress>(enableExternalReferencesSupport: true);
+            return new UnitedMemoryLinks<TLinkAddress>(new FileMappedResizableDirectMemory(dataDBFilename), UnitedMemoryLinks<TLinkAddress>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
         }
 
-        public static DefaultXmlStorage<TLink> CreateXmlStorage()
+        public static DefaultXmlStorage<TLinkAddress> CreateXmlStorage()
         {
             var links = CreateLinks();
             return CreateXmlStorage(links);
         }
 
-        public static DefaultXmlStorage<TLink> CreateXmlStorage(ILinks<TLink> links)
+        public static DefaultXmlStorage<TLinkAddress> CreateXmlStorage(ILinks<TLinkAddress> links)
         {
             BalancedVariantConverter = new(links);
-            return new DefaultXmlStorage<TLink>(links, BalancedVariantConverter);
+            return new DefaultXmlStorage<TLinkAddress>(links, BalancedVariantConverter);
         }
 
         [Fact]
@@ -90,18 +90,18 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentValueLink = defaultXmlStorage.AttachObject(document);
-            TLink createdObjectValue = links.GetTarget(documentValueLink);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentValueLink = defaultXmlStorage.AttachObject(document);
+            TLinkAddress createdObjectValue = links.GetTarget(documentValueLink);
 
-            TLink valueMarker = links.GetSource(createdObjectValue);
+            TLinkAddress valueMarker = links.GetSource(createdObjectValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink createdObject = links.GetTarget(createdObjectValue);
-            TLink objectMarker = links.GetSource(createdObject);
+            TLinkAddress createdObject = links.GetTarget(createdObjectValue);
+            TLinkAddress objectMarker = links.GetSource(createdObject);
             Assert.Equal(objectMarker, defaultXmlStorage.ObjectMarker);
 
-            TLink foundDocumentValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundDocumentValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdObjectValue, foundDocumentValue);
         }
 
@@ -110,18 +110,18 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentStringLink = defaultXmlStorage.AttachString(document, "stringName");
-            TLink createdStringValue = links.GetTarget(documentStringLink);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentStringLink = defaultXmlStorage.AttachString(document, "stringName");
+            TLinkAddress createdStringValue = links.GetTarget(documentStringLink);
 
-            TLink valueMarker = links.GetSource(createdStringValue);
+            TLinkAddress valueMarker = links.GetSource(createdStringValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink createdString = links.GetTarget(createdStringValue);
-            TLink stringMarker = links.GetSource(createdString);
+            TLinkAddress createdString = links.GetTarget(createdStringValue);
+            TLinkAddress stringMarker = links.GetSource(createdString);
             Assert.Equal(stringMarker, defaultXmlStorage.StringMarker);
 
-            TLink foundStringValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundStringValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdStringValue, foundStringValue);
         }
 
@@ -130,18 +130,18 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage = CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentNumberLink = defaultXmlStorage.AttachNumber(document, 2021);
-            TLink createdNumberValue = links.GetTarget(documentNumberLink);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentNumberLink = defaultXmlStorage.AttachNumber(document, 2021);
+            TLinkAddress createdNumberValue = links.GetTarget(documentNumberLink);
 
-            TLink valueMarker = links.GetSource(createdNumberValue);
+            TLinkAddress valueMarker = links.GetSource(createdNumberValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink createdNumber = links.GetTarget(createdNumberValue);
-            TLink numberMarker = links.GetSource(createdNumber);
+            TLinkAddress createdNumber = links.GetTarget(createdNumberValue);
+            TLinkAddress numberMarker = links.GetSource(createdNumber);
             Assert.Equal(numberMarker, defaultXmlStorage.NumberMarker);
 
-            TLink foundNumberValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundNumberValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdNumberValue, foundNumberValue);
         }
 
@@ -150,18 +150,18 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
 
-            TLink documentTrueValueLink = defaultXmlStorage.AttachBoolean(document, true);
-            TLink createdTrueValue = links.GetTarget(documentTrueValueLink);
+            TLinkAddress documentTrueValueLink = defaultXmlStorage.AttachBoolean(document, true);
+            TLinkAddress createdTrueValue = links.GetTarget(documentTrueValueLink);
 
-            TLink valueMarker = links.GetSource(createdTrueValue);
+            TLinkAddress valueMarker = links.GetSource(createdTrueValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink trueMarker = links.GetTarget(createdTrueValue);
+            TLinkAddress trueMarker = links.GetTarget(createdTrueValue);
             Assert.Equal(trueMarker, defaultXmlStorage.TrueMarker);
 
-            TLink foundTrueValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundTrueValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdTrueValue, foundTrueValue);
         }
 
@@ -170,18 +170,18 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
 
-            TLink documentFalseValueLink = defaultXmlStorage.AttachBoolean(document, false);
-            TLink createdFalseValue = links.GetTarget(documentFalseValueLink);
+            TLinkAddress documentFalseValueLink = defaultXmlStorage.AttachBoolean(document, false);
+            TLinkAddress createdFalseValue = links.GetTarget(documentFalseValueLink);
 
-            TLink valueMarker = links.GetSource(createdFalseValue);
+            TLinkAddress valueMarker = links.GetSource(createdFalseValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink falseMarker = links.GetTarget(createdFalseValue);
+            TLinkAddress falseMarker = links.GetTarget(createdFalseValue);
             Assert.Equal(falseMarker, defaultXmlStorage.FalseMarker);
 
-            TLink foundFalseValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundFalseValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdFalseValue, foundFalseValue);
         }
 
@@ -190,18 +190,18 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
 
-            TLink documentNullValueLink = defaultXmlStorage.AttachNull(document);
-            TLink createdNullValue = links.GetTarget(documentNullValueLink);
+            TLinkAddress documentNullValueLink = defaultXmlStorage.AttachNull(document);
+            TLinkAddress createdNullValue = links.GetTarget(documentNullValueLink);
 
-            TLink valueMarker = links.GetSource(createdNullValue);
+            TLinkAddress valueMarker = links.GetSource(createdNullValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink nullMarker = links.GetTarget(createdNullValue);
+            TLinkAddress nullMarker = links.GetTarget(createdNullValue);
             Assert.Equal(nullMarker, defaultXmlStorage.NullMarker);
 
-            TLink foundNullValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundNullValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdNullValue, foundNullValue);
         }
 
@@ -210,24 +210,24 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
 
-            TLink documentArrayValueLink = defaultXmlStorage.AttachArray(document, new TLink[0]);
-            TLink createdArrayValue = links.GetTarget(documentArrayValueLink);
+            TLinkAddress documentArrayValueLink = defaultXmlStorage.AttachArray(document, new TLinkAddress[0]);
+            TLinkAddress createdArrayValue = links.GetTarget(documentArrayValueLink);
             output.WriteLine(links.Format(createdArrayValue));
 
 
-            TLink valueMarker = links.GetSource(createdArrayValue);
+            TLinkAddress valueMarker = links.GetSource(createdArrayValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink createdArrayLink = links.GetTarget(createdArrayValue);
-            TLink arrayMarker = links.GetSource(createdArrayLink);
+            TLinkAddress createdArrayLink = links.GetTarget(createdArrayValue);
+            TLinkAddress arrayMarker = links.GetSource(createdArrayLink);
             Assert.Equal(arrayMarker, defaultXmlStorage.ArrayMarker);
 
-            TLink createArrayContents = links.GetTarget(createdArrayLink);
+            TLinkAddress createArrayContents = links.GetTarget(createdArrayLink);
             Assert.Equal(createArrayContents, defaultXmlStorage.EmptyArrayMarker);
 
-            TLink foundArrayValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundArrayValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdArrayValue, foundArrayValue);
         }
 
@@ -236,47 +236,47 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
 
-            TLink arrayElement = defaultXmlStorage.CreateString("arrayElement");
-            TLink[] array = new TLink[] { arrayElement, arrayElement, arrayElement };
+            TLinkAddress arrayElement = defaultXmlStorage.CreateString("arrayElement");
+            TLinkAddress[] array = new TLinkAddress[] { arrayElement, arrayElement, arrayElement };
 
 
-            TLink documentArrayValueLink = defaultXmlStorage.AttachArray(document, array);
-            TLink createdArrayValue = links.GetTarget(documentArrayValueLink);
+            TLinkAddress documentArrayValueLink = defaultXmlStorage.AttachArray(document, array);
+            TLinkAddress createdArrayValue = links.GetTarget(documentArrayValueLink);
 
-            DefaultStack<TLink> stack = new();
-            RightSequenceWalker<TLink> rightSequenceWalker = new(links, stack, arrayElementLink => links.GetSource(arrayElementLink) == defaultXmlStorage.ValueMarker);
-            IEnumerable<TLink> arrayElementsValuesLink = rightSequenceWalker.Walk(createdArrayValue);
+            DefaultStack<TLinkAddress> stack = new();
+            RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(links, stack, arrayElementLink => links.GetSource(arrayElementLink) == defaultXmlStorage.ValueMarker);
+            IEnumerable<TLinkAddress> arrayElementsValuesLink = rightSequenceWalker.Walk(createdArrayValue);
             Assert.NotEmpty(arrayElementsValuesLink);
 
             output.WriteLine(links.Format(createdArrayValue));
 
 
-            TLink valueMarker = links.GetSource(createdArrayValue);
+            TLinkAddress valueMarker = links.GetSource(createdArrayValue);
             Assert.Equal(valueMarker, defaultXmlStorage.ValueMarker);
 
-            TLink createdArrayLink = links.GetTarget(createdArrayValue);
-            TLink arrayMarker = links.GetSource(createdArrayLink);
+            TLinkAddress createdArrayLink = links.GetTarget(createdArrayValue);
+            TLinkAddress arrayMarker = links.GetSource(createdArrayLink);
             Assert.Equal(arrayMarker, defaultXmlStorage.ArrayMarker);
 
-            TLink createdArrayContents = links.GetTarget(createdArrayLink);
+            TLinkAddress createdArrayContents = links.GetTarget(createdArrayLink);
             Assert.Equal(links.GetTarget(createdArrayContents), arrayElement);
 
 
-            TLink foundArrayValue = defaultXmlStorage.GetValueLink(document);
+            TLinkAddress foundArrayValue = defaultXmlStorage.GetValueLink(document);
             Assert.Equal(createdArrayValue, foundArrayValue);
         }
 
         [Fact]
         public void GetObjectFromDocumentObjectValueLinkTest()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValueLink = defaultXmlStorage.AttachObject(document);
-            TLink objectValueLink = links.GetTarget(documentObjectValueLink);
-            TLink objectFromGetObject = defaultXmlStorage.GetObject(documentObjectValueLink);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValueLink = defaultXmlStorage.AttachObject(document);
+            TLinkAddress objectValueLink = links.GetTarget(documentObjectValueLink);
+            TLinkAddress objectFromGetObject = defaultXmlStorage.GetObject(documentObjectValueLink);
             output.WriteLine(links.Format(objectValueLink));
             output.WriteLine(links.Format(objectFromGetObject));
             Assert.Equal(links.GetTarget(objectValueLink), objectFromGetObject);
@@ -285,27 +285,27 @@ public class XmlStorageTests
         [Fact]
         public void GetObjectFromObjectValueLinkTest()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValueLink = defaultXmlStorage.AttachObject(document);
-            TLink objectValueLink = links.GetTarget(documentObjectValueLink);
-            TLink objectFromGetObject = defaultXmlStorage.GetObject(objectValueLink);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValueLink = defaultXmlStorage.AttachObject(document);
+            TLinkAddress objectValueLink = links.GetTarget(documentObjectValueLink);
+            TLinkAddress objectFromGetObject = defaultXmlStorage.GetObject(objectValueLink);
             Assert.Equal(links.GetTarget(objectValueLink), objectFromGetObject);
         }
 
         [Fact]
         public void AttachStringValueToKey()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValue = defaultXmlStorage.AttachObject(document);
-            TLink @object = defaultXmlStorage.GetObject(documentObjectValue);
-            TLink memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
-            TLink memberStringValueLink = defaultXmlStorage.AttachString(memberLink, "stringValue");
-            TLink stringValueLink = links.GetTarget(memberStringValueLink);
-            List<TLink> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
+            TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
+            TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
+            TLinkAddress memberStringValueLink = defaultXmlStorage.AttachString(memberLink, "stringValue");
+            TLinkAddress stringValueLink = links.GetTarget(memberStringValueLink);
+            List<TLinkAddress> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
             Assert.Equal(memberLink, objectMembersLinks[0]);
             Assert.Equal(stringValueLink, defaultXmlStorage.GetValueLink(objectMembersLinks[0]));
         }
@@ -313,15 +313,15 @@ public class XmlStorageTests
         [Fact]
         public void AttachNumberValueToKey()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValue = defaultXmlStorage.AttachObject(document);
-            TLink @object = defaultXmlStorage.GetObject(documentObjectValue);
-            TLink memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
-            TLink memberNumberValueLink = defaultXmlStorage.AttachNumber(memberLink, 123);
-            TLink numberValueLink = links.GetTarget(memberNumberValueLink);
-            List<TLink> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
+            TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
+            TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
+            TLinkAddress memberNumberValueLink = defaultXmlStorage.AttachNumber(memberLink, 123);
+            TLinkAddress numberValueLink = links.GetTarget(memberNumberValueLink);
+            List<TLinkAddress> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
             Assert.Equal(memberLink, objectMembersLinks[0]);
             Assert.Equal(numberValueLink, defaultXmlStorage.GetValueLink(objectMembersLinks[0]));
         }
@@ -329,15 +329,15 @@ public class XmlStorageTests
         [Fact]
         public void AttachObjectValueToKey()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValue = defaultXmlStorage.AttachObject(document);
-            TLink @object = defaultXmlStorage.GetObject(documentObjectValue);
-            TLink memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
-            TLink memberObjectValueLink = defaultXmlStorage.AttachObject(memberLink);
-            TLink objectValueLink = links.GetTarget(memberObjectValueLink);
-            List<TLink> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
+            TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
+            TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
+            TLinkAddress memberObjectValueLink = defaultXmlStorage.AttachObject(memberLink);
+            TLinkAddress objectValueLink = links.GetTarget(memberObjectValueLink);
+            List<TLinkAddress> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
             Assert.Equal(memberLink, objectMembersLinks[0]);
             Assert.Equal(objectValueLink, defaultXmlStorage.GetValueLink(objectMembersLinks[0]));
         }
@@ -345,17 +345,17 @@ public class XmlStorageTests
         [Fact]
         public void AttachArrayValueToKey()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValue = defaultXmlStorage.AttachObject(document);
-            TLink @object = defaultXmlStorage.GetObject(documentObjectValue);
-            TLink memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
-            TLink arrayElement = defaultXmlStorage.CreateString("arrayElement");
-            TLink[] array = { arrayElement, arrayElement, arrayElement };
-            TLink memberArrayValueLink = defaultXmlStorage.AttachArray(memberLink, array);
-            TLink arrayValueLink = links.GetTarget(memberArrayValueLink);
-            List<TLink> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
+            TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
+            TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
+            TLinkAddress arrayElement = defaultXmlStorage.CreateString("arrayElement");
+            TLinkAddress[] array = { arrayElement, arrayElement, arrayElement };
+            TLinkAddress memberArrayValueLink = defaultXmlStorage.AttachArray(memberLink, array);
+            TLinkAddress arrayValueLink = links.GetTarget(memberArrayValueLink);
+            List<TLinkAddress> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
             Assert.Equal(memberLink, objectMembersLinks[0]);
             Assert.Equal(arrayValueLink, defaultXmlStorage.GetValueLink(objectMembersLinks[0]));
         }
@@ -363,15 +363,15 @@ public class XmlStorageTests
         [Fact]
         public void AttachTrueValueToKey()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValue = defaultXmlStorage.AttachObject(document);
-            TLink @object = defaultXmlStorage.GetObject(documentObjectValue);
-            TLink memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
-            TLink memberTrueValueLink = defaultXmlStorage.AttachBoolean(memberLink, true);
-            TLink trueValueLink = links.GetTarget(memberTrueValueLink);
-            List<TLink> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
+            TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
+            TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
+            TLinkAddress memberTrueValueLink = defaultXmlStorage.AttachBoolean(memberLink, true);
+            TLinkAddress trueValueLink = links.GetTarget(memberTrueValueLink);
+            List<TLinkAddress> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
             Assert.Equal(memberLink, objectMembersLinks[0]);
             Assert.Equal(trueValueLink, defaultXmlStorage.GetValueLink(objectMembersLinks[0]));
         }
@@ -379,15 +379,15 @@ public class XmlStorageTests
         [Fact]
         public void AttachFalseValueToKey()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValue = defaultXmlStorage.AttachObject(document);
-            TLink @object = defaultXmlStorage.GetObject(documentObjectValue);
-            TLink memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
-            TLink memberFalseValueLink = defaultXmlStorage.AttachBoolean(memberLink, false);
-            TLink falseValueLink = links.GetTarget(memberFalseValueLink);
-            List<TLink> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
+            TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
+            TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
+            TLinkAddress memberFalseValueLink = defaultXmlStorage.AttachBoolean(memberLink, false);
+            TLinkAddress falseValueLink = links.GetTarget(memberFalseValueLink);
+            List<TLinkAddress> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
             Assert.Equal(memberLink, objectMembersLinks[0]);
             Assert.Equal(falseValueLink, defaultXmlStorage.GetValueLink(objectMembersLinks[0]));
         }
@@ -395,15 +395,15 @@ public class XmlStorageTests
         [Fact]
         public void AttachNullValueToKey()
         {
-            ILinks<TLink> links = CreateLinks();
+            ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLink document = defaultXmlStorage.CreateDocument("documentName");
-            TLink documentObjectValue = defaultXmlStorage.AttachObject(document);
-            TLink @object = defaultXmlStorage.GetObject(documentObjectValue);
-            TLink memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
-            TLink memberNullValueLink = defaultXmlStorage.AttachNull(memberLink);
-            TLink nullValueLink = links.GetTarget(memberNullValueLink);
-            List<TLink> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
+            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
+            TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
+            TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
+            TLinkAddress memberNullValueLink = defaultXmlStorage.AttachNull(memberLink);
+            TLinkAddress nullValueLink = links.GetTarget(memberNullValueLink);
+            List<TLinkAddress> objectMembersLinks = defaultXmlStorage.GetMembersLinks(@object);
             Assert.Equal(nullValueLink, defaultXmlStorage.GetValueLink(objectMembersLinks[0]));
         }
     }

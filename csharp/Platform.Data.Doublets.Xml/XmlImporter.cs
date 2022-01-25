@@ -18,41 +18,41 @@ using Platform.Memory;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 
 namespace Platform.Data.Doublets.Xml {
-    public class XmlImporter<TLink> where TLink : struct
+    public class XmlImporter<TLinkAddress> where TLinkAddress : struct
     {
-        private readonly IXmlStorage<TLink> _storage;
-        private readonly LinksListToSequenceConverterBase<TLink> _listToSequenceConverter;
+        private readonly IXmlStorage<TLinkAddress> _storage;
+        private readonly LinksListToSequenceConverterBase<TLinkAddress> _listToSequenceConverter;
         private readonly IEqualityComparer _equalityComparer;
 
-        public XmlImporter(IXmlStorage<TLink> storage) : this(storage, new BalancedVariantConverter<TLink>(storage.Links)) {}
+        public XmlImporter(IXmlStorage<TLinkAddress> storage) : this(storage, new BalancedVariantConverter<TLinkAddress>(storage.Links)) {}
 
-        public XmlImporter(IXmlStorage<TLink> storage, LinksListToSequenceConverterBase<TLink> listToSequenceConverter)
+        public XmlImporter(IXmlStorage<TLinkAddress> storage, LinksListToSequenceConverterBase<TLinkAddress> listToSequenceConverter)
         {
             _storage = storage;
             _listToSequenceConverter = listToSequenceConverter;
-            _equalityComparer = EqualityComparer<TLink>.Default;
+            _equalityComparer = EqualityComparer<TLinkAddress>.Default;
         }
 
-        public TLink Import(XmlReader reader, string documentName, CancellationToken token)
+        public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
         {
-            TLink document = default;
+            TLinkAddress document = default;
             document = _storage.CreateDocument(documentName);
-            Read(reader, token, new XmlElement<TLink>{Link = document, Type = XmlNodeType.None});
+            Read(reader, token, new XmlElement<TLinkAddress>{Link = document, Type = XmlNodeType.None});
             return document;
         }
 
-        public TLink Import(string file, CancellationToken token)
+        public TLinkAddress Import(string file, CancellationToken token)
         {
             var document = _storage.CreateDocument(file);
             using var reader = XmlReader.Create(file);
-            Read(reader, token, new XmlElement<TLink>{Link = document, Type = XmlNodeType.None});
+            Read(reader, token, new XmlElement<TLinkAddress>{Link = document, Type = XmlNodeType.None});
             return document;
         }
 
 
-        private void Read(XmlReader reader, CancellationToken token, XmlElement<TLink> parent)
+        private void Read(XmlReader reader, CancellationToken token, XmlElement<TLinkAddress> parent)
         {
-            List<XmlElement<TLink>> elements = new();
+            List<XmlElement<TLinkAddress>> elements = new();
             // TODO: If path was loaded previously, skip it.
             while (reader.Read())
             {
@@ -64,7 +64,7 @@ namespace Platform.Data.Doublets.Xml {
                 {
                     case XmlNodeType.Element:
                     {
-                        var element = new XmlElement<TLink> { Name = reader.Name, Depth = reader.Depth, Type = XmlNodeType.Element};
+                        var element = new XmlElement<TLinkAddress> { Name = reader.Name, Depth = reader.Depth, Type = XmlNodeType.Element};
                         elements.Add(element);
                         break;
                     }
@@ -72,7 +72,7 @@ namespace Platform.Data.Doublets.Xml {
                         break;
                     case XmlNodeType.Text:
                     {
-                        var element = new XmlElement<TLink> { Value = reader.Value, ValueType = reader.ValueType, Depth = reader.Depth, Type = XmlNodeType.Text};
+                        var element = new XmlElement<TLinkAddress> { Value = reader.Value, ValueType = reader.ValueType, Depth = reader.Depth, Type = XmlNodeType.Text};
                         elements.Add(element);
                         break;
                     }
@@ -117,7 +117,7 @@ namespace Platform.Data.Doublets.Xml {
                 {
                     continue;
                 }
-                var children = new List<TLink>();
+                var children = new List<TLinkAddress>();
                 for (int j = i; element.Depth == elements[i].Depth ; j--)
                 {
                     switch (elements[j].Type)
@@ -166,10 +166,10 @@ namespace Platform.Data.Doublets.Xml {
             }
         }
 
-        // private void Read(XmlReader reader, CancellationToken token, XmlElement<TLink> parent)
+        // private void Read(XmlReader reader, CancellationToken token, XmlElement<TLinkAddress> parent)
         // {
-        //     Stack<XmlElement<TLink>> parents = new();
-        //     Stack<XmlElement<TLink>> elements = new();
+        //     Stack<XmlElement<TLinkAddress>> parents = new();
+        //     Stack<XmlElement<TLinkAddress>> elements = new();
         //     // TODO: If path was loaded previously, skip it.
         //     while (reader.Read())
         //     {
@@ -183,13 +183,13 @@ namespace Platform.Data.Doublets.Xml {
         //             {
         //                 var elementName = reader.Name;
         //                 var element = _storage.CreateElement(elementName);
-        //                 parents.Push(new XmlElement<TLink>(element, parents.PeekOrDefault()));
+        //                 parents.Push(new XmlElement<TLinkAddress>(element, parents.PeekOrDefault()));
         //                 break;
         //             }
         //             case XmlNodeType.EndElement:
         //             {
         //                 var element = parents.Pop();
-        //                 var children = new List<TLink>();
+        //                 var children = new List<TLinkAddress>();
         //                 for (int i = elements.Count - 1; i >= 0; i--)
         //                 {
         //                     var currentSibling = elements.ElementAtOrDefault(i);

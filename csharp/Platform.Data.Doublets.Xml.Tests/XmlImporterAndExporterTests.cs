@@ -2,7 +2,7 @@
 using System.Threading;
 using System.IO;
 using Xunit;
-using TLink = System.UInt64;
+using TLinkAddress = System.UInt64;
 using Platform.Data.Doublets.Memory.United.Generic;
 using Platform.Memory;
 using Platform.Data.Doublets.Memory;
@@ -16,30 +16,30 @@ namespace Platform.Data.Doublets.Xml.Tests
     public class XmlImportAndExportTests
     {
         private const string XmlPrefixTag = "<?xml version=\"1.0\"?>";
-        private static Platform.Data.Doublets.Sequences.Converters.BalancedVariantConverter<TLink> _balancedVariantConverter;
+        private static Platform.Data.Doublets.Sequences.Converters.BalancedVariantConverter<TLinkAddress> _balancedVariantConverter;
 
-        public static ILinks<TLink> CreateLinks() => CreateLinks<TLink>(new IO.TemporaryFile());
+        public static ILinks<TLinkAddress> CreateLinks() => CreateLinks<TLinkAddress>(new IO.TemporaryFile());
 
-        public static ILinks<TLink> CreateLinks<TLink>(string dataDbFilename)
+        public static ILinks<TLinkAddress> CreateLinks<TLinkAddress>(string dataDbFilename)
         {
-            var linksConstants = new LinksConstants<TLink>(enableExternalReferencesSupport: true);
-            return new UnitedMemoryLinks<TLink>(new FileMappedResizableDirectMemory(dataDbFilename), UnitedMemoryLinks<TLink>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
+            var linksConstants = new LinksConstants<TLinkAddress>(enableExternalReferencesSupport: true);
+            return new UnitedMemoryLinks<TLinkAddress>(new FileMappedResizableDirectMemory(dataDbFilename), UnitedMemoryLinks<TLinkAddress>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
         }
 
-        public static DefaultXmlStorage<TLink> CreateXmlStorage(ILinks<TLink> links) => new (links, _balancedVariantConverter);
+        public static DefaultXmlStorage<TLinkAddress> CreateXmlStorage(ILinks<TLinkAddress> links) => new (links, _balancedVariantConverter);
 
-        public TLink Import(IXmlStorage<TLink> storage, string documentName, Stream xmlStream)
+        public TLinkAddress Import(IXmlStorage<TLinkAddress> storage, string documentName, Stream xmlStream)
         {
             var utf8XmlReader = XmlReader.Create(xmlStream);
-            XmlImporter<TLink> jsonImporter = new(storage);
+            XmlImporter<TLinkAddress> jsonImporter = new(storage);
             CancellationTokenSource importCancellationTokenSource = new();
             CancellationToken cancellationToken = importCancellationTokenSource.Token;
             return jsonImporter.Import(utf8XmlReader, documentName, cancellationToken);
         }
 
-        public void Export(TLink documentLink, IXmlStorage<TLink> storage, MemoryStream stream)
+        public void Export(TLinkAddress documentLink, IXmlStorage<TLinkAddress> storage, MemoryStream stream)
         {
-            XmlExporter<TLink> xmlExporter = new(storage);
+            XmlExporter<TLinkAddress> xmlExporter = new(storage);
             CancellationTokenSource exportCancellationTokenSource = new();
             CancellationToken exportCancellationToken = exportCancellationTokenSource.Token;
             xmlExporter.Export(documentLink, stream, exportCancellationToken);

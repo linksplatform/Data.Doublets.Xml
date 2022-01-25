@@ -2,63 +2,63 @@ using System;
 using System.Collections.Generic;
 
 namespace Platform.Data.Doublets.Xml;
-public interface IXmlStorage<TLink> where TLink : struct
+public interface IXmlStorage<TLinkAddress> where TLinkAddress : struct
     {
-        ILinks<TLink> Links { get; }
-        TLink DocumentMarker { get; }
+        ILinks<TLinkAddress> Links { get; }
+        TLinkAddress DocumentMarker { get; }
 
-        TLink ElementMarker { get; }
+        TLinkAddress ElementMarker { get; }
 
-        TLink TextElementMarker { get; }
-        TLink ObjectMarker { get; }
-        TLink MemberMarker { get; }
-        TLink ValueMarker { get; }
-        TLink StringMarker { get; }
-        TLink EmptyStringMarker { get; }
-        TLink NumberMarker { get; }
-        TLink NegativeNumberMarker { get; }
-        TLink ArrayMarker { get; }
-        TLink EmptyArrayMarker { get; }
-        TLink TrueMarker { get; }
-        TLink FalseMarker { get; }
-        TLink NullMarker { get; }
-        TLink CreateString(string content);
-        TLink CreateStringValue(string content);
-        TLink CreateNumber(decimal number);
-        TLink CreateNumberValue(decimal number);
-        TLink CreateBooleanValue(bool value);
-        TLink CreateNullValue();
-        TLink CreateDocument(string name);
+        TLinkAddress TextElementMarker { get; }
+        TLinkAddress ObjectMarker { get; }
+        TLinkAddress MemberMarker { get; }
+        TLinkAddress ValueMarker { get; }
+        TLinkAddress StringMarker { get; }
+        TLinkAddress EmptyStringMarker { get; }
+        TLinkAddress NumberMarker { get; }
+        TLinkAddress NegativeNumberMarker { get; }
+        TLinkAddress ArrayMarker { get; }
+        TLinkAddress EmptyArrayMarker { get; }
+        TLinkAddress TrueMarker { get; }
+        TLinkAddress FalseMarker { get; }
+        TLinkAddress NullMarker { get; }
+        TLinkAddress CreateString(string content);
+        TLinkAddress CreateStringValue(string content);
+        TLinkAddress CreateNumber(decimal number);
+        TLinkAddress CreateNumberValue(decimal number);
+        TLinkAddress CreateBooleanValue(bool value);
+        TLinkAddress CreateNullValue();
+        TLinkAddress CreateDocument(string name);
 
-        TLink CreateElement(string name);
+        TLinkAddress CreateElement(string name);
 
-        TLink CreateTextElement(string content);
+        TLinkAddress CreateTextElement(string content);
 
-        List<TLink> GetChildrenElements(TLink element);
-        TLink CreateObject();
-        TLink CreateObjectValue();
-        TLink CreateArray(IList<TLink>? array);
-        TLink CreateArray(TLink sequence);
-        TLink CreateArrayValue(IList<TLink>? array);
-        TLink CreateArrayValue(TLink sequence);
-        TLink CreateMember(string name);
-        TLink CreateValue(TLink value);
-        TLink AttachObject(TLink parent);
-        TLink AttachString(TLink parent, string content);
-        TLink AttachNumber(TLink parent, decimal number);
-        TLink AttachBoolean(TLink parent, bool value);
-        TLink AttachNull(TLink parent);
-        TLink AttachArray(TLink parent, IList<TLink>? array);
-        TLink AttachMemberToObject(TLink @object, string keyName);
-        TLink Attach(TLink parent, TLink child);
-        TLink AppendArrayValue(TLink arrayValue, TLink appendant);
-        TLink GetDocumentOrDefault(string name);
-        string GetString(TLink stringValue);
-        decimal GetNumber(TLink valueLink);
-        TLink GetObject(TLink objectValueLink);
-        TLink GetArray(TLink arrayValueLink);
-        TLink GetArraySequence(TLink array);
-        TLink GetValueLink(TLink parent);
-        TLink GetValueMarker(TLink value);
-        List<TLink> GetMembersLinks(TLink @object);
+        List<TLinkAddress> GetChildrenElements(TLinkAddress element);
+        TLinkAddress CreateObject();
+        TLinkAddress CreateObjectValue();
+        TLinkAddress CreateArray(IList<TLinkAddress>? array);
+        TLinkAddress CreateArray(TLinkAddress sequence);
+        TLinkAddress CreateArrayValue(IList<TLinkAddress>? array);
+        TLinkAddress CreateArrayValue(TLinkAddress sequence);
+        TLinkAddress CreateMember(string name);
+        TLinkAddress CreateValue(TLinkAddress value);
+        TLinkAddress AttachObject(TLinkAddress parent);
+        TLinkAddress AttachString(TLinkAddress parent, string content);
+        TLinkAddress AttachNumber(TLinkAddress parent, decimal number);
+        TLinkAddress AttachBoolean(TLinkAddress parent, bool value);
+        TLinkAddress AttachNull(TLinkAddress parent);
+        TLinkAddress AttachArray(TLinkAddress parent, IList<TLinkAddress>? array);
+        TLinkAddress AttachMemberToObject(TLinkAddress @object, string keyName);
+        TLinkAddress Attach(TLinkAddress parent, TLinkAddress child);
+        TLinkAddress AppendArrayValue(TLinkAddress arrayValue, TLinkAddress appendant);
+        TLinkAddress GetDocumentOrDefault(string name);
+        string GetString(TLinkAddress stringValue);
+        decimal GetNumber(TLinkAddress valueLink);
+        TLinkAddress GetObject(TLinkAddress objectValueLink);
+        TLinkAddress GetArray(TLinkAddress arrayValueLink);
+        TLinkAddress GetArraySequence(TLinkAddress array);
+        TLinkAddress GetValueLink(TLinkAddress parent);
+        TLinkAddress GetValueMarker(TLinkAddress value);
+        List<TLinkAddress> GetMembersLinks(TLinkAddress @object);
     }
