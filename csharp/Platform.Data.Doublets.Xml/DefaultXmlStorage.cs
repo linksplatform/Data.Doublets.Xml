@@ -31,13 +31,13 @@ namespace Platform.Data.Doublets.Xml
         {
             public bool Add(IList<TLink>? sequence) => true;
 
-            public bool MightContain(IList<TLink> sequence) => true;
+            public bool MightContain(IList<TLink>? sequence) => true;
         }
         public readonly TLink Any;
         public static readonly TLink Zero = default;
         public static readonly TLink One = Arithmetic.Increment(Zero);
         public readonly BalancedVariantConverter<TLink> BalancedVariantConverter;
-        public readonly IConverter<IList<TLink>, TLink> ListToSequenceConverter;
+        public readonly IConverter<IList<TLink>?, TLink> ListToSequenceConverter;
         public readonly TLink MeaningRoot;
         public readonly EqualityComparer<TLink> EqualityComparer = EqualityComparer<TLink>.Default;
 
@@ -76,7 +76,7 @@ namespace Platform.Data.Doublets.Xml
         public TLink TrueMarker { get; }
         public TLink FalseMarker { get; }
         public TLink NullMarker { get; }
-        public DefaultXmlStorage(ILinks<TLink> links, IConverter<IList<TLink>, TLink> listToSequenceConverter)
+        public DefaultXmlStorage(ILinks<TLink> links, IConverter<IList<TLink>?, TLink> listToSequenceConverter)
         {
             Links = links;
             ListToSequenceConverter = listToSequenceConverter;
@@ -182,13 +182,13 @@ namespace Platform.Data.Doublets.Xml
             var @object = CreateObject();
             return CreateValue(@object);
         }
-        public TLink CreateArray(IList<TLink> array)
+        public TLink CreateArray(IList<TLink>? array)
         {
             var arraySequence = array.Count == 0 ? EmptyArrayMarker : BalancedVariantConverter.Convert(array);
             return CreateArray(arraySequence);
         }
         public TLink CreateArray(TLink sequence) => Links.GetOrCreate(ArrayMarker, sequence);
-        public TLink CreateArrayValue(IList<TLink> array)
+        public TLink CreateArrayValue(IList<TLink>? array)
         {
             var arrayLink = CreateArray(array);
             return CreateValue(arrayLink);
@@ -227,7 +227,7 @@ namespace Platform.Data.Doublets.Xml
             var nullValue = CreateNullValue();
             return Attach(parent, nullValue);
         }
-        public TLink AttachArray(TLink parent, IList<TLink> array)
+        public TLink AttachArray(TLink parent, IList<TLink>? array)
         {
             var arrayValue = CreateArrayValue(array);
             return Attach(parent, arrayValue);

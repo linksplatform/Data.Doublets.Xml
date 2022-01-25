@@ -39,7 +39,7 @@ public interface IXmlStorage<TLink> where TLink : struct
         TLink CreateObjectValue();
         TLink CreateArray(IList<TLink>? array);
         TLink CreateArray(TLink sequence);
-        TLink CreateArrayValue(IList<TLink> array);
+        TLink CreateArrayValue(IList<TLink>? array);
         TLink CreateArrayValue(TLink sequence);
         TLink CreateMember(string name);
         TLink CreateValue(TLink value);
@@ -48,7 +48,7 @@ public interface IXmlStorage<TLink> where TLink : struct
         TLink AttachNumber(TLink parent, decimal number);
         TLink AttachBoolean(TLink parent, bool value);
         TLink AttachNull(TLink parent);
-        TLink AttachArray(TLink parent, IList<TLink> array);
+        TLink AttachArray(TLink parent, IList<TLink>? array);
         TLink AttachMemberToObject(TLink @object, string keyName);
         TLink Attach(TLink parent, TLink child);
         TLink AppendArrayValue(TLink arrayValue, TLink appendant);

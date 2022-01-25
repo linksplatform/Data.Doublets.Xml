@@ -256,7 +256,7 @@
 //         /// <para>A list of i list t link</para>
 //         /// <para></para>
 //         /// </returns>
-//         public IList<TLink> GetChildren(TLink parent)
+//         public IList<TLink>? GetChildren(TLink parent)
 //         {
 //             throw new System.NotImplementedException();
 //         }
