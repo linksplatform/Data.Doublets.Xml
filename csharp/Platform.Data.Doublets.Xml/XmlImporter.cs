@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -125,12 +127,21 @@ namespace Platform.Data.Doublets.Xml {
                         case XmlNodeType.None:
                             break;
                         case XmlNodeType.Element:
+                        {
+                            var child = _storage.CreateElement(reader.Name);
+                            children.Add(child);
+                            elements.RemoveAt(i);
                             break;
+                        }
                         case XmlNodeType.Attribute:
                             break;
                         case XmlNodeType.Text:
-                            var content = _storage.CreateTextElement()
+                        {
+                            var child = _storage.CreateTextElement(reader.Value);
+                            children.Add(child);
+                            elements.RemoveAt(i);
                             break;
+                        }
                         case XmlNodeType.CDATA:
                             break;
                         case XmlNodeType.EntityReference:
@@ -163,6 +174,9 @@ namespace Platform.Data.Doublets.Xml {
                             throw new ArgumentOutOfRangeException();
                     }
                 }
+                var childrenSequence = _listToSequenceConverter.Convert(children);
+                _storage.Attach(_storage.CreateElement(element.Name), childrenSequence);
+                // How to tell that this element already has its link in storage when we will be reading it as child element?
             }
         }
 
