@@ -36,7 +36,7 @@
 
   <ItemGroup>
     <PackageReference Include="Platform.Data.Sequences" Version="0.0.2" />
-    <PackageReference Include="Platform.Data.Doublets.Sequences" Version="0.0.1" />
+    <PackageReference Include="Platform.Data.Doublets.Sequences" Version="0.1.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
   </ItemGroup>
 
