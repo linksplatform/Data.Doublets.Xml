@@ -240,7 +240,7 @@ namespace Platform.Data.Doublets.Xml
             var member = CreateMember(keyName);
             return Attach(@object, member);
         }
-        public TLinkAddress Attach(TLinkAddress parent, TLinkAddress child) => Links.GetOrCreate(parent, child);
+        public TLinkAddress Attach(TLinkAddress child, TLinkAddress parent) => Links.GetOrCreate(child, parent);
         public TLinkAddress AppendArrayValue(TLinkAddress arrayValue, TLinkAddress appendant)
         {
             var array = GetArray(arrayValue);
