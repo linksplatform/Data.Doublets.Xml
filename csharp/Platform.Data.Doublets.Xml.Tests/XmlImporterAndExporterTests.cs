@@ -28,7 +28,7 @@ namespace Platform.Data.Doublets.Xml.Tests
 
         public static DefaultXmlStorage<TLinkAddress> CreateXmlStorage(ILinks<TLinkAddress> links) => new (links, _balancedVariantConverter);
 
-        public TLinkAddress Import(IXmlStorage<TLinkAddress> storage, string documentName, Stream xmlStream)
+        public TLinkAddress Import(DefaultXmlStorage<TLinkAddress> storage, string documentName, Stream xmlStream)
         {
             var utf8XmlReader = XmlReader.Create(xmlStream);
             XmlImporter<TLinkAddress> jsonImporter = new(storage);
@@ -37,12 +37,13 @@ namespace Platform.Data.Doublets.Xml.Tests
             return jsonImporter.Import(utf8XmlReader, documentName, cancellationToken);
         }
 
-        public void Export(TLinkAddress documentLink, IXmlStorage<TLinkAddress> storage, MemoryStream stream)
+        public void Export(TLinkAddress documentLink, DefaultXmlStorage<TLinkAddress> storage, MemoryStream stream)
         {
             XmlExporter<TLinkAddress> xmlExporter = new(storage);
             CancellationTokenSource exportCancellationTokenSource = new();
             CancellationToken exportCancellationToken = exportCancellationTokenSource.Token;
-            xmlExporter.Export(documentLink, stream, exportCancellationToken);
+            var xmlWriter = XmlWriter.Create(stream);
+            xmlExporter.Export(documentLink, xmlWriter, exportCancellationToken);
         }
 
         [Theory]
