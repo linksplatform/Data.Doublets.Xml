@@ -64,6 +64,7 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress ElementMarker { get; }
 
         public TLinkAddress TextElementMarker { get; }
+        public TLinkAddress AttributeMarker { get; }
         public TLinkAddress ObjectMarker { get; }
         public TLinkAddress MemberMarker { get; }
         public TLinkAddress ValueMarker { get; }
@@ -89,6 +90,7 @@ namespace Platform.Data.Doublets.Xml
             DocumentMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
             ElementMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
             TextElementMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
+            AttributeMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
             ObjectMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
             MemberMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
             ValueMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
