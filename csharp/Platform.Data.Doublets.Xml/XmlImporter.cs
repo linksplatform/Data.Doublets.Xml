@@ -22,13 +22,13 @@ using Platform.Memory;
 namespace Platform.Data.Doublets.Xml {
     public class XmlImporter<TLinkAddress> where TLinkAddress : struct
     {
-        private readonly IXmlStorage<TLinkAddress> _storage;
+        private readonly DefaultXmlStorage<TLinkAddress> _storage;
         private readonly LinksListToSequenceConverterBase<TLinkAddress> _listToSequenceConverter;
         private readonly IEqualityComparer _equalityComparer;
 
-        public XmlImporter(IXmlStorage<TLinkAddress> storage) : this(storage, new BalancedVariantConverter<TLinkAddress>(storage.Links)) {}
+        public XmlImporter(DefaultXmlStorage<TLinkAddress> storage) : this(storage, new BalancedVariantConverter<TLinkAddress>(storage.Links)) {}
 
-        public XmlImporter(IXmlStorage<TLinkAddress> storage, LinksListToSequenceConverterBase<TLinkAddress> listToSequenceConverter)
+        public XmlImporter(DefaultXmlStorage<TLinkAddress> storage, LinksListToSequenceConverterBase<TLinkAddress> listToSequenceConverter)
         {
             _storage = storage;
             _listToSequenceConverter = listToSequenceConverter;
@@ -39,7 +39,7 @@ namespace Platform.Data.Doublets.Xml {
         {
             TLinkAddress document = default;
             document = _storage.CreateDocument(documentName);
-            Read(reader, token, new XmlElement<TLinkAddress>{Link = document, Type = XmlNodeType.None});
+            Read(reader, token, document);
             return document;
         }
 
@@ -47,35 +47,76 @@ namespace Platform.Data.Doublets.Xml {
         {
             var document = _storage.CreateDocument(file);
             using var reader = XmlReader.Create(file);
-            Read(reader, token, new XmlElement<TLinkAddress>{Link = document, Type = XmlNodeType.None});
+            Read(reader, token,  document);
             return document;
         }
 
-
-        private void Read(XmlReader reader, CancellationToken token, XmlElement<TLinkAddress> parent)
+        private void Read(XmlReader reader, CancellationToken token, TLinkAddress document)
         {
-            List<XmlElement<TLinkAddress>> elements = new();
-            // TODO: If path was loaded previously, skip it.
+            var xmlNodes = ParseXmlElements(reader, token);
+            var documentChildren = new List<TLinkAddress>();
+            foreach (var xmlNode in xmlNodes)
+            {
+                var node = _storage.CreateNode(xmlNode);
+                documentChildren.Add(node);
+            }
+            var documentChildrenSequence = _storage.ListToSequenceConverter.Convert(documentChildren);
+            _storage.Attach(documentChildrenSequence, document);
+            // for (int i = 0; i < xmlElements.Count; i++)
+            // {
+            //     var xmlElement = xmlElements[i];
+            //     if (xmlElement.Type == XmlNodeType.Element)
+            //     {
+            //         var element = _storage.CreateElement(xmlElement.Name);
+            //         _storage.AddElement(parent.Link, element);
+            //         Read(reader, token, new XmlElement<TLinkAddress>{Link = element, Type = XmlNodeType.None});
+            //     }
+            //     else if (xmlElement.Type == XmlNodeType.Text)
+            //     {
+            //         _storage.AddText(parent.Link, xmlElement.Value);
+            //     }
+            //     else if (xmlElement.Type == XmlNodeType.EndElement)
+            //     {
+            //         return;
+            //     }
+            // }
+        }
+
+        private IList<XmlNode<TLinkAddress>> ParseXmlElements(XmlReader reader, CancellationToken token)
+        {
+            var xmlElements = new List<XmlNode<TLinkAddress>>();
+            var parents = new Stack<XmlNode<TLinkAddress>>();
+            var i = 0;
             while (reader.Read())
             {
                 if (token.IsCancellationRequested)
                 {
-                    return;
+                    return xmlElements;
                 }
+                ++i;
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
                     {
-                        var element = new XmlElement<TLinkAddress> { Name = reader.Name, Depth = reader.Depth, Type = XmlNodeType.Element};
-                        elements.Add(element);
+                        var xmlElement = new XmlNode<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
+                        xmlElements.Add(xmlElement);
+                        if (parents.Count > 0)
+                        {
+                            parents.Peek().Children.Enqueue(xmlElement);
+                        }
+                        parents.Push(xmlElement);
                         break;
                     }
                     case XmlNodeType.EndElement:
+                    {
+
                         break;
+                    }
                     case XmlNodeType.Text:
                     {
-                        var element = new XmlElement<TLinkAddress> { Value = reader.Value, ValueType = reader.ValueType, Depth = reader.Depth, Type = XmlNodeType.Text};
-                        elements.Add(element);
+                        var xmlElement = new XmlNode<TLinkAddress> { Value = reader.Value, ValueType = reader.ValueType, Type = XmlNodeType.Text};
+                        xmlElements.Add(xmlElement);
+                        parents.Peek().Children.Enqueue(xmlElement);
                         break;
                     }
                     case XmlNodeType.None:
@@ -112,72 +153,11 @@ namespace Platform.Data.Doublets.Xml {
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            for (int i = 0, depth = 0; i < elements.Count; i++)
-            {
-                var element = elements[i];
-                if (element.Depth <= elements[i+1].Depth)
-                {
-                    continue;
-                }
-                var children = new List<TLinkAddress>();
-                for (int j = i; element.Depth == elements[i].Depth ; j--)
-                {
-                    switch (elements[j].Type)
-                    {
-                        case XmlNodeType.None:
-                            break;
-                        case XmlNodeType.Element:
-                        {
-                            var child = _storage.CreateElement(reader.Name);
-                            children.Add(child);
-                            elements.RemoveAt(i);
-                            break;
-                        }
-                        case XmlNodeType.Attribute:
-                            break;
-                        case XmlNodeType.Text:
-                        {
-                            var child = _storage.CreateTextElement(reader.Value);
-                            children.Add(child);
-                            elements.RemoveAt(i);
-                            break;
-                        }
-                        case XmlNodeType.CDATA:
-                            break;
-                        case XmlNodeType.EntityReference:
-                            break;
-                        case XmlNodeType.Entity:
-                            break;
-                        case XmlNodeType.ProcessingInstruction:
-                            break;
-                        case XmlNodeType.Comment:
-                            break;
-                        case XmlNodeType.Document:
-                            break;
-                        case XmlNodeType.DocumentType:
-                            break;
-                        case XmlNodeType.DocumentFragment:
-                            break;
-                        case XmlNodeType.Notation:
-                            break;
-                        case XmlNodeType.Whitespace:
-                            break;
-                        case XmlNodeType.SignificantWhitespace:
-                            break;
-                        case XmlNodeType.EndElement:
-                            break;
-                        case XmlNodeType.EndEntity:
-                            break;
-                        case XmlNodeType.XmlDeclaration:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
-                var childrenSequence = _listToSequenceConverter.Convert(children);
-                _storage.Attach(_storage.CreateElement(element.Name), childrenSequence);
-                // How to tell that this element already has its link in storage when we will be reading it as child element?
-            }
+            return xmlElements;
+        }
+
+        private void ReadElement(XmlReader reader, CancellationToken token, XmlNode<TLinkAddress> node)
+        {
         }
 
         // private void Read(XmlReader reader, CancellationToken token, XmlElement<TLinkAddress> parent)
