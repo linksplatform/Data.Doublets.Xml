@@ -151,10 +151,11 @@ namespace Platform.Data.Doublets.Xml
             return Links.CreateAndUpdate(ElementMarker, elementName);
         }
 
-        public TLinkAddress CreateTextElement(string content)
+        public TLinkAddress CreateElement(string name, TLinkAddress childrenSequence)
         {
-            var contentLink = CreateString(content);
-            return Links.GetOrCreate(TextElementMarker, contentLink);
+            var elementLink = CreateElement(name);
+            Links.GetOrCreate(elementLink, childrenSequence);
+            return elementLink;
         }
 
         public List<TLinkAddress> GetChildrenElements(TLinkAddress element)
