@@ -243,22 +243,7 @@ namespace Platform.Data.Doublets.Xml
             return Attach(@object, member);
         }
         public TLinkAddress Attach(TLinkAddress child, TLinkAddress parent) => Links.GetOrCreate(child, parent);
-        public TLinkAddress AppendArrayValue(TLinkAddress arrayValue, TLinkAddress appendant)
-        {
-            var array = GetArray(arrayValue);
-            var arraySequence = Links.GetTarget(array);
-            TLinkAddress newArrayValue;
-            if (EqualityComparer.Equals(arraySequence, EmptyArrayMarker))
-            {
-                newArrayValue = CreateArrayValue(appendant);
-            }
-            else
-            {
-                arraySequence = DefaultSequenceAppender.Append(arraySequence, appendant);
-                newArrayValue = CreateArrayValue(arraySequence);
-            }
-            return newArrayValue;
-        }
+
         public TLinkAddress GetDocumentOrDefault(string name)
         {
             var stringSequence = GetStringSequence(name);
