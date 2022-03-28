@@ -18,7 +18,7 @@ using Platform.Data.Doublets.Unicode;
 
 namespace Platform.Data.Doublets.Xml
 {
-    public class DefaultXmlStorage<TLinkAddress> : IXmlStorage<TLinkAddress> where TLinkAddress : struct
+    public class DefaultXmlStorage<TLinkAddress> /* : IXmlStorage<TLinkAddress> */ where TLinkAddress : struct
     {
         private static readonly TLinkAddress _zero = default;
         private static readonly TLinkAddress _one = Arithmetic.Increment(_zero);
