@@ -62,24 +62,6 @@ namespace Platform.Data.Doublets.Xml {
             }
             var documentChildrenSequence = _storage.ListToSequenceConverter.Convert(documentChildren);
             _storage.Attach(documentChildrenSequence, document);
-            // for (int i = 0; i < xmlElements.Count; i++)
-            // {
-            //     var xmlElement = xmlElements[i];
-            //     if (xmlElement.Type == XmlNodeType.Element)
-            //     {
-            //         var element = _storage.CreateElement(xmlElement.Name);
-            //         _storage.AddElement(parent.Link, element);
-            //         Read(reader, token, new XmlElement<TLinkAddress>{Link = element, Type = XmlNodeType.None});
-            //     }
-            //     else if (xmlElement.Type == XmlNodeType.Text)
-            //     {
-            //         _storage.AddText(parent.Link, xmlElement.Value);
-            //     }
-            //     else if (xmlElement.Type == XmlNodeType.EndElement)
-            //     {
-            //         return;
-            //     }
-            // }
         }
 
         private IList<XmlNode<TLinkAddress>> ParseXmlElements(XmlReader reader, CancellationToken token)

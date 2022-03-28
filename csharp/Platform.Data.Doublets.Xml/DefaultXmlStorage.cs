@@ -59,7 +59,6 @@ namespace Platform.Data.Doublets.Xml
         public readonly IConverter<string, TLinkAddress> StringToUnicodeSequenceConverter;
         public readonly IConverter<TLinkAddress, string> UnicodeSequenceToStringConverter;
         public readonly DefaultSequenceRightHeightProvider<TLinkAddress> DefaultSequenceRightHeightProvider;
-        public readonly DefaultSequenceAppender<TLinkAddress> DefaultSequenceAppender;
         public ILinks<TLinkAddress> Links { get; }
         public TLinkAddress DocumentMarker { get; }
 
@@ -117,7 +116,6 @@ namespace Platform.Data.Doublets.Xml
             RawNumberSequenceToBigIntegerConverter = new(links, NumberToAddressConverter, NegativeNumberMarker);
             DecimalToRationalConverter = new(links, BigIntegerToRawNumberSequenceConverter);
             RationalToDecimalConverter = new(links, RawNumberSequenceToBigIntegerConverter);
-            DefaultSequenceAppender = new(Links, new DefaultStack<TLinkAddress>(), DefaultSequenceRightHeightProvider);
         }
         public TLinkAddress CreateString(string content)
         {
