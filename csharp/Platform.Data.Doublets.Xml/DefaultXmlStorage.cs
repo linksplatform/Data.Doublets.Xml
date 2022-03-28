@@ -430,11 +430,11 @@ namespace Platform.Data.Doublets.Xml
             {
                 return xmlNode.Link;
             }
+            var childrenLinks = new List<TLinkAddress>();
             foreach (var childXmlElement in xmlNode.Children)
             {
-                CreateNode(childXmlElement);
+                childrenLinks.Add(CreateNode(childXmlElement));
             }
-            var childrenLinks = xmlNode.Children.Select(element => element.Link).ToList();
             var childrenSequence = ListToSequenceConverter.Convert(childrenLinks);
             return _links.GetOrCreate(xmlNode.Link, childrenSequence);
         }
