@@ -399,5 +399,50 @@ namespace Platform.Data.Doublets.Xml
             }, query);
             return members;
         }
+
+        private void CreateAttribute(XmlNode<TLinkAddress> node)
+        {
+            var attributeName = _stringToUnicodeSequenceConverter.Convert(node.Name);
+            var attributeValue = _stringToUnicodeSequenceConverter.Convert(node.Value);
+            var attribute = _links.GetOrCreate(attributeName, attributeValue);
+            node.Link = _links.GetOrCreate(AttributeMarker, attribute);
+        }
+
+        public TLinkAddress CreateNode(XmlNode<TLinkAddress> xmlNode)
+        {
+            if (XmlNodeType.Element == xmlNode.Type)
+            {
+                xmlNode.Link = CreateElement(xmlNode.Name);
+            }
+            else if (XmlNodeType.Text == xmlNode.Type)
+            {
+                var contentLink = CreateString(xmlNode.Value);
+                xmlNode.Link = Links.GetOrCreate(TextElementMarker, contentLink);
+            }
+            else if (XmlNodeType.Attribute == xmlNode.Type)
+            {
+                var name = CreateString(xmlNode.Name);
+                var value = CreateString(xmlNode.Value);
+                var attribute = Links.GetOrCreate(name, value);
+                xmlNode.Link = Links.GetOrCreate(AttributeMarker, attribute);
+            }
+            if (0 == xmlNode.Children.Count)
+            {
+                return xmlNode.Link;
+            }
+            foreach (var childXmlElement in xmlNode.Children)
+            {
+                CreateNode(childXmlElement);
+            }
+            var childrenLinks = xmlNode.Children.Select(element => element.Link).ToList();
+            var childrenSequence = ListToSequenceConverter.Convert(childrenLinks);
+            return _links.GetOrCreate(xmlNode.Link, childrenSequence);
+        }
+
+        public void GetElementName(XmlNode<TLinkAddress> node)
+        {
+            var nameSequence = _links.GetTarget(node.Link);
+            node.Name = UnicodeSequenceToStringConverter.Convert(nameSequence);
+        }
     }
 }
