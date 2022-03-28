@@ -270,6 +270,34 @@ namespace Platform.Data.Doublets.Xml
             return Links.SearchOrDefault(DocumentMarker, @string);
         }
 
+        public void GetChildren(XmlNode<TLinkAddress> node)
+        {
+            var any = _links.Constants.Any;
+            _links.Each(new Link<TLinkAddress>(any, node.Link, any), fromElementToAnyLink =>
+            {
+                var child = _links.GetTarget(fromElementToAnyLink);
+                var marker = _links.GetSource(child);
+                var type = GetTypeFromMarker(marker);
+                var childXmlElement = new XmlNode<TLinkAddress> { Link = child, Type = type };
+                GetChildren(childXmlElement);
+                node.Children.Enqueue(childXmlElement);
+                return _links.Constants.Continue;
+            });
+        }
+
+        private XmlNodeType GetTypeFromMarker(TLinkAddress marker)
+        {
+            if (EqualityComparer.Equals(ElementMarker, marker))
+            {
+                return XmlNodeType.Element;
+            }
+            if (EqualityComparer.Equals(TextElementMarker, marker))
+            {
+                return XmlNodeType.Element;
+            }
+            throw new NotSupportedException($"Marker {marker} is not supported");
+        }
+
         private TLinkAddress GetStringSequence(string content) => content == "" ? EmptyStringMarker : StringToUnicodeSequenceConverter.Convert(content);
         public string GetString(TLinkAddress stringValue)
         {
