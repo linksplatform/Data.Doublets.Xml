@@ -5,6 +5,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using Platform.Collections.Stacks;
+using Platform.Data.Doublets.Sequences.Walkers;
 using Platform.Exceptions;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -13,32 +15,32 @@ namespace Platform.Data.Doublets.Xml
 {
     public class XmlExporter<TLinkAddress> where TLinkAddress : struct
     {
-        private readonly IXmlStorage<TLinkAddress> _storage;
-        private EqualityComparer<TLinkAddress> _defaultEqualityComparer = EqualityComparer<TLinkAddress>.Default;
-        public XmlExporter(IXmlStorage<TLinkAddress> storage) => _storage = storage;
-        public Task Export(string documentName, Stream stream, CancellationToken token) => Export(_storage.GetDocumentOrDefault(documentName), stream, token);
-
-        public Task Export(TLinkAddress document, Stream stream, CancellationToken token)
+        private readonly DefaultXmlStorage<TLinkAddress> _storage;
+        public readonly EqualityComparer<TLinkAddress> DefaultEqualityComparer = EqualityComparer<TLinkAddress>.Default;
+        public XmlExporter(DefaultXmlStorage<TLinkAddress> storage) => _storage = storage;
+        public void Export(TLinkAddress document, XmlWriter xmlWriter, CancellationToken token)
         {
-            return Task.Factory.StartNew(() =>
-            {
-            if (_defaultEqualityComparer.Equals(default, document))
+            if (DefaultEqualityComparer.Equals(default, document))
             {
                 throw new Exception("The document does not exist.");
             }
-            using var writer = XmlWriter.Create(stream);
-            Write(writer, document, token);
-            }, token);
+            Write(xmlWriter, document, token);
         }
 
-        private void Write(XmlWriter writer, TLinkAddress context, CancellationToken token) => Write(writer, new XmlElement<TLinkAddress>{Parent = {Link = context} }, token);
-
-        private void Write(XmlWriter writer, XmlElement<TLinkAddress> context, CancellationToken token)
+        private void Write(XmlWriter writer, TLinkAddress document, CancellationToken token)
         {
-            foreach(TLinkAddress child in _storage.GetChildrenElements(context.Parent.Link))
+            var any = _storage.Links.Constants.Any;
+            var documentSequenceLink = _storage.Links.SearchOrDefault(document, any);
+            var sequence = _storage.Links.GetTarget(documentSequenceLink);
+            RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(_storage.Links, new DefaultStack<TLinkAddress>(), linkAddress =>
             {
-                Write(writer, child, token);
-            }
+                var source = _storage.Links.GetSource(linkAddress);
+                var sourceOfSource = _storage.Links.GetSource(source);
+                var isTextElement = DefaultEqualityComparer.Equals(source, _storage.TextElementMarker);
+                var isAttribute = DefaultEqualityComparer.Equals(source, _storage.AttributeMarker);
+                var isElement = DefaultEqualityComparer.Equals(sourceOfSource, _storage.ElementMarker);
+                return isTextElement || isAttribute || isElement;
+            });
         }
     }
 }
