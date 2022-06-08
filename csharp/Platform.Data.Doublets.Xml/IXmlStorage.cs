@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace Platform.Data.Doublets.Xml;
+namespace Platform.Data.Doublets.Xml { }
+
 // public interface IXmlStorage<TLinkAddress> where TLinkAddress : struct
 //     {
 //         ILinks<TLinkAddress> Links { get; }
