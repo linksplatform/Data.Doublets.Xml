@@ -26,8 +26,8 @@ namespace Platform.Data.Doublets.Xml
         private static readonly TLinkAddress _one = Arithmetic.Increment(_zero);
         private readonly StringToUnicodeSequenceConverter<TLinkAddress> _stringToUnicodeSequenceConverter;
         private readonly ILinks<TLinkAddress> _links;
-        private TLinkAddress _unicodeSymbolMarker;
-        private TLinkAddress _unicodeSequenceMarker;
+        private TLinkAddress _unicodeSymbolType;
+        private TLinkAddress _unicodeSequenceType;
 
         private class Unindex : ISequenceIndex<TLinkAddress>
         {
@@ -36,11 +36,9 @@ namespace Platform.Data.Doublets.Xml
             public bool MightContain(IList<TLinkAddress>? sequence) => true;
         }
         public readonly TLinkAddress Any;
-        public static readonly TLinkAddress Zero = default;
-        public static readonly TLinkAddress One = Arithmetic.Increment(Zero);
         public readonly BalancedVariantConverter<TLinkAddress> BalancedVariantConverter;
         public readonly IConverter<IList<TLinkAddress>?, TLinkAddress> ListToSequenceConverter;
-        public readonly TLinkAddress MeaningRoot;
+        public readonly TLinkAddress Type;
         public readonly EqualityComparer<TLinkAddress> EqualityComparer = EqualityComparer<TLinkAddress>.Default;
 
         // Converters that are able to convert link's address (UInt64 value) to a raw number represented with another UInt64 value and back
@@ -60,68 +58,70 @@ namespace Platform.Data.Doublets.Xml
         public readonly IConverter<TLinkAddress, string> UnicodeSequenceToStringConverter;
         public readonly DefaultSequenceRightHeightProvider<TLinkAddress> DefaultSequenceRightHeightProvider;
         public ILinks<TLinkAddress> Links { get; }
-        public TLinkAddress DocumentMarker { get; }
+        public TLinkAddress DocumentType { get; }
 
-        public TLinkAddress ElementMarker { get; }
+        public TLinkAddress ElementType { get; }
 
-        public TLinkAddress TextElementMarker { get; }
-        public TLinkAddress AttributeMarker { get; }
-        public TLinkAddress ObjectMarker { get; }
-        public TLinkAddress MemberMarker { get; }
-        public TLinkAddress ValueMarker { get; }
-        public TLinkAddress StringMarker { get; }
-        public TLinkAddress EmptyStringMarker { get; }
-        public TLinkAddress NumberMarker { get; }
-        public TLinkAddress NegativeNumberMarker { get; }
-        public TLinkAddress ArrayMarker { get; }
-        public TLinkAddress EmptyArrayMarker { get; }
-        public TLinkAddress TrueMarker { get; }
-        public TLinkAddress FalseMarker { get; }
-        public TLinkAddress NullMarker { get; }
+        public TLinkAddress TextElementType { get; }
+        public TLinkAddress AttributeType { get; }
+        public TLinkAddress ObjectType { get; }
+        public TLinkAddress MemberType { get; }
+        public TLinkAddress ValueType { get; }
+        public TLinkAddress StringType { get; }
+        public TLinkAddress EmptyStringType { get; }
+        public TLinkAddress NumberType { get; }
+        public TLinkAddress NegativeNumberType { get; }
+        public TLinkAddress ArrayType { get; }
+        public TLinkAddress EmptyArrayType { get; }
+        public TLinkAddress TrueType { get; }
+        public TLinkAddress FalseType { get; }
+        public TLinkAddress NullType { get; }
         public DefaultXmlStorage(ILinks<TLinkAddress> links, IConverter<IList<TLinkAddress>?, TLinkAddress> listToSequenceConverter)
         {
             Links = links;
             ListToSequenceConverter = listToSequenceConverter;
             // Initializes constants
             Any = Links.Constants.Any;
-            var markerIndex = One;
-            MeaningRoot = links.GetOrCreate(markerIndex, markerIndex);
-            var unicodeSymbolMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            var unicodeSequenceMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            DocumentMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            ElementMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            TextElementMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            AttributeMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            ObjectMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            MemberMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            ValueMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            StringMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            EmptyStringMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            NumberMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            NegativeNumberMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            ArrayMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            EmptyArrayMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            TrueMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            FalseMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
-            NullMarker = links.GetOrCreate(MeaningRoot, Arithmetic.Increment(ref markerIndex));
+            TLinkAddress zero = default;
+            var one = zero.Increment();
+            Type = links.GetOrCreate(one, one);
+            var typeIndex = one;
+            var unicodeSymbolType = links.GetOrCreate(Type, Arithmetic.Increment(ref typeIndex));
+            var unicodeSequenceType = links.GetOrCreate(Type, Arithmetic.Increment(ref typeIndex));
             BalancedVariantConverter = new(links);
-            TargetMatcher<TLinkAddress> unicodeSymbolCriterionMatcher = new(Links, unicodeSymbolMarker);
-            TargetMatcher<TLinkAddress> unicodeSequenceCriterionMatcher = new(Links, unicodeSequenceMarker);
-            CharToUnicodeSymbolConverter<TLinkAddress> charToUnicodeSymbolConverter = new(Links, AddressToNumberConverter, unicodeSymbolMarker);
+            TargetMatcher<TLinkAddress> unicodeSymbolCriterionMatcher = new(Links, unicodeSymbolType);
+            TargetMatcher<TLinkAddress> unicodeSequenceCriterionMatcher = new(Links, unicodeSequenceType);
+            CharToUnicodeSymbolConverter<TLinkAddress> charToUnicodeSymbolConverter = new(Links, AddressToNumberConverter, unicodeSymbolType);
             UnicodeSymbolToCharConverter<TLinkAddress> unicodeSymbolToCharConverter = new(Links, NumberToAddressConverter, unicodeSymbolCriterionMatcher);
-            StringToUnicodeSequenceConverter = new CachingConverterDecorator<string, TLinkAddress>(new StringToUnicodeSequenceConverter<TLinkAddress>(Links, charToUnicodeSymbolConverter, BalancedVariantConverter, unicodeSequenceMarker));
-            RightSequenceWalker<TLinkAddress> sequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), unicodeSymbolCriterionMatcher.IsMatched);
-            UnicodeSequenceToStringConverter<TLinkAddress> unicodeSequenceToStringConverter = new UnicodeSequenceToStringConverter<TLinkAddress>(Links, unicodeSequenceCriterionMatcher, sequenceWalker, unicodeSymbolToCharConverter, unicodeSequenceMarker);
+            StringToUnicodeSequenceConverter = new CachingConverterDecorator<string, TLinkAddress>(new StringToUnicodeSequenceConverter<TLinkAddress>(Links, charToUnicodeSymbolConverter, BalancedVariantConverter, unicodeSequenceType));
+            DocumentType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentType)));
+            ElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementType)));
+            TextElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TextElementType)));
+            AttributeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeType)));
+            ObjectType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ObjectType)));
+            MemberType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(MemberType)));
+            ValueType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ValueType)));
+            StringType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(StringType)));
+            EmptyStringType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(EmptyStringType)));
+            NumberType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(NumberType)));
+            NegativeNumberType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(NegativeNumberType)));
+            ArrayType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ArrayType)));
+            EmptyArrayType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(EmptyArrayType)));
+            TrueType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TrueType)));
+            FalseType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(FalseType)));
+            NullType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(NullType)));
+            RightSequenceWalker<TLinkAddress> unicodeSymbolSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), unicodeSymbolCriterionMatcher.IsMatched);
+            UnicodeSequenceToStringConverter<TLinkAddress> unicodeSequenceToStringConverter = new UnicodeSequenceToStringConverter<TLinkAddress>(Links, unicodeSequenceCriterionMatcher, unicodeSymbolSequenceWalker, unicodeSymbolToCharConverter, unicodeSequenceType);
             UnicodeSequenceToStringConverter = new CachingConverterDecorator<TLinkAddress, string>(unicodeSequenceToStringConverter);
-            BigIntegerToRawNumberSequenceConverter = new(links, AddressToNumberConverter, ListToSequenceConverter, NegativeNumberMarker);
-            RawNumberSequenceToBigIntegerConverter = new(links, NumberToAddressConverter, NegativeNumberMarker);
+            BigIntegerToRawNumberSequenceConverter = new(links, AddressToNumberConverter, ListToSequenceConverter, NegativeNumberType);
+            RawNumberSequenceToBigIntegerConverter = new(links, NumberToAddressConverter, NegativeNumberType);
             DecimalToRationalConverter = new(links, BigIntegerToRawNumberSequenceConverter);
             RationalToDecimalConverter = new(links, RawNumberSequenceToBigIntegerConverter);
         }
         public TLinkAddress CreateString(string content)
         {
             var @string = GetStringSequence(content);
-            return Links.GetOrCreate(StringMarker, @string);
+            return Links.GetOrCreate(StringType, @string);
         }
         public TLinkAddress CreateStringValue(string content)
         {
@@ -131,25 +131,36 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress CreateNumber(decimal number)
         {
             var numberSequence = DecimalToRationalConverter.Convert(number);
-            return Links.GetOrCreate(NumberMarker, numberSequence);
+            return Links.GetOrCreate(NumberType, numberSequence);
         }
         public TLinkAddress CreateNumberValue(decimal number)
         {
             var numberLink = CreateNumber(number);
             return CreateValue(numberLink);
         }
-        public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueMarker : FalseMarker);
-        public TLinkAddress CreateNullValue() => CreateValue(NullMarker);
+        public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
+        public TLinkAddress CreateNullValue() => CreateValue(NullType);
         public TLinkAddress CreateDocument(string name)
         {
             var documentName = CreateString(name);
-            return Links.GetOrCreate(DocumentMarker, documentName);
+            return Links.GetOrCreate(DocumentType, documentName);
         }
 
         public TLinkAddress CreateElement(string name)
         {
             var elementName = CreateString(name);
-            return Links.CreateAndUpdate(ElementMarker, elementName);
+            return Links.CreateAndUpdate(ElementType, elementName);
+        }
+
+        public string GetElementName(TLinkAddress elementLinkAddress)
+        {
+            var elementType = Links.GetSource(elementLinkAddress);
+            if (!EqualityComparer.Equals(elementType, ElementType))
+            {
+                throw new Exception("The passed link address is not an element link address.");
+            }
+            var elementNameLinkAddress = Links.GetTarget(elementLinkAddress);
+            return UnicodeSequenceToStringConverter.Convert(elementNameLinkAddress);
         }
 
         public TLinkAddress CreateElement(string name, TLinkAddress childrenSequence)
@@ -167,7 +178,7 @@ namespace Platform.Data.Doublets.Xml
             {
                 var childElement = _links.GetTarget(parentAndChildLink);
                 var childElementSource = _links.GetSource(childElement);
-                if (!EqualityComparer.Equals(ElementMarker, childElementSource))
+                if (!EqualityComparer.Equals(ElementType, childElementSource))
                 {
                     return _links.Constants.Continue;
                 }
@@ -179,7 +190,7 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress CreateObject()
         {
             var @object = Links.Create();
-            return Links.Update(@object, newSource: ObjectMarker, newTarget: @object);
+            return Links.Update(@object, newSource: ObjectType, newTarget: @object);
         }
         public TLinkAddress CreateObjectValue()
         {
@@ -188,10 +199,10 @@ namespace Platform.Data.Doublets.Xml
         }
         public TLinkAddress CreateArray(IList<TLinkAddress>? array)
         {
-            var arraySequence = array.Count == 0 ? EmptyArrayMarker : BalancedVariantConverter.Convert(array);
+            var arraySequence = array.Count == 0 ? EmptyArrayType : BalancedVariantConverter.Convert(array);
             return CreateArray(arraySequence);
         }
-        public TLinkAddress CreateArray(TLinkAddress sequence) => Links.GetOrCreate(ArrayMarker, sequence);
+        public TLinkAddress CreateArray(TLinkAddress sequence) => Links.GetOrCreate(ArrayType, sequence);
         public TLinkAddress CreateArrayValue(IList<TLinkAddress>? array)
         {
             var arrayLink = CreateArray(array);
@@ -205,9 +216,9 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress CreateMember(string name)
         {
             var nameLink = CreateString(name);
-            return Links.GetOrCreate(MemberMarker, nameLink);
+            return Links.GetOrCreate(MemberType, nameLink);
         }
-        public TLinkAddress CreateValue(TLinkAddress value) => Links.GetOrCreate(ValueMarker, value);
+        public TLinkAddress CreateValue(TLinkAddress value) => Links.GetOrCreate(ValueType, value);
         public TLinkAddress AttachObject(TLinkAddress parent) => Attach(parent, CreateObjectValue());
         public TLinkAddress AttachString(TLinkAddress parent, string content)
         {
@@ -246,12 +257,12 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress GetDocumentOrDefault(string name)
         {
             var stringSequence = GetStringSequence(name);
-            var @string = Links.SearchOrDefault(StringMarker, stringSequence);
+            var @string = Links.SearchOrDefault(StringType, stringSequence);
             if (EqualityComparer.Equals(@string, default))
             {
                 return default;
             }
-            return Links.SearchOrDefault(DocumentMarker, @string);
+            return Links.SearchOrDefault(DocumentType, @string);
         }
 
         public void GetChildren(XmlNode<TLinkAddress> node)
@@ -260,8 +271,8 @@ namespace Platform.Data.Doublets.Xml
             _links.Each(new Link<TLinkAddress>(any, node.Link, any), fromElementToAnyLink =>
             {
                 var child = _links.GetTarget(fromElementToAnyLink);
-                var marker = _links.GetSource(child);
-                var type = GetTypeFromMarker(marker);
+                var Type = _links.GetSource(child);
+                var type = GetTypeFromType(Type);
                 var childXmlElement = new XmlNode<TLinkAddress> { Link = child, Type = type };
                 GetChildren(childXmlElement);
                 node.Children.Enqueue(childXmlElement);
@@ -269,20 +280,20 @@ namespace Platform.Data.Doublets.Xml
             });
         }
 
-        private XmlNodeType GetTypeFromMarker(TLinkAddress marker)
+        private XmlNodeType GetTypeFromType(TLinkAddress Type)
         {
-            if (EqualityComparer.Equals(ElementMarker, marker))
+            if (EqualityComparer.Equals(ElementType, Type))
             {
                 return XmlNodeType.Element;
             }
-            if (EqualityComparer.Equals(TextElementMarker, marker))
+            if (EqualityComparer.Equals(TextElementType, Type))
             {
                 return XmlNodeType.Element;
             }
-            throw new NotSupportedException($"Marker {marker} is not supported");
+            throw new NotSupportedException($"Type {Type} is not supported");
         }
 
-        private TLinkAddress GetStringSequence(string content) => content == "" ? EmptyStringMarker : StringToUnicodeSequenceConverter.Convert(content);
+        private TLinkAddress GetStringSequence(string content) => content == "" ? EmptyStringType : StringToUnicodeSequenceConverter.Convert(content);
         public string GetString(TLinkAddress stringValue)
         {
             var current = stringValue;
@@ -290,10 +301,10 @@ namespace Platform.Data.Doublets.Xml
             for (int i = 0; i < 3; i++)
             {
                 source = Links.GetSource(current);
-                if (EqualityComparer.Equals(source, StringMarker))
+                if (EqualityComparer.Equals(source, StringType))
                 {
                     var sequence = Links.GetTarget(current);
-                    var isEmpty = EqualityComparer.Equals(sequence, EmptyStringMarker);
+                    var isEmpty = EqualityComparer.Equals(sequence, EmptyStringType);
                     return isEmpty ? "" : UnicodeSequenceToStringConverter.Convert(sequence);
                 }
                 current = Links.GetTarget(current);
@@ -309,7 +320,7 @@ namespace Platform.Data.Doublets.Xml
             {
                 source = Links.GetSource(current);
                 target = Links.GetTarget(current);
-                if (EqualityComparer.Equals(source, NumberMarker))
+                if (EqualityComparer.Equals(source, NumberType))
                 {
                     return RationalToDecimalConverter.Convert(target);
                 }
@@ -324,7 +335,7 @@ namespace Platform.Data.Doublets.Xml
             for (int i = 0; i < 3; i++)
             {
                 source = Links.GetSource(current);
-                if (EqualityComparer.Equals(source, ObjectMarker))
+                if (EqualityComparer.Equals(source, ObjectType))
                 {
                     return current;
                 }
@@ -339,7 +350,7 @@ namespace Platform.Data.Doublets.Xml
             for (int i = 0; i < 3; i++)
             {
                 source = Links.GetSource(current);
-                if (EqualityComparer.Equals(source, ArrayMarker))
+                if (EqualityComparer.Equals(source, ArrayType))
                 {
                     return current;
                 }
@@ -358,7 +369,7 @@ namespace Platform.Data.Doublets.Xml
                     return default;
                 case 1:
                     var resultLinkTarget = Links.GetTarget(resultLinks[0]);
-                    if (EqualityComparer.Equals(Links.GetSource(resultLinkTarget), ValueMarker))
+                    if (EqualityComparer.Equals(Links.GetSource(resultLinkTarget), ValueType))
                     {
                         return resultLinkTarget;
                     }
@@ -372,11 +383,11 @@ namespace Platform.Data.Doublets.Xml
                     throw new InvalidOperationException("The list elements length is negative.");
             }
         }
-        public TLinkAddress GetValueMarker(TLinkAddress value)
+        public TLinkAddress GetValueType(TLinkAddress value)
         {
             var target = Links.GetTarget(value);
             var targetSource = Links.GetSource(target);
-            if (EqualityComparer.Equals(MeaningRoot, targetSource))
+            if (EqualityComparer.Equals(Type, targetSource))
             {
                 return target;
             }
@@ -389,8 +400,8 @@ namespace Platform.Data.Doublets.Xml
             Links.Each(objectMemberLink =>
             {
                 var memberLink = Links.GetTarget(objectMemberLink);
-                var memberMarker = Links.GetSource(memberLink);
-                if (EqualityComparer.Equals(memberMarker, MemberMarker))
+                var memberType = Links.GetSource(memberLink);
+                if (EqualityComparer.Equals(memberType, MemberType))
                 {
                     members.Add(Links.GetIndex(objectMemberLink));
                 }
@@ -399,12 +410,12 @@ namespace Platform.Data.Doublets.Xml
             return members;
         }
 
-        private void CreateAttribute(XmlNode<TLinkAddress> node)
+        private void CreateAttributeElement(XmlNode<TLinkAddress> node)
         {
             var attributeName = _stringToUnicodeSequenceConverter.Convert(node.Name);
             var attributeValue = _stringToUnicodeSequenceConverter.Convert(node.Value);
             var attribute = _links.GetOrCreate(attributeName, attributeValue);
-            node.Link = _links.GetOrCreate(AttributeMarker, attribute);
+            node.Link = _links.GetOrCreate(AttributeType, attribute);
         }
 
         public TLinkAddress CreateNode(XmlNode<TLinkAddress> xmlNode)
@@ -415,15 +426,11 @@ namespace Platform.Data.Doublets.Xml
             }
             else if (XmlNodeType.Text == xmlNode.Type)
             {
-                var contentLink = CreateString(xmlNode.Value);
-                xmlNode.Link = Links.GetOrCreate(TextElementMarker, contentLink);
+                xmlNode.Link = CreateTextElement(xmlNode.Value);
             }
             else if (XmlNodeType.Attribute == xmlNode.Type)
             {
-                var name = CreateString(xmlNode.Name);
-                var value = CreateString(xmlNode.Value);
-                var attribute = Links.GetOrCreate(name, value);
-                xmlNode.Link = Links.GetOrCreate(AttributeMarker, attribute);
+                CreateAttributeElement(xmlNode.Name, xmlNode.Value);
             }
             if (0 == xmlNode.Children.Count)
             {
@@ -432,10 +439,60 @@ namespace Platform.Data.Doublets.Xml
             var childrenLinks = new List<TLinkAddress>();
             foreach (var childXmlElement in xmlNode.Children)
             {
-                childrenLinks.Add(CreateNode(childXmlElement));
+                var childNode = CreateNode(childXmlElement);
+                childrenLinks.Add(childNode);
             }
             var childrenSequence = ListToSequenceConverter.Convert(childrenLinks);
             return _links.GetOrCreate(xmlNode.Link, childrenSequence);
+        }
+
+        public TLinkAddress CreateAttributeElement(string name, string value)
+        {
+            var nameLinkAddress = CreateString(name);
+            var valueLinkAddress = CreateString(value);
+            var attributeValueLinkAddress = Links.GetOrCreate(nameLinkAddress, valueLinkAddress);
+            return Links.GetOrCreate(AttributeType, attributeValueLinkAddress);
+        }
+
+        public string GetAttributeName(TLinkAddress attributeLinkAddress)
+        {
+            var attributeType = Links.GetSource(attributeLinkAddress);
+            if (!EqualityComparer.Equals(attributeType, AttributeType))
+            {
+                throw new Exception("The passed link address is not an attribute link address.");
+            }
+            var attributeValueLinkAddress = Links.GetTarget(attributeLinkAddress);
+            var attributeNameLinkAddress = Links.GetSource(attributeValueLinkAddress);
+            return UnicodeSequenceToStringConverter.Convert(attributeNameLinkAddress);
+        }
+
+        public string GetAttributeValue(TLinkAddress attributeLinkAddress)
+        {
+            var attributeType = Links.GetSource(attributeLinkAddress);
+            if (!EqualityComparer.Equals(attributeType, AttributeType))
+            {
+                throw new Exception("The passed link address is not an attribute link address.");
+            }
+            var attributeValueLinkAddress = Links.GetTarget(attributeLinkAddress);
+            var attributeValueValueLinkAddress = Links.GetSource(attributeValueLinkAddress);
+            return UnicodeSequenceToStringConverter.Convert(attributeValueValueLinkAddress);
+        }
+        
+        public TLinkAddress CreateTextElement(string text)
+        {
+            var contentLink = CreateString(text);
+            return Links.GetOrCreate(TextElementType, contentLink);
+        }
+
+        public string GetTextElementValue(TLinkAddress textElementLinkAddress)
+        {
+            var textElementType = Links.GetSource(textElementLinkAddress);
+            if (!EqualityComparer.Equals(textElementType, TextElementType))
+            {
+                throw new Exception("The passed link address is not a text element link address.");
+            }
+            var contentLink = Links.GetTarget(textElementLinkAddress);
+            return UnicodeSequenceToStringConverter.Convert(contentLink);
         }
 
         public void GetElementName(XmlNode<TLinkAddress> node)
