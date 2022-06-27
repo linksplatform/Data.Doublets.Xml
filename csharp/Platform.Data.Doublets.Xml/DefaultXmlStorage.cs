@@ -254,15 +254,16 @@ namespace Platform.Data.Doublets.Xml
         }
         public TLinkAddress Attach(TLinkAddress child, TLinkAddress parent) => Links.GetOrCreate(child, parent);
 
-        public TLinkAddress GetDocumentOrDefault(string name)
+        public TLinkAddress GetDocument(string name)
         {
             var stringSequence = GetStringSequence(name);
             var @string = Links.SearchOrDefault(StringType, stringSequence);
-            if (EqualityComparer.Equals(@string, default))
+            var documentLink = Links.SearchOrDefault(DocumentType, @string);
+            if (EqualityComparer.Equals(documentLink, default))
             {
-                return default;
+                throw new Exception($"Not found document with name {name}");
             }
-            return Links.SearchOrDefault(DocumentType, @string);
+            return documentLink;
         }
 
         public void GetChildren(XmlNode<TLinkAddress> node)
