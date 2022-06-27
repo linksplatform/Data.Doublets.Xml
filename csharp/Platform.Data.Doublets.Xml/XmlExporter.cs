@@ -18,20 +18,23 @@ namespace Platform.Data.Doublets.Xml
         private readonly DefaultXmlStorage<TLinkAddress> _storage;
         public readonly EqualityComparer<TLinkAddress> DefaultEqualityComparer = EqualityComparer<TLinkAddress>.Default;
         public XmlExporter(DefaultXmlStorage<TLinkAddress> storage) => _storage = storage;
-        public void Export(TLinkAddress document, XmlWriter xmlWriter, CancellationToken token)
+
+        public void Export(XmlWriter xmlWriter, string documentName, CancellationToken cancellationToken)
         {
-            if (DefaultEqualityComparer.Equals(default, document))
-            {
-                throw new Exception("The document does not exist.");
-            }
-            Write(xmlWriter, document, token);
+            var documentAddress = _storage.GetDocument(documentName); 
+            Export(xmlWriter, documentAddress, cancellationToken);
+        }
+
+        public void Export(XmlWriter xmlWriter, TLinkAddress documentAddress, CancellationToken cancellationToken)
+        {
+            Write(xmlWriter, documentAddress, cancellationToken);
         }
 
         private void Write(XmlWriter writer, TLinkAddress document, CancellationToken token)
         {
             var any = _storage.Links.Constants.Any;
             var documentSequenceLink = _storage.Links.SearchOrDefault(document, any);
-            var sequence = _storage.Links.GetTarget(documentSequenceLink);
+            var xmlNodesSequenceLinkAddress = _storage.Links.GetTarget(documentSequenceLink);
             RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(_storage.Links, new DefaultStack<TLinkAddress>(), linkAddress =>
             {
                 var source = _storage.Links.GetSource(linkAddress);
@@ -41,6 +44,29 @@ namespace Platform.Data.Doublets.Xml
                 var isElement = DefaultEqualityComparer.Equals(sourceOfSource, _storage.ElementMarker);
                 return isTextElement || isAttribute || isElement;
             });
+            var xmlNodesSequence = rightSequenceWalker.Walk(xmlNodesSequenceLinkAddress);
+            foreach (var xmlNodeLinkAddress in xmlNodesSequence)
+            {
+                var isTextElement = DefaultEqualityComparer.Equals(xmlNodeLinkAddress, _storage.TextElementMarker);
+                if (isTextElement)
+                {
+                    var text = _storage.GetTextElementValue(xmlNodeLinkAddress);
+                    writer.WriteString(text);
+                }
+                var isAttribute = DefaultEqualityComparer.Equals(xmlNodeLinkAddress, _storage.AttributeMarker);
+                if (isAttribute)
+                {
+                    var attributeName = _storage.GetAttributeName(xmlNodeLinkAddress);
+                    var attributeValue = _storage.GetAttributeValue(xmlNodeLinkAddress);
+                    writer.WriteAttributeString(attributeName, attributeValue);
+                }
+                var isElement = DefaultEqualityComparer.Equals(xmlNodeLinkAddress, _storage.ElementMarker);
+                if (isElement)
+                {
+                    var elementName = _storage.GetElementName(xmlNodeLinkAddress);
+                    writer.WriteStartElement(elementName);
+                }
+            }
         }
     }
 }
