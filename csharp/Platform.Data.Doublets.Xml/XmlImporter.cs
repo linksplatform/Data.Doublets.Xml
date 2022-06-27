@@ -37,8 +37,7 @@ namespace Platform.Data.Doublets.Xml {
 
         public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
         {
-            TLinkAddress document = default;
-            document = _storage.CreateDocument(documentName);
+            TLinkAddress document = _storage.CreateDocument(documentName);
             Read(reader, token, document);
             return document;
         }
@@ -51,60 +50,64 @@ namespace Platform.Data.Doublets.Xml {
             return document;
         }
 
-        private void Read(XmlReader reader, CancellationToken token, TLinkAddress document)
+        private void Read(XmlReader reader, CancellationToken token, TLinkAddress documentAddress)
         {
-            var xmlNodes = ParseXmlElements(reader, token);
-            var documentChildren = new List<TLinkAddress>();
-            foreach (var xmlNode in xmlNodes)
-            {
-                var node = _storage.CreateNode(xmlNode);
-                documentChildren.Add(node);
-            }
+            var documentChildren = ParseXmlElements(reader, token);
             var documentChildrenSequence = _storage.ListToSequenceConverter.Convert(documentChildren);
-            _storage.Attach(documentChildrenSequence, document);
+            _storage.Links.GetOrCreate(documentAddress, documentChildrenSequence);
         }
 
-        private IList<XmlNode<TLinkAddress>> ParseXmlElements(XmlReader reader, CancellationToken token)
+        private IList<TLinkAddress> ParseXmlElements(XmlReader reader, CancellationToken token)
         {
-            var xmlElements = new List<XmlNode<TLinkAddress>>();
-            var parents = new Stack<XmlNode<TLinkAddress>>();
-            var i = 0;
+            var documentElements = new List<TLinkAddress>();
+            var parents = new Stack<XmlElement<TLinkAddress>>();
             while (reader.Read())
             {
                 if (token.IsCancellationRequested)
                 {
-                    return xmlElements;
+                    return documentElements;
                 }
-                ++i;
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
                     {
-                        var xmlElement = new XmlNode<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
-                        xmlElements.Add(xmlElement);
-                        if (parents.Count > 0)
-                        {
-                            parents.Peek().Children.Enqueue(xmlElement);
-                        }
-                        parents.Push(xmlElement);
+                        var xmlNode = new XmlElement<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
+                        parents.Push(xmlNode);
                         break;
                     }
                     case XmlNodeType.EndElement:
                     {
-
+                        var element = parents.Pop();
+                        var childrenSequence = _listToSequenceConverter.Convert(element.Children);
+                        var xmlElementAddress = _storage.CreateElement(reader.Name, childrenSequence);
+                        var hasParent = parents.Count > 0;
+                        if (hasParent)
+                        {
+                            var parent = parents.Peek();
+                            parent.Children.Add(xmlElementAddress);
+                        }
+                        else
+                        {
+                            documentElements.Add(xmlElementAddress);
+                        }
                         break;
                     }
                     case XmlNodeType.Text:
                     {
-                        var xmlElement = new XmlNode<TLinkAddress> { Value = reader.Value, ValueType = reader.ValueType, Type = XmlNodeType.Text};
-                        xmlElements.Add(xmlElement);
-                        parents.Peek().Children.Enqueue(xmlElement);
+                        var textElementAddress = _storage.CreateTextElement(reader.Value);
+                        var parent = parents.Peek();
+                        parent.Children.Add(textElementAddress);
                         break;
                     }
                     case XmlNodeType.None:
                         break;
                     case XmlNodeType.Attribute:
+                    {
+                        var attributeElementAddress = _storage.CreateAttributeElement(reader.Name, reader.Value);
+                        var parent = parents.Peek();
+                        parent.Children.Add(attributeElementAddress);
                         break;
+                    }
                     case XmlNodeType.CDATA:
                         break;
                     case XmlNodeType.EntityReference:
@@ -135,103 +138,7 @@ namespace Platform.Data.Doublets.Xml {
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            return xmlElements;
+            return documentElements;
         }
-
-        private void ReadElement(XmlReader reader, CancellationToken token, XmlNode<TLinkAddress> node)
-        {
-        }
-
-        // private void Read(XmlReader reader, CancellationToken token, XmlElement<TLinkAddress> parent)
-        // {
-        //     Stack<XmlElement<TLinkAddress>> parents = new();
-        //     Stack<XmlElement<TLinkAddress>> elements = new();
-        //     // TODO: If path was loaded previously, skip it.
-        //     while (reader.Read())
-        //     {
-        //         if (token.IsCancellationRequested)
-        //         {
-        //             return;
-        //         }
-        //         switch (reader.NodeType)
-        //         {
-        //             case XmlNodeType.Element:
-        //             {
-        //                 var elementName = reader.Name;
-        //                 var element = _storage.CreateElement(elementName);
-        //                 parents.Push(new XmlElement<TLinkAddress>(element, parents.PeekOrDefault()));
-        //                 break;
-        //             }
-        //             case XmlNodeType.EndElement:
-        //             {
-        //                 var element = parents.Pop();
-        //                 var children = new List<TLinkAddress>();
-        //                 for (int i = elements.Count - 1; i >= 0; i--)
-        //                 {
-        //                     var currentSibling = elements.ElementAtOrDefault(i);
-        //                     if (currentSibling == default)
-        //                     {
-        //                         continue;
-        //                     }
-        //                     if (_equalityComparer.Equals(element.Link, currentSibling.Parent.Link))
-        //                     {
-        //                         children.Add(currentSibling.Link);
-        //                         elements.Pop();
-        //                     }
-        //                 }
-        //                 if (children.Count != 0)
-        //                 {
-        //                     var childrenSequence = _listToSequenceConverter.Convert(children);
-        //                     _storage.Attach(element.Link, childrenSequence);
-        //                 }
-        //                 elements.Push(element);
-        //                 break;
-        //             }
-        //             case XmlNodeType.Text:
-        //                 ConsoleHelpers.Debug("Text element import is started.");
-        //                 var content = reader.Value;
-        //                 ConsoleHelpers.Debug("Content: {0}{1}", content.Truncate(50), content.Length >= 50 ? "..." : "");
-        //                 var textElement = _storage.CreateTextElement(content);
-        //                 _storage.Attach(parent.Link, textElement);
-        //                 ConsoleHelpers.Debug("Text element import is finished.");
-        //                 break;
-        //             case XmlNodeType.None:
-        //                 break;
-        //             case XmlNodeType.Attribute:
-        //                 break;
-        //             case XmlNodeType.CDATA:
-        //                 break;
-        //             case XmlNodeType.EntityReference:
-        //                 break;
-        //             case XmlNodeType.Entity:
-        //                 break;
-        //             case XmlNodeType.ProcessingInstruction:
-        //                 break;
-        //             case XmlNodeType.Comment:
-        //                 break;
-        //             case XmlNodeType.Document:
-        //                 break;
-        //             case XmlNodeType.DocumentType:
-        //                 break;
-        //             case XmlNodeType.DocumentFragment:
-        //                 break;
-        //             case XmlNodeType.Notation:
-        //                 break;
-        //             case XmlNodeType.Whitespace:
-        //                 break;
-        //             case XmlNodeType.SignificantWhitespace:
-        //                 break;
-        //             case XmlNodeType.EndEntity:
-        //                 break;
-        //             case XmlNodeType.XmlDeclaration:
-        //                 break;
-        //             default:
-        //                 throw new ArgumentOutOfRangeException();
-        //         }
-        //     }
-        // }
-
-
-        private string ToXPath(Stack<string> path) => string.Join("/", path.Reverse());
     }
 }
