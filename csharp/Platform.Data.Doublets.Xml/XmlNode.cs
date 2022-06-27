@@ -6,18 +6,8 @@ using System.Xml;
 
 namespace Platform.Data.Doublets.Xml
 {
-    public class XmlNode<TLinkAddress>
+    public interface XmlNode
     {
-        private static EqualityComparer<TLinkAddress> _equalityComparer = EqualityComparer<TLinkAddress>.Default;
-        public XmlNode<TLinkAddress> Parent;
-        public TLinkAddress Link;
-        public string Name;
-        public int Depth;
-        public XmlNodeType Type;
-        public string Value;
-        public Type ValueType;
-        public Queue<XmlNode<TLinkAddress>> Children = new Queue<XmlNode<TLinkAddress>>();
-
-        public bool HasChild(XmlNode<TLinkAddress> parent, XmlNode<TLinkAddress> child) => Parent.Depth == child.Depth + 1;
+        
     }
 }
