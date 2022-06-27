@@ -30,7 +30,7 @@ namespace Platform.Data.Doublets.Xml
             Write(xmlWriter, documentAddress, cancellationToken);
         }
 
-        private void Write(XmlWriter writer, TLinkAddress document, CancellationToken token)
+        private void Write(XmlWriter writer, TLinkAddress document, CancellationToken cancellationToken)
         {
             var any = _storage.Links.Constants.Any;
             var documentSequenceLink = _storage.Links.SearchOrDefault(document, any);
