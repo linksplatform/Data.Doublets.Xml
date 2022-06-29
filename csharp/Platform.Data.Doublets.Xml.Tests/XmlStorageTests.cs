@@ -48,15 +48,15 @@ public class XmlStorageTests
         public void CreateDocumentTest()
         {
             var defaultXmlStorage = CreateXmlStorage();
-            defaultXmlStorage.CreateDocument("documentName");
+            defaultXmlStorage.CreateDocumentName("documentName");
         }
 
         [Fact]
         public void GetDocumentTest()
         {
             var defaultXmlStorage = CreateXmlStorage();
-            var createdDocumentLink = defaultXmlStorage.CreateDocument("documentName");
-            var foundDocumentLink = defaultXmlStorage.GetDocumentOrDefault("documentName");
+            var createdDocumentLink = defaultXmlStorage.CreateDocumentName("documentName");
+            var foundDocumentLink = defaultXmlStorage.GetDocument("documentName");
             Assert.Equal(createdDocumentLink, foundDocumentLink);
         }
 
@@ -80,7 +80,7 @@ public class XmlStorageTests
         public void CreateMemberTest()
         {
             var defaultXmlStorage = CreateXmlStorage();
-            var document = defaultXmlStorage.CreateDocument("documentName");
+            var document = defaultXmlStorage.CreateDocumentName("documentName");
             defaultXmlStorage.AttachObject(document);
             defaultXmlStorage.CreateMember("keyName");
         }
@@ -90,7 +90,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentValueLink = defaultXmlStorage.AttachObject(document);
             TLinkAddress createdObjectValue = links.GetTarget(documentValueLink);
 
@@ -110,7 +110,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentStringLink = defaultXmlStorage.AttachString(document, "stringName");
             TLinkAddress createdStringValue = links.GetTarget(documentStringLink);
 
@@ -130,7 +130,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage = CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentNumberLink = defaultXmlStorage.AttachNumber(document, 2021);
             TLinkAddress createdNumberValue = links.GetTarget(documentNumberLink);
 
@@ -150,7 +150,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
 
             TLinkAddress documentTrueValueLink = defaultXmlStorage.AttachBoolean(document, true);
             TLinkAddress createdTrueValue = links.GetTarget(documentTrueValueLink);
@@ -170,7 +170,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
 
             TLinkAddress documentFalseValueLink = defaultXmlStorage.AttachBoolean(document, false);
             TLinkAddress createdFalseValue = links.GetTarget(documentFalseValueLink);
@@ -190,7 +190,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
 
             TLinkAddress documentNullValueLink = defaultXmlStorage.AttachNull(document);
             TLinkAddress createdNullValue = links.GetTarget(documentNullValueLink);
@@ -210,7 +210,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
 
             TLinkAddress documentArrayValueLink = defaultXmlStorage.AttachArray(document, new TLinkAddress[0]);
             TLinkAddress createdArrayValue = links.GetTarget(documentArrayValueLink);
@@ -236,7 +236,7 @@ public class XmlStorageTests
         {
             var links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
 
             TLinkAddress arrayElement = defaultXmlStorage.CreateString("arrayElement");
             TLinkAddress[] array = new TLinkAddress[] { arrayElement, arrayElement, arrayElement };
@@ -273,7 +273,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValueLink = defaultXmlStorage.AttachObject(document);
             TLinkAddress objectValueLink = links.GetTarget(documentObjectValueLink);
             TLinkAddress objectFromGetObject = defaultXmlStorage.GetObject(documentObjectValueLink);
@@ -287,7 +287,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValueLink = defaultXmlStorage.AttachObject(document);
             TLinkAddress objectValueLink = links.GetTarget(documentObjectValueLink);
             TLinkAddress objectFromGetObject = defaultXmlStorage.GetObject(objectValueLink);
@@ -299,7 +299,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
             TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
             TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
@@ -315,7 +315,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
             TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
             TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
@@ -331,7 +331,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
             TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
             TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
@@ -347,7 +347,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
             TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
             TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
@@ -365,7 +365,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
             TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
             TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
@@ -381,7 +381,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
             TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
             TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");
@@ -397,7 +397,7 @@ public class XmlStorageTests
         {
             ILinks<TLinkAddress> links = CreateLinks();
             var defaultXmlStorage =CreateXmlStorage(links);
-            TLinkAddress document = defaultXmlStorage.CreateDocument("documentName");
+            TLinkAddress document = defaultXmlStorage.CreateDocumentName("documentName");
             TLinkAddress documentObjectValue = defaultXmlStorage.AttachObject(document);
             TLinkAddress @object = defaultXmlStorage.GetObject(documentObjectValue);
             TLinkAddress memberLink = defaultXmlStorage.AttachMemberToObject(@object, "keyName");

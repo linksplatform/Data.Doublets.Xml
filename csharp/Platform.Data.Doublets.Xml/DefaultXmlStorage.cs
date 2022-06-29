@@ -140,7 +140,7 @@ namespace Platform.Data.Doublets.Xml
         }
         public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
         public TLinkAddress CreateNullValue() => CreateValue(NullType);
-        public TLinkAddress CreateDocument(string name)
+        public TLinkAddress CreateDocumentName(string name)
         {
             var documentName = CreateString(name);
             return Links.GetOrCreate(DocumentType, documentName);
@@ -256,14 +256,14 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress GetDocument(string name)
         {
-            var stringSequence = GetStringSequence(name);
-            var @string = Links.SearchOrDefault(StringType, stringSequence);
-            var documentLink = Links.SearchOrDefault(DocumentType, @string);
-            if (EqualityComparer.Equals(documentLink, default))
+            var documentNameStringSequenceLinkAddress = GetStringSequence(name);
+            var documentNameStringLinkAddress = Links.SearchOrDefault(StringType, documentNameStringSequenceLinkAddress);
+            var documentToDocumentNameLinkAddress = Links.SearchOrDefault(_links.Constants.Any, documentNameStringLinkAddress);
+            if (EqualityComparer.Equals(documentToDocumentNameLinkAddress, default))
             {
                 throw new Exception($"Not found document with name {name}");
             }
-            return documentLink;
+            return _links.GetSource(documentToDocumentNameLinkAddress);
         }
 
         public void GetChildren(XmlNode<TLinkAddress> node)

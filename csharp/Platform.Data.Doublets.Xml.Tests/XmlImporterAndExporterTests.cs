@@ -43,7 +43,7 @@ namespace Platform.Data.Doublets.Xml.Tests
             CancellationTokenSource exportCancellationTokenSource = new();
             CancellationToken exportCancellationToken = exportCancellationTokenSource.Token;
             var xmlWriter = XmlWriter.Create(stream);
-            xmlExporter.Export(documentLink, xmlWriter, exportCancellationToken);
+            xmlExporter.Export(xmlWriter, documentLink, exportCancellationToken);
         }
 
         [Theory]

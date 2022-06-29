@@ -37,14 +37,14 @@ namespace Platform.Data.Doublets.Xml {
 
         public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
         {
-            TLinkAddress document = _storage.CreateDocument(documentName);
+            TLinkAddress document = _storage.CreateDocumentName(documentName);
             Read(reader, token, document);
             return document;
         }
 
         public TLinkAddress Import(string file, CancellationToken token)
         {
-            var document = _storage.CreateDocument(file);
+            var document = _storage.CreateDocumentName(file);
             using var reader = XmlReader.Create(file);
             Read(reader, token,  document);
             return document;
