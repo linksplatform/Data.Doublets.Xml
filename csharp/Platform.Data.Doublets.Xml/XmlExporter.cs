@@ -61,15 +61,27 @@ namespace Platform.Data.Doublets.Xml
             }
         }
 
-        private void ExportElement(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
+        private void ExportElement(XmlWriter xmlWriter, TLinkAddress elementLinkAddress)
         {
-            var elementName = _storage.GetElementName(xmlNodeLinkAddress);
-            xmlWriter.WriteStartElement(elementName);
-            var childrenElementLinkAddressList = _storage.GetChildrenElements(xmlNodeLinkAddress);
-            foreach (var childElementLinkAddress in childrenElementLinkAddressList)
+            var currentElementLinkAddress = elementLinkAddress;
+            var endElementCount = 0;
+            do
             {
-                
-            }
+                var elementName = _storage.GetElementName(currentElementLinkAddress);
+                xmlWriter.WriteStartElement(elementName);
+                var attrubute = _storage.GetAttributeForElement(currentElementLinkAddress);
+                var 
+                var childrenElementLinkAddressList = _storage.GetChildrenElements(currentElementLinkAddress);    
+                foreach (var childElementLinkAddress in childrenElementLinkAddressList)
+                {
+                    
+                }
+                endElementCount++;
+            } while (true);
+            for (int i = 0; i < endElementCount; i++)
+            {
+                xmlWriter.WriteEndElement();
+            }            
         }
 
         private void ExportAttributeElement(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
