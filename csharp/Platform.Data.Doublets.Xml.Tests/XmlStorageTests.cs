@@ -56,7 +56,7 @@ public class XmlStorageTests
         {
             var defaultXmlStorage = CreateXmlStorage();
             var createdDocumentLink = defaultXmlStorage.CreateDocumentName("documentName");
-            var foundDocumentLink = defaultXmlStorage.GetDocument("documentName");
+            var foundDocumentLink = defaultXmlStorage.GetDocumentLinkAddress("documentName");
             Assert.Equal(createdDocumentLink, foundDocumentLink);
         }
 

@@ -21,52 +21,68 @@ namespace Platform.Data.Doublets.Xml
 
         public void Export(XmlWriter xmlWriter, string documentName, CancellationToken cancellationToken)
         {
-            var documentAddress = _storage.GetDocument(documentName); 
+            var documentAddress = _storage.GetDocumentLinkAddress(documentName); 
             Export(xmlWriter, documentAddress, cancellationToken);
         }
 
-        public void Export(XmlWriter xmlWriter, TLinkAddress documentAddress, CancellationToken cancellationToken)
+        public void Export(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
-            Write(xmlWriter, documentAddress, cancellationToken);
+            Write(xmlWriter, documentLinkAddress, cancellationToken);
         }
 
-        private void Write(XmlWriter writer, TLinkAddress document, CancellationToken cancellationToken)
+        private void Write(XmlWriter xmlWriter, TLinkAddress document, CancellationToken cancellationToken)
         {
             var any = _storage.Links.Constants.Any;
             var documentSequenceLink = _storage.Links.SearchOrDefault(document, any);
             var xmlNodesSequenceLinkAddress = _storage.Links.GetTarget(documentSequenceLink);
-            RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(_storage.Links, new DefaultStack<TLinkAddress>(), linkAddress =>
+            RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(_storage.Links, new DefaultStack<TLinkAddress>() /*, linkAddress =>
             {
                 var source = _storage.Links.GetSource(linkAddress);
-                var sourceOfSource = _storage.Links.GetSource(source);
-                var isTextElement = DefaultEqualityComparer.Equals(source, _storage.TextElementMarker);
-                var isAttribute = DefaultEqualityComparer.Equals(source, _storage.AttributeMarker);
-                var isElement = DefaultEqualityComparer.Equals(sourceOfSource, _storage.ElementMarker);
-                return isTextElement || isAttribute || isElement;
-            });
+                var isTextElement = _storage.IsTextElement(source);
+                var isAttributeElement = _storage.IsAttributeElement(source);
+                var isElement = _storage.IsElement(source);
+                return isTextElement || isAttributeElement || isElement;
+            } */);
             var xmlNodesSequence = rightSequenceWalker.Walk(xmlNodesSequenceLinkAddress);
             foreach (var xmlNodeLinkAddress in xmlNodesSequence)
             {
-                var isTextElement = DefaultEqualityComparer.Equals(xmlNodeLinkAddress, _storage.TextElementMarker);
-                if (isTextElement)
+                if (_storage.IsTextElement(xmlNodeLinkAddress))
                 {
-                    var text = _storage.GetTextElementValue(xmlNodeLinkAddress);
-                    writer.WriteString(text);
+                    ExportTextElement(xmlWriter, xmlNodeLinkAddress);
                 }
-                var isAttribute = DefaultEqualityComparer.Equals(xmlNodeLinkAddress, _storage.AttributeMarker);
-                if (isAttribute)
+                if (_storage.IsAttributeElement(xmlNodeLinkAddress))
                 {
-                    var attributeName = _storage.GetAttributeName(xmlNodeLinkAddress);
-                    var attributeValue = _storage.GetAttributeValue(xmlNodeLinkAddress);
-                    writer.WriteAttributeString(attributeName, attributeValue);
+                    ExportAttributeElement(xmlWriter, xmlNodeLinkAddress);
                 }
-                var isElement = DefaultEqualityComparer.Equals(xmlNodeLinkAddress, _storage.ElementMarker);
-                if (isElement)
+                if (_storage.IsElement(xmlNodeLinkAddress))
                 {
-                    var elementName = _storage.GetElementName(xmlNodeLinkAddress);
-                    writer.WriteStartElement(elementName);
+                    ExportElement(xmlWriter, xmlNodeLinkAddress);
                 }
             }
+        }
+
+        private void ExportElement(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
+        {
+            var elementName = _storage.GetElementName(xmlNodeLinkAddress);
+            xmlWriter.WriteStartElement(elementName);
+            var childrenElementLinkAddressList = _storage.GetChildrenElements(xmlNodeLinkAddress);
+            foreach (var childElementLinkAddress in childrenElementLinkAddressList)
+            {
+                
+            }
+        }
+
+        private void ExportAttributeElement(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
+        {
+            var attributeName = _storage.GetAttributeName(xmlNodeLinkAddress);
+            var attributeValue = _storage.GetAttributeValue(xmlNodeLinkAddress);
+            xmlWriter.WriteAttributeString(attributeName, attributeValue);
+        }
+
+        public void ExportTextElement(XmlWriter xmlWriter, TLinkAddress textElementLinkAddress)
+        {
+            var text = _storage.GetTextElementValue(textElementLinkAddress);
+            xmlWriter.WriteString(text);
         }
     }
 }

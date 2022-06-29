@@ -37,24 +37,25 @@ namespace Platform.Data.Doublets.Xml {
 
         public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
         {
-            TLinkAddress document = _storage.CreateDocumentName(documentName);
-            Read(reader, token, document);
-            return document;
+            TLinkAddress documentNameLinkAddress = _storage.CreateDocumentName(documentName);
+            Read(reader, token, documentNameLinkAddress);
+            return documentNameLinkAddress;
         }
 
         public TLinkAddress Import(string file, CancellationToken token)
         {
-            var document = _storage.CreateDocumentName(file);
+            var documentNameLinkAddress = _storage.CreateDocumentName(file);
             using var reader = XmlReader.Create(file);
-            Read(reader, token,  document);
-            return document;
+            Read(reader, token,  documentNameLinkAddress);
+            return documentNameLinkAddress;
         }
 
-        private void Read(XmlReader reader, CancellationToken token, TLinkAddress documentAddress)
+        private void Read(XmlReader reader, CancellationToken token, TLinkAddress documentNameLinkAddress)
         {
-            var documentChildren = ParseXmlElements(reader, token);
-            var documentChildrenSequence = _storage.ListToSequenceConverter.Convert(documentChildren);
-            _storage.Links.GetOrCreate(documentAddress, documentChildrenSequence);
+            var elements = ParseXmlElements(reader, token);
+            var elementsSequenceLinkAddress = _storage.ListToSequenceConverter.Convert(elements);
+            var documentLinkAddress = _storage.CreateDocument(elementsSequenceLinkAddress);
+            _storage.Links.GetOrCreate(documentLinkAddress, documentNameLinkAddress);
         }
 
         private IList<TLinkAddress> ParseXmlElements(XmlReader reader, CancellationToken token)
