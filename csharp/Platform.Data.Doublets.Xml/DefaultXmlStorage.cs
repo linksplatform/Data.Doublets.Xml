@@ -365,21 +365,6 @@ namespace Platform.Data.Doublets.Xml
             return EqualityComparer.Equals(documentType, DocumentType);
         }
 
-        public void GetChildrenNodes()
-        {
-            var any = _links.Constants.Any;
-            _links.Each(new Link<TLinkAddress>(any, node.Link, any), fromElementToAnyLink =>
-            {
-                var child = _links.GetTarget(fromElementToAnyLink);
-                var Type = _links.GetSource(child);
-                var type = GetTypeFromType(Type);
-                var childXmlElement = new XmlNode<TLinkAddress> { Link = child, Type = type };
-                GetChildrenNodes(childXmlElement);
-                node.Children.Enqueue(childXmlElement);
-                return _links.Constants.Continue;
-            });
-        }
-
         private XmlNodeType GetTypeFromType(TLinkAddress Type)
         {
             if (EqualityComparer.Equals(ElementType, Type))
@@ -506,40 +491,12 @@ namespace Platform.Data.Doublets.Xml
             return members;
         }
 
-        private void CreateAttributeElement(XmlNode<TLinkAddress> node)
+        private TLinkAddress CreateAttributeNode(XmlAttribute xmlAttribute)
         {
-            var attributeName = _stringToUnicodeSequenceConverter.Convert(node.Name);
-            var attributeValue = _stringToUnicodeSequenceConverter.Convert(node.Value);
+            var attributeName = _stringToUnicodeSequenceConverter.Convert(xmlAttribute.Name);
+            var attributeValue = _stringToUnicodeSequenceConverter.Convert(xmlAttribute.Value);
             var attribute = _links.GetOrCreate(attributeName, attributeValue);
-            node.Link = _links.GetOrCreate(AttributeElementType, attribute);
-        }
-
-        public TLinkAddress CreateNode(XmlNode<TLinkAddress> xmlNode)
-        {
-            if (XmlNodeType.Element == xmlNode.Type)
-            {
-                xmlNode.Link = CreateElement(xmlNode.Name);
-            }
-            else if (XmlNodeType.Text == xmlNode.Type)
-            {
-                xmlNode.Link = CreateTextElement(xmlNode.Value);
-            }
-            else if (XmlNodeType.Attribute == xmlNode.Type)
-            {
-                CreateAttributeElement(xmlNode.Name, xmlNode.Value);
-            }
-            if (0 == xmlNode.Children.Count)
-            {
-                return xmlNode.Link;
-            }
-            var childrenLinks = new List<TLinkAddress>();
-            foreach (var childXmlElement in xmlNode.Children)
-            {
-                var childNode = CreateNode(childXmlElement);
-                childrenLinks.Add(childNode);
-            }
-            var childrenSequence = ListToSequenceConverter.Convert(childrenLinks);
-            return _links.GetOrCreate(xmlNode.Link, childrenSequence);
+            return _links.GetOrCreate(AttributeElementType, attribute);
         }
 
         public TLinkAddress CreateAttributeElement(string name, string value)
@@ -548,11 +505,6 @@ namespace Platform.Data.Doublets.Xml
             var valueLinkAddress = CreateString(value);
             var attributeValueLinkAddress = Links.GetOrCreate(nameLinkAddress, valueLinkAddress);
             return Links.GetOrCreate(AttributeElementType, attributeValueLinkAddress);
-        }
-
-        public XmlAttribute GetAttributeForElement(TLinkAddress parentElementLinkAddress)
-        {
-            Links.Each(new Link<TLinkAddress>())
         }
 
         public string GetAttributeName(TLinkAddress attributeLinkAddress)
@@ -594,12 +546,6 @@ namespace Platform.Data.Doublets.Xml
             }
             var contentLink = Links.GetTarget(textElementLinkAddress);
             return UnicodeSequenceToStringConverter.Convert(contentLink);
-        }
-
-        public void GetElementName(XmlNode<TLinkAddress> node)
-        {
-            var nameSequence = _links.GetTarget(node.Link);
-            node.Name = UnicodeSequenceToStringConverter.Convert(nameSequence);
         }
     }
 }
