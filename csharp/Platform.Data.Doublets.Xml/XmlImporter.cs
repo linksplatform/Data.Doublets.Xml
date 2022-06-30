@@ -95,18 +95,18 @@ namespace Platform.Data.Doublets.Xml {
                     }
                     case XmlNodeType.Text:
                     {
-                        var textElementAddress = _storage.CreateTextElement(reader.Value);
+                        var textNodeAddress = _storage.CreateTextNode(reader.Value);
                         var parent = parents.Peek();
-                        parent.Children.Add(textElementAddress);
+                        parent.Children.Add(textNodeAddress);
                         break;
                     }
                     case XmlNodeType.None:
                         break;
                     case XmlNodeType.Attribute:
                     {
-                        var attributeElementAddress = _storage.CreateAttributeElement(reader.Name, reader.Value);
+                        var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
                         var parent = parents.Peek();
-                        parent.Children.Add(attributeElementAddress);
+                        parent.Children.Add(attributeNodeAddress);
                         break;
                     }
                     case XmlNodeType.CDATA:

@@ -38,10 +38,10 @@ namespace Platform.Data.Doublets.Xml
             RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(_storage.Links, new DefaultStack<TLinkAddress>() /*, linkAddress =>
             {
                 var source = _storage.Links.GetSource(linkAddress);
-                var isTextElement = _storage.IsTextElement(source);
-                var isAttributeElement = _storage.IsAttributeElement(source);
+                var isTextNode = _storage.IsTextNode(source);
+                var isAttributeNode = _storage.IsAttributeNode(source);
                 var isElement = _storage.IsElement(source);
-                return isTextElement || isAttributeElement || isElement;
+                return isTextNode || isAttributeNode || isElement;
             } */);
             var xmlNodesSequence = rightSequenceWalker.Walk(xmlNodesSequenceLinkAddress);
         }
@@ -50,11 +50,11 @@ namespace Platform.Data.Doublets.Xml
         {
             if (_storage.IsTextNode(nodeLinkAddress))
             {
-                ExportTextElement(xmlWriter, nodeLinkAddress);
+                ExportTextNode(xmlWriter, nodeLinkAddress);
             }
             else if (_storage.IsAttributeNode(nodeLinkAddress))
             {
-                ExportAttributeElement(xmlWriter, nodeLinkAddress);
+                ExportAttributeNode(xmlWriter, nodeLinkAddress);
             }
             else if (_storage.IsElement(nodeLinkAddress))
             {
@@ -89,16 +89,16 @@ namespace Platform.Data.Doublets.Xml
             }            
         }
 
-        private void ExportAttributeElement(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
+        private void ExportAttributeNode(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
         {
             var attributeName = _storage.GetAttributeName(xmlNodeLinkAddress);
             var attributeValue = _storage.GetAttributeValue(xmlNodeLinkAddress);
             xmlWriter.WriteAttributeString(attributeName, attributeValue);
         }
 
-        public void ExportTextElement(XmlWriter xmlWriter, TLinkAddress textElementLinkAddress)
+        public void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
         {
-            var text = _storage.GetTextElementValue(textElementLinkAddress);
+            var text = _storage.GetTextNodeValue(textNodeLinkAddress);
             xmlWriter.WriteString(text);
         }
     }

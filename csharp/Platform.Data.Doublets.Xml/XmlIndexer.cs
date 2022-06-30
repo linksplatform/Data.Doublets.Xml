@@ -163,7 +163,7 @@
 //         /// <para>The null constant.</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLinkAddress CreateTextElement(string content)
+//         public TLinkAddress CreateTextNode(string content)
 //         {
 //             _index.Add(ToElements(content));
 //             return _nullConstant;
@@ -233,7 +233,7 @@
 //         /// <para>The link</para>
 //         /// <para></para>
 //         /// </returns>
-//         public TLinkAddress GetTextElement(string content)
+//         public TLinkAddress GetTextNode(string content)
 //         {
 //             throw new System.NotImplementedException();
 //         }
