@@ -186,7 +186,7 @@ namespace Platform.Data.Doublets.Xml
             return CreateElementChildrenNodes(elementLinkAddress, childrenNodesSequenceLinkAddress);
         }
 
-        public bool IsElementChildrenElements(TLinkAddress possibleChildrenNodesLinkAddress)
+        public bool IsChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
         {
             var possibleChildrenNodesType = Links.GetSource(possibleChildrenNodesLinkAddress);
             return EqualityComparer.Equals(possibleChildrenNodesType, ChildrenNodesType);
@@ -207,20 +207,24 @@ namespace Platform.Data.Doublets.Xml
 
         public List<TLinkAddress> GetChildrenNodes(TLinkAddress elementLinkAddress)
         {
-            var childElements = new List<TLinkAddress>();
+            if (!IsElement(elementLinkAddress))
+            {
+                throw new Exception("The passed link address is not an element link address.");
+            }
+            var childrenNodes = new List<TLinkAddress>();
             _links.Each(new Link<TLinkAddress>(elementLinkAddress, _links.Constants.Any), parentToChildLink =>
             {
                 var possibleChildrenNodesLinkAddress = _links.GetSource(parentToChildLink);
-                if (!IsElementChildrenElements(possibleChildrenNodesLinkAddress))
+                if (!IsChildrenNodes(possibleChildrenNodesLinkAddress))
                 {
                     return Links.Constants.Continue;
                 }
-                var childrenElementsSequenceLinkAddress = GetChildrenNodesSequence(possibleChildrenNodesLinkAddress);
-                RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), );
-                var childrenElementsSequence = rightSequenceWalker.Walk(childrenElementsSequenceLinkAddress);
+                var childrenNodesSequenceLinkAddress = GetChildrenNodesSequence(possibleChildrenNodesLinkAddress);
+                RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
+                childrenNodes = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
                 return _links.Constants.Continue;
             });
-            return childElements;
+            return childrenNodes;
         }
         public TLinkAddress CreateObject()
         {
