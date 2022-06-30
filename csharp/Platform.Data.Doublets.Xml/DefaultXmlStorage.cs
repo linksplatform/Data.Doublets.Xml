@@ -62,6 +62,8 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress DocumentNameType { get; }
 
         public TLinkAddress ElementType { get; }
+        
+        public TLinkAddress ChildrenNodesType { get; }
 
         public TLinkAddress TextElementType { get; }
         public TLinkAddress AttributeElementType { get; }
@@ -98,6 +100,7 @@ namespace Platform.Data.Doublets.Xml
             DocumentType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentType)));
             DocumentNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentNameType)));
             ElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementType)));
+            ChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ChildrenNodesType)));
             TextElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TextElementType)));
             AttributeElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeElementType)));
             ObjectType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ObjectType)));
@@ -171,28 +174,52 @@ namespace Platform.Data.Doublets.Xml
             return UnicodeSequenceToStringConverter.Convert(elementNameLinkAddress);
         }
 
-        public TLinkAddress CreateElement(string name, TLinkAddress childrenSequence)
+        public TLinkAddress CreateElementChildrenNodes(TLinkAddress elementLinkAddress, TLinkAddress childrenNodesSequenceLinkAddress)
         {
-            var elementLink = CreateElement(name);
-            Links.GetOrCreate(elementLink, childrenSequence);
-            return elementLink;
+            var childrenNodesLinkAddress = Links.GetOrCreate(ChildrenNodesType, childrenNodesSequenceLinkAddress);
+            return Links.GetOrCreate(elementLinkAddress, childrenNodesLinkAddress);
         }
 
-        public List<TLinkAddress> GetChildrenElements(TLinkAddress element)
+        public TLinkAddress CreateElement(string name, TLinkAddress childrenNodesSequenceLinkAddress)
         {
-            var parentAndChildrenElementsQuery = new Link<TLinkAddress>(element, _links.Constants.Any);
+            var elementLinkAddress = CreateElement(name);
+            return CreateElementChildrenNodes(elementLinkAddress, childrenNodesSequenceLinkAddress);
+        }
+
+        public bool IsElementChildrenElements(TLinkAddress possibleChildrenNodesLinkAddress)
+        {
+            var possibleChildrenNodesType = Links.GetSource(possibleChildrenNodesLinkAddress);
+            return EqualityComparer.Equals(possibleChildrenNodesType, ChildrenNodesType);
+        }
+
+        public TLinkAddress GetChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
+        {
+            return Links.GetTarget(childrenNodesLinkAddress);
+        }
+
+        public bool IsNode(TLinkAddress possibleXmlNode)
+        {
+            var isElement = IsElement(possibleXmlNode);
+            var isTextNode = IsTextNode(possibleXmlNode);
+            var isAttributeNode = IsAttributeNode(possibleXmlNode);
+            return isElement || isTextNode || isAttributeNode;
+        }
+
+        public List<TLinkAddress> GetChildrenNodes(TLinkAddress elementLinkAddress)
+        {
             var childElements = new List<TLinkAddress>();
-            _links.Each(parentAndChildLink =>
+            _links.Each(new Link<TLinkAddress>(elementLinkAddress, _links.Constants.Any), parentToChildLink =>
             {
-                var childElement = _links.GetTarget(parentAndChildLink);
-                var childElementSource = _links.GetSource(childElement);
-                if (!EqualityComparer.Equals(ElementType, childElementSource))
+                var possibleChildrenNodesLinkAddress = _links.GetSource(parentToChildLink);
+                if (!IsElementChildrenElements(possibleChildrenNodesLinkAddress))
                 {
-                    return _links.Constants.Continue;
+                    return Links.Constants.Continue;
                 }
-                childElements.Add(childElement);
+                var childrenElementsSequenceLinkAddress = GetChildrenNodesSequence(possibleChildrenNodesLinkAddress);
+                RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), );
+                var childrenElementsSequence = rightSequenceWalker.Walk(childrenElementsSequenceLinkAddress);
                 return _links.Constants.Continue;
-            }, parentAndChildrenElementsQuery);
+            });
             return childElements;
         }
         public TLinkAddress CreateObject()
@@ -284,13 +311,13 @@ namespace Platform.Data.Doublets.Xml
             return EqualityComparer.Equals(documentNameType, DocumentNameType);
         }
 
-        public bool IsTextElement(TLinkAddress textElementLinkAddress)
+        public bool IsTextNode(TLinkAddress textElementLinkAddress)
         {
             var possibleTextElementType = Links.GetSource(textElementLinkAddress);
             return EqualityComparer.Equals(possibleTextElementType, TextElementType);
         }
 
-        public bool IsAttributeElement(TLinkAddress attributeElementLinkAddress)
+        public bool IsAttributeNode(TLinkAddress attributeElementLinkAddress)
         {
             var possibleAttributeElementType = Links.GetSource(attributeElementLinkAddress);
             return EqualityComparer.Equals(possibleAttributeElementType, AttributeElementType);
@@ -334,7 +361,7 @@ namespace Platform.Data.Doublets.Xml
             return EqualityComparer.Equals(documentType, DocumentType);
         }
 
-        public void GetChildrenElements()
+        public void GetChildrenNodes()
         {
             var any = _links.Constants.Any;
             _links.Each(new Link<TLinkAddress>(any, node.Link, any), fromElementToAnyLink =>
@@ -343,7 +370,7 @@ namespace Platform.Data.Doublets.Xml
                 var Type = _links.GetSource(child);
                 var type = GetTypeFromType(Type);
                 var childXmlElement = new XmlNode<TLinkAddress> { Link = child, Type = type };
-                GetChildrenElements(childXmlElement);
+                GetChildrenNodes(childXmlElement);
                 node.Children.Enqueue(childXmlElement);
                 return _links.Constants.Continue;
             });
@@ -517,6 +544,11 @@ namespace Platform.Data.Doublets.Xml
             var valueLinkAddress = CreateString(value);
             var attributeValueLinkAddress = Links.GetOrCreate(nameLinkAddress, valueLinkAddress);
             return Links.GetOrCreate(AttributeElementType, attributeValueLinkAddress);
+        }
+
+        public XmlAttribute GetAttributeForElement(TLinkAddress parentElementLinkAddress)
+        {
+            Links.Each(new Link<TLinkAddress>())
         }
 
         public string GetAttributeName(TLinkAddress attributeLinkAddress)

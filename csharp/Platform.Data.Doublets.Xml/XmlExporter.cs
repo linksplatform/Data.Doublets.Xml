@@ -44,13 +44,17 @@ namespace Platform.Data.Doublets.Xml
                 return isTextElement || isAttributeElement || isElement;
             } */);
             var xmlNodesSequence = rightSequenceWalker.Walk(xmlNodesSequenceLinkAddress);
+        }
+
+        public void ExportNode(XmlWriter xmlWriter, TLinkAddress nodeLinkAddress)
+        {
             foreach (var xmlNodeLinkAddress in xmlNodesSequence)
             {
-                if (_storage.IsTextElement(xmlNodeLinkAddress))
+                if (_storage.IsTextNode(xmlNodeLinkAddress))
                 {
                     ExportTextElement(xmlWriter, xmlNodeLinkAddress);
                 }
-                if (_storage.IsAttributeElement(xmlNodeLinkAddress))
+                if (_storage.IsAttributeNode(xmlNodeLinkAddress))
                 {
                     ExportAttributeElement(xmlWriter, xmlNodeLinkAddress);
                 }
@@ -59,8 +63,9 @@ namespace Platform.Data.Doublets.Xml
                     ExportElement(xmlWriter, xmlNodeLinkAddress);
                 }
             }
+            
         }
-
+        
         private void ExportElement(XmlWriter xmlWriter, TLinkAddress elementLinkAddress)
         {
             var currentElementLinkAddress = elementLinkAddress;
@@ -71,7 +76,7 @@ namespace Platform.Data.Doublets.Xml
                 xmlWriter.WriteStartElement(elementName);
                 var attrubute = _storage.GetAttributeForElement(currentElementLinkAddress);
                 var 
-                var childrenElementLinkAddressList = _storage.GetChildrenElements(currentElementLinkAddress);    
+                var childrenElementLinkAddressList = _storage.GetChildrenNodes(currentElementLinkAddress);    
                 foreach (var childElementLinkAddress in childrenElementLinkAddressList)
                 {
                     

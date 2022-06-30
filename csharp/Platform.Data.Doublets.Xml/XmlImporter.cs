@@ -72,8 +72,8 @@ namespace Platform.Data.Doublets.Xml {
                 {
                     case XmlNodeType.Element:
                     {
-                        var xmlNode = new XmlElement<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
-                        parents.Push(xmlNode);
+                        var element = new XmlElement<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
+                        parents.Push(element);
                         break;
                     }
                     case XmlNodeType.EndElement:
