@@ -48,22 +48,22 @@ namespace Platform.Data.Doublets.Xml
 
         public void ExportNode(XmlWriter xmlWriter, TLinkAddress nodeLinkAddress)
         {
-            foreach (var xmlNodeLinkAddress in xmlNodesSequence)
+            if (_storage.IsTextNode(nodeLinkAddress))
             {
-                if (_storage.IsTextNode(xmlNodeLinkAddress))
-                {
-                    ExportTextElement(xmlWriter, xmlNodeLinkAddress);
-                }
-                if (_storage.IsAttributeNode(xmlNodeLinkAddress))
-                {
-                    ExportAttributeElement(xmlWriter, xmlNodeLinkAddress);
-                }
-                if (_storage.IsElement(xmlNodeLinkAddress))
-                {
-                    ExportElement(xmlWriter, xmlNodeLinkAddress);
-                }
+                ExportTextElement(xmlWriter, nodeLinkAddress);
             }
-            
+            else if (_storage.IsAttributeNode(nodeLinkAddress))
+            {
+                ExportAttributeElement(xmlWriter, nodeLinkAddress);
+            }
+            else if (_storage.IsElement(nodeLinkAddress))
+            {
+                ExportElement(xmlWriter, nodeLinkAddress);
+            }
+            else
+            {
+                throw new NotSupportedException("The passed link address is not a text, attribute or element.");
+            }
         }
         
         private void ExportElement(XmlWriter xmlWriter, TLinkAddress elementLinkAddress)
