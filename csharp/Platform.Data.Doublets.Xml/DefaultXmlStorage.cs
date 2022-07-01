@@ -62,7 +62,8 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress ElementType { get; }
         
-        public TLinkAddress ChildrenNodesType { get; }
+        public TLinkAddress DocumentChildrenNodesType { get; }
+        public TLinkAddress ElementChildrenNodesType { get; }
 
         public TLinkAddress TextNodeType { get; }
         public TLinkAddress AttributeNodeType { get; }
@@ -99,7 +100,8 @@ namespace Platform.Data.Doublets.Xml
             DocumentType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentType)));
             DocumentNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentNameType)));
             ElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementType)));
-            ChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ChildrenNodesType)));
+            ElementChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementChildrenNodesType)));
+            DocumentChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentChildrenNodesType)));
             TextNodeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TextNodeType)));
             AttributeNodeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeNodeType)));
             ObjectType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ObjectType)));
@@ -175,7 +177,7 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress CreateElementChildrenNodes(TLinkAddress elementLinkAddress, TLinkAddress childrenNodesSequenceLinkAddress)
         {
-            var childrenNodesLinkAddress = Links.GetOrCreate(ChildrenNodesType, childrenNodesSequenceLinkAddress);
+            var childrenNodesLinkAddress = Links.GetOrCreate(ElementChildrenNodesType, childrenNodesSequenceLinkAddress);
             return Links.GetOrCreate(elementLinkAddress, childrenNodesLinkAddress);
         }
 
@@ -185,12 +187,18 @@ namespace Platform.Data.Doublets.Xml
             return CreateElementChildrenNodes(elementLinkAddress, childrenNodesSequenceLinkAddress);
         }
 
-        public bool IsChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
+        public bool IsDocumentChildrenNodes(TLinkAddress possibleDocumentChildrenNodesLinkAddress)
         {
-            var possibleChildrenNodesType = Links.GetSource(possibleChildrenNodesLinkAddress);
-            return EqualityComparer.Equals(possibleChildrenNodesType, ChildrenNodesType);
+            var possibleDocumentChildrenNodesType = Links.GetSource(possibleDocumentChildrenNodesLinkAddress);
+            return EqualityComparer.Equals(possibleDocumentChildrenNodesType, ElementChildrenNodesType);
         }
 
+        public bool IsElementChildrenNodes(TLinkAddress possibleElementChildrenNodesLinkAddress)
+        {
+            var possibleElementChildrenNodesType = Links.GetSource(possibleElementChildrenNodesLinkAddress);
+            return EqualityComparer.Equals(possibleElementChildrenNodesType, ElementChildrenNodesType);
+        }
+        
         public TLinkAddress GetChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
             return Links.GetTarget(childrenNodesLinkAddress);
@@ -210,6 +218,20 @@ namespace Platform.Data.Doublets.Xml
             {
                 throw new ArgumentException("The passed link address is not a document link address.", nameof(documentLinkAddress));
             }
+            var childrenNodes = new List<TLinkAddress>();
+            Links.Each(new Link<TLinkAddress>(documentLinkAddress, Links.Constants.Any), documentToAnyLink =>
+            {
+                var possibleChildrenNodesLinkAddress = Links.GetTarget(documentToAnyLink);
+                if (!IsDocumentChildrenNodes(possibleChildrenNodesLinkAddress))
+                {
+                    return Links.Constants.Continue;
+                }
+                var childrenNodesSequenceLinkAddress = GetChildrenNodesSequence(possibleChildrenNodesLinkAddress);
+                RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
+                childrenNodes = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
+                return Links.Constants.Continue;
+            });
+            return childrenNodes;
             return GetChildrenNodes(documentLinkAddress);
         }
 
@@ -224,20 +246,7 @@ namespace Platform.Data.Doublets.Xml
 
         public IList<TLinkAddress> GetChildrenNodes(TLinkAddress parentLinkAddress)
         {
-            var childrenNodes = new List<TLinkAddress>();
-            Links.Each(new Link<TLinkAddress>(parentLinkAddress, Links.Constants.Any), parentToChildLink =>
-            {
-                var possibleChildrenNodesLinkAddress = Links.GetSource(parentToChildLink);
-                if (!IsChildrenNodes(possibleChildrenNodesLinkAddress))
-                {
-                    return Links.Constants.Continue;
-                }
-                var childrenNodesSequenceLinkAddress = GetChildrenNodesSequence(possibleChildrenNodesLinkAddress);
-                RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
-                childrenNodes = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
-                return Links.Constants.Continue;
-            });
-            return childrenNodes;
+            
         }
         public TLinkAddress CreateObject()
         {
