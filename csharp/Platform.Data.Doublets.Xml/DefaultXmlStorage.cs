@@ -394,10 +394,10 @@ namespace Platform.Data.Doublets.Xml
         }
         
 
-        private bool IsDocument(TLinkAddress documentLinkAddress)
+        private bool IsDocument(TLinkAddress possibleDocumentLinkAddress)
         {
-            var documentType = Links.GetSource(documentLinkAddress);
-            return EqualityComparer.Equals(documentType, DocumentType);
+            var possibleDocumentType = Links.GetSource(possibleDocumentLinkAddress);
+            return EqualityComparer.Equals(possibleDocumentType, DocumentType);
         }
 
         private XmlNodeType GetTypeFromType(TLinkAddress Type)
