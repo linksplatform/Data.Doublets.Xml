@@ -57,7 +57,7 @@ namespace Platform.Data.Doublets.Xml
             }
             else
             {
-                throw new NotSupportedException("The passed link address is not a text, attribute or element.");
+                throw new ArgumentException("The passed link address is not a text, attribute or element.", nameof(nodeLinkAddress));
             }
         }
         
