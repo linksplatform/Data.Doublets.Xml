@@ -217,7 +217,7 @@ namespace Platform.Data.Doublets.Xml
             return isElement || isTextNode || isAttributeNode;
         }
 
-        public IList<TLinkAddress> GetDocumentChildrenNodes(TLinkAddress documentLinkAddress)
+        public IList<TLinkAddress> GetDocumentChildNodeLinkAddressList(TLinkAddress documentLinkAddress)
         {
             if (!IsDocument(documentLinkAddress))
             {
