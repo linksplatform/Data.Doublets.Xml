@@ -30,11 +30,9 @@ namespace Platform.Data.Doublets.Xml
             Write(xmlWriter, documentLinkAddress, cancellationToken);
         }
 
-        private void Write(XmlWriter xmlWriter, TLinkAddress document, CancellationToken cancellationToken)
+        private void Write(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
-            var any = _storage.Links.Constants.Any;
-            var documentSequenceLink = _storage.Links.SearchOrDefault(document, any);
-            var childrenNodes = _storage.GetElementChildrenNodes(documentSequenceLink);
+            var childrenNodes = _storage.GetDocumentChildrenNodes(documentLinkAddress);
             foreach (var childNode in childrenNodes)
             {
                 ExportNode(xmlWriter, childNode);
