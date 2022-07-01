@@ -205,14 +205,28 @@ namespace Platform.Data.Doublets.Xml
             return isElement || isTextNode || isAttributeNode;
         }
 
-        public List<TLinkAddress> GetChildrenNodes(TLinkAddress elementLinkAddress)
+        public IList<TLinkAddress> GetDocumentChildrenNodes(TLinkAddress documentLinkAddress)
+        {
+            if (!IsDocument(documentLinkAddress))
+            {
+                throw new ArgumentException("The passed link address is not a document link address.", nameof(documentLinkAddress));
+            }
+            return GetChildrenNodes(documentLinkAddress);
+        }
+
+        public IList<TLinkAddress> GetElementChildrenNodes(TLinkAddress elementLinkAddress)
         {
             if (!IsElement(elementLinkAddress))
             {
-                throw new Exception("The passed link address is not an element link address.");
+                throw new ArgumentException("The passed link address is not an element link address.", nameof(elementLinkAddress));
             }
+            return GetChildrenNodes(elementLinkAddress);
+        }
+
+        public IList<TLinkAddress> GetChildrenNodes(TLinkAddress parentLinkAddress)
+        {
             var childrenNodes = new List<TLinkAddress>();
-            _links.Each(new Link<TLinkAddress>(elementLinkAddress, _links.Constants.Any), parentToChildLink =>
+            _links.Each(new Link<TLinkAddress>(parentLinkAddress, _links.Constants.Any), parentToChildLink =>
             {
                 var possibleChildrenNodesLinkAddress = _links.GetSource(parentToChildLink);
                 if (!IsChildrenNodes(possibleChildrenNodesLinkAddress))
@@ -505,6 +519,15 @@ namespace Platform.Data.Doublets.Xml
             var valueLinkAddress = CreateString(value);
             var attributeValueLinkAddress = Links.GetOrCreate(nameLinkAddress, valueLinkAddress);
             return Links.GetOrCreate(AttributeNodeType, attributeValueLinkAddress);
+        }
+
+        public XmlAttribute GetAttribute(TLinkAddress attributeLinkAddress)
+        {
+            return new XmlAttribute
+            {
+                Name = GetAttributeName(attributeLinkAddress),
+                Value = GetAttributeValue(attributeLinkAddress)
+            };
         }
 
         public string GetAttributeName(TLinkAddress attributeLinkAddress)
