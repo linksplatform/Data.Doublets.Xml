@@ -34,16 +34,11 @@ namespace Platform.Data.Doublets.Xml
         {
             var any = _storage.Links.Constants.Any;
             var documentSequenceLink = _storage.Links.SearchOrDefault(document, any);
-            var xmlNodesSequenceLinkAddress = _storage.Links.GetTarget(documentSequenceLink);
-            RightSequenceWalker<TLinkAddress> rightSequenceWalker = new(_storage.Links, new DefaultStack<TLinkAddress>() /*, linkAddress =>
+            var childrenNodes = _storage.GetElementChildrenNodes(documentSequenceLink);
+            foreach (var childNode in childrenNodes)
             {
-                var source = _storage.Links.GetSource(linkAddress);
-                var isTextNode = _storage.IsTextNode(source);
-                var isAttributeNode = _storage.IsAttributeNode(source);
-                var isElement = _storage.IsElement(source);
-                return isTextNode || isAttributeNode || isElement;
-            } */);
-            var xmlNodesSequence = rightSequenceWalker.Walk(xmlNodesSequenceLinkAddress);
+                ExportNode(xmlWriter, childNode);
+            }
         }
 
         public void ExportNode(XmlWriter xmlWriter, TLinkAddress nodeLinkAddress)
@@ -68,32 +63,20 @@ namespace Platform.Data.Doublets.Xml
         
         private void ExportElement(XmlWriter xmlWriter, TLinkAddress elementLinkAddress)
         {
-            var currentElementLinkAddress = elementLinkAddress;
-            var endElementCount = 0;
-            do
+            var elementName = _storage.GetElementName(elementLinkAddress);
+            xmlWriter.WriteStartElement(elementName);
+            var childrenNodesLinkAddressList = _storage.GetElementChildrenNodes(elementLinkAddress);    
+            foreach (var childNodeLinkAddress in childrenNodesLinkAddressList)
             {
-                var elementName = _storage.GetElementName(currentElementLinkAddress);
-                xmlWriter.WriteStartElement(elementName);
-                var attrubute = _storage.GetAttributeForElement(currentElementLinkAddress);
-                var 
-                var childrenElementLinkAddressList = _storage.GetChildrenNodes(currentElementLinkAddress);    
-                foreach (var childElementLinkAddress in childrenElementLinkAddressList)
-                {
-                    
-                }
-                endElementCount++;
-            } while (true);
-            for (int i = 0; i < endElementCount; i++)
-            {
-                xmlWriter.WriteEndElement();
-            }            
+                ExportNode(xmlWriter, childNodeLinkAddress);
+            }
+            xmlWriter.WriteEndElement();
         }
 
         private void ExportAttributeNode(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
         {
-            var attributeName = _storage.GetAttributeName(xmlNodeLinkAddress);
-            var attributeValue = _storage.GetAttributeValue(xmlNodeLinkAddress);
-            xmlWriter.WriteAttributeString(attributeName, attributeValue);
+            var attribute = _storage.GetAttribute(xmlNodeLinkAddress);
+            xmlWriter.WriteAttributeString(attribute.Name, attribute.Value);
         }
 
         public void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
