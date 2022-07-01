@@ -32,7 +32,7 @@ namespace Platform.Data.Doublets.Xml
 
         private void Write(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
-            var childrenNodes = _storage.GetDocumentChildrenNodes(documentLinkAddress);
+            var childrenNodes = _storage.GetDocumentChildNodeLinkAddressList(documentLinkAddress);
             foreach (var childNode in childrenNodes)
             {
                 ExportNode(xmlWriter, childNode);
