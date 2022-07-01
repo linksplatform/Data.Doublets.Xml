@@ -149,7 +149,7 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress CreateDocument(TLinkAddress childrenNodesLink)
         {
-            if (!IsDocumentChildrenNodes(childrenNodesLink))
+            if (!IsDocumentChildrenNodesLinkAddress(childrenNodesLink))
             {
                 throw new ArgumentException($"The passed link address is not a document children nodes link address", nameof(childrenNodesLink));
             }
@@ -160,12 +160,7 @@ namespace Platform.Data.Doublets.Xml
         {
             return Links.GetOrCreate(DocumentChildrenNodesType, documentChildrenNodesSequenceLinkAddress);
         }
-        
-        public bool IsDocumentChildrenNodesLink(TLinkAddress possibleDocumentChildrenNodesLinkAddress)
-        {
-            return EqualityComparer.Equals(DocumentChildrenNodesType, possibleDocumentChildrenNodesLinkAddress);
-        }
-        
+
         public TLinkAddress CreateDocumentName(string name)
         {
             var documentName = CreateString(name);
@@ -201,10 +196,10 @@ namespace Platform.Data.Doublets.Xml
             return CreateElementChildrenNodes(elementLinkAddress, childrenNodesSequenceLinkAddress);
         }
 
-        public bool IsDocumentChildrenNodes(TLinkAddress possibleDocumentChildrenNodesLinkAddress)
+        public bool IsDocumentChildrenNodesLinkAddress(TLinkAddress possibleDocumentChildrenNodesLinkAddress)
         {
             var possibleDocumentChildrenNodesType = Links.GetSource(possibleDocumentChildrenNodesLinkAddress);
-            return EqualityComparer.Equals(possibleDocumentChildrenNodesType, ElementChildrenNodesType);
+            return EqualityComparer.Equals(possibleDocumentChildrenNodesType, DocumentChildrenNodesType);
         }
 
         public bool IsElementChildrenNodes(TLinkAddress possibleElementChildrenNodesLinkAddress)
@@ -238,7 +233,7 @@ namespace Platform.Data.Doublets.Xml
                 throw new ArgumentException("The passed link address is not a document link address.", nameof(documentLinkAddress));
             }
             var childrenNodesLinkAddress = Links.GetTarget(documentLinkAddress);
-            if (!IsDocumentChildrenNodes(childrenNodesLinkAddress))
+            if (!IsDocumentChildrenNodesLinkAddress(childrenNodesLinkAddress))
             {
                 throw new ArgumentException("The passed link address is not a document children nodes link address.", nameof(childrenNodesLinkAddress));
             }
@@ -258,7 +253,7 @@ namespace Platform.Data.Doublets.Xml
             Links.Each(new Link<TLinkAddress>(elementLinkAddress, Links.Constants.Any), elementToAnyLink =>
             {
                 var possibleChildrenNodesLinkAddress = Links.GetTarget(elementToAnyLink);
-                if (!IsDocumentChildrenNodes(possibleChildrenNodesLinkAddress))
+                if (!IsDocumentChildrenNodesLinkAddress(possibleChildrenNodesLinkAddress))
                 {
                     return Links.Constants.Continue;
                 }
