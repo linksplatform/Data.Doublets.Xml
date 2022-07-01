@@ -147,9 +147,23 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
         public TLinkAddress CreateNullValue() => CreateValue(NullType);
 
-        public TLinkAddress CreateDocument(TLinkAddress elementsSequence)
+        public TLinkAddress CreateDocument(TLinkAddress childrenNodesLink)
         {
-            return Links.GetOrCreate(DocumentType, elementsSequence);
+            if (!IsDocumentChildrenNodes(childrenNodesLink))
+            {
+                throw new ArgumentException($"The passed link address is not a document children nodes link address", nameof(childrenNodesLink));
+            }
+            return Links.GetOrCreate(DocumentType, childrenNodesLink);
+        }
+
+        public TLinkAddress CreateDocumentChildrenNodesLinkAddress(TLinkAddress documentChildrenNodesSequenceLinkAddress)
+        {
+            return Links.GetOrCreate(DocumentChildrenNodesType, documentChildrenNodesSequenceLinkAddress);
+        }
+        
+        public bool IsDocumentChildrenNodesLink(TLinkAddress possibleDocumentChildrenNodesLinkAddress)
+        {
+            return EqualityComparer.Equals(DocumentChildrenNodesType, possibleDocumentChildrenNodesLinkAddress);
         }
         
         public TLinkAddress CreateDocumentName(string name)

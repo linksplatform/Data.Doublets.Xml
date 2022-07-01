@@ -50,14 +50,15 @@ namespace Platform.Data.Doublets.Xml {
 
         private TLinkAddress Read(XmlReader reader, CancellationToken token, TLinkAddress documentNameLinkAddress)
         {
-            var elements = ParseXmlElements(reader, token);
-            var elementsSequenceLinkAddress = _storage.ListToSequenceConverter.Convert(elements);
-            var documentLinkAddress = _storage.CreateDocument(elementsSequenceLinkAddress);
+            var childNodeLinkAddressList = ImportNodes(reader, token);
+            var childrenNodesSequenceLinkAddress = _storage.ListToSequenceConverter.Convert(childNodeLinkAddressList);
+            var childrenNodesLinkAddress = _storage.CreateDocumentChildrenNodesLinkAddress(childrenNodesSequenceLinkAddress);
+            var documentLinkAddress = _storage.CreateDocument(childrenNodesLinkAddress);
             _storage.Links.GetOrCreate(documentLinkAddress, documentNameLinkAddress);
             return documentLinkAddress;
         }
 
-        private IList<TLinkAddress> ParseXmlElements(XmlReader reader, CancellationToken token)
+        private IList<TLinkAddress> ImportNodes(XmlReader reader, CancellationToken token)
         {
             var documentElements = new List<TLinkAddress>();
             var parents = new Stack<XmlElement<TLinkAddress>>();
