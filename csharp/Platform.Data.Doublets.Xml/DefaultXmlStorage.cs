@@ -210,6 +210,11 @@ namespace Platform.Data.Doublets.Xml
         
         public TLinkAddress GetDocumentChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
+            var possibleDocumentChildrenNodesType = Links.GetSource(childrenNodesLinkAddress);
+            if (!IsDocumentChildrenNodesLinkAddress(possibleDocumentChildrenNodesType))
+            {
+                throw new ArgumentException("The passed link address is not a document children nodes link address", nameof(childrenNodesLinkAddress));
+            }
             return Links.GetTarget(childrenNodesLinkAddress);
         }
         
