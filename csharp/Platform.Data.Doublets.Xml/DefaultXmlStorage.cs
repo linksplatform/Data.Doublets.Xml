@@ -223,20 +223,15 @@ namespace Platform.Data.Doublets.Xml
             {
                 throw new ArgumentException("The passed link address is not a document link address.", nameof(documentLinkAddress));
             }
-            var childrenNodes = new List<TLinkAddress>();
-            Links.Each(new Link<TLinkAddress>(documentLinkAddress, Links.Constants.Any), documentToAnyLink =>
+            var childrenNodesLinkAddress = Links.GetTarget(documentLinkAddress);
+            if (!IsDocumentChildrenNodes(childrenNodesLinkAddress))
             {
-                var possibleChildrenNodesLinkAddress = Links.GetTarget(documentToAnyLink);
-                if (!IsDocumentChildrenNodes(possibleChildrenNodesLinkAddress))
-                {
-                    return Links.Constants.Continue;
-                }
-                var childrenNodesSequenceLinkAddress = GetDocumentChildrenNodesSequence(possibleChildrenNodesLinkAddress);
-                RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
-                childrenNodes = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
-                return Links.Constants.Continue;
-            });
-            return childrenNodes;
+                throw new ArgumentException("The passed link address is not a document children nodes link address.", nameof(childrenNodesLinkAddress));
+            }
+            var childrenNodesSequenceLinkAddress = GetDocumentChildrenNodesSequence(childrenNodesLinkAddress);
+            RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
+            var childNodeLinkAddressList = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
+            return childNodeLinkAddressList;
         }
 
         public IList<TLinkAddress> GetElementChildrenNodes(TLinkAddress elementLinkAddress)
