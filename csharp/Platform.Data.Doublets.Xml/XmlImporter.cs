@@ -37,66 +37,65 @@ namespace Platform.Data.Doublets.Xml {
 
         public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
         {
-            TLinkAddress documentNameLinkAddress = _storage.CreateDocumentName(documentName);
-            return Read(reader, token, documentNameLinkAddress);
+            TLinkAddress documentLinkAddress = _storage.CreateDocument(documentName);
+            return Read(reader, token, documentLinkAddress);
         }
 
         public TLinkAddress Import(string file, CancellationToken token)
         {
-            var documentNameLinkAddress = _storage.CreateDocumentName(file);
+            var documentLinkAddress = _storage.CreateDocument(file);
             using var reader = XmlReader.Create(file);
-            return Read(reader, token,  documentNameLinkAddress);
+            return Read(reader, token,  documentLinkAddress);
         }
 
-        private TLinkAddress Read(XmlReader reader, CancellationToken token, TLinkAddress documentNameLinkAddress)
+        private TLinkAddress Read(XmlReader reader, CancellationToken token, TLinkAddress documentLinkAddress)
         {
             var childNodeLinkAddressList = ImportNodes(reader, token);
             var childrenNodesSequenceLinkAddress = _storage.ListToSequenceConverter.Convert(childNodeLinkAddressList);
             var childrenNodesLinkAddress = _storage.CreateDocumentChildrenNodesLinkAddress(childrenNodesSequenceLinkAddress);
-            var documentLinkAddress = _storage.CreateDocument(childrenNodesLinkAddress);
-            _storage.Links.GetOrCreate(documentLinkAddress, documentNameLinkAddress);
+            _storage.Links.GetOrCreate(documentLinkAddress, childrenNodesLinkAddress); 
             return documentLinkAddress;
         }
 
         private IList<TLinkAddress> ImportNodes(XmlReader reader, CancellationToken token)
         {
-            var documentElements = new List<TLinkAddress>();
-            var parents = new Stack<XmlElement<TLinkAddress>>();
+            var nodes = new List<TLinkAddress>();
+            var elements = new Stack<XmlElement<TLinkAddress>>();
             while (reader.Read())
             {
                 if (token.IsCancellationRequested)
                 {
-                    return documentElements;
+                    return nodes;
                 }
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
                     {
                         var element = new XmlElement<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
-                        parents.Push(element);
+                        elements.Push(element);
                         break;
                     }
                     case XmlNodeType.EndElement:
                     {
-                        var element = parents.Pop();
+                        var element = elements.Pop();
                         var childrenSequence = _listToSequenceConverter.Convert(element.Children);
                         var xmlElementAddress = _storage.CreateElement(reader.Name, childrenSequence);
-                        var hasParent = parents.Count > 0;
+                        var hasParent = elements.Count > 0;
                         if (hasParent)
                         {
-                            var parent = parents.Peek();
+                            var parent = elements.Peek();
                             parent.Children.Add(xmlElementAddress);
                         }
                         else
                         {
-                            documentElements.Add(xmlElementAddress);
+                            nodes.Add(xmlElementAddress);
                         }
                         break;
                     }
                     case XmlNodeType.Text:
                     {
                         var textNodeAddress = _storage.CreateTextNode(reader.Value);
-                        var parent = parents.Peek();
+                        var parent = elements.Peek();
                         parent.Children.Add(textNodeAddress);
                         break;
                     }
@@ -105,7 +104,7 @@ namespace Platform.Data.Doublets.Xml {
                     case XmlNodeType.Attribute:
                     {
                         var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
-                        var parent = parents.Peek();
+                        var parent = elements.Peek();
                         parent.Children.Add(attributeNodeAddress);
                         break;
                     }
@@ -139,7 +138,7 @@ namespace Platform.Data.Doublets.Xml {
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            return documentElements;
+            return nodes;
         }
     }
 }
