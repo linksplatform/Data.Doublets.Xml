@@ -49,7 +49,7 @@ namespace Platform.Data.Doublets.Xml
             {
                 ExportAttributeNode(xmlWriter, nodeLinkAddress);
             }
-            else if (_storage.IsElement(nodeLinkAddress))
+            else if (_storage.IsElementLinkAddress(nodeLinkAddress))
             {
                 ExportElement(xmlWriter, nodeLinkAddress);
             }
