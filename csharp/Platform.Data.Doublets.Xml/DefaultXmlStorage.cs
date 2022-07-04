@@ -57,6 +57,7 @@ namespace Platform.Data.Doublets.Xml
         public readonly IConverter<string, TLinkAddress> StringToUnicodeSequenceConverter;
         public readonly IConverter<TLinkAddress, string> UnicodeSequenceToStringConverter;
         public readonly DefaultSequenceRightHeightProvider<TLinkAddress> DefaultSequenceRightHeightProvider;
+
         public TLinkAddress DocumentType { get; }
         public TLinkAddress DocumentNameType { get; }
 
@@ -72,6 +73,12 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress MemberType { get; }
         public TLinkAddress ValueType { get; }
         public TLinkAddress StringType { get; }
+        private TLinkAddress IntegerType { get; }
+        private TLinkAddress DecimalType { get; }
+        private TLinkAddress DurationType { get; }
+        private TLinkAddress DateTimeType { get; }
+        private TLinkAddress DateType { get; }
+        private TLinkAddress TimeType { get; }
         public TLinkAddress EmptyStringType { get; }
         public TLinkAddress NumberType { get; }
         public TLinkAddress NegativeNumberType { get; }
@@ -110,6 +117,12 @@ namespace Platform.Data.Doublets.Xml
             MemberType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(MemberType)));
             ValueType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ValueType)));
             StringType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(StringType)));
+            IntegerType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(IntegerType)));
+            DecimalType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DecimalType)));
+            DurationType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DurationType)));
+            DateTimeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DateTimeType)));
+            DateType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DateType)));
+            TimeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TimeType)));
             EmptyStringType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(EmptyStringType)));
             NumberType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(NumberType)));
             NegativeNumberType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(NegativeNumberType)));
@@ -128,7 +141,7 @@ namespace Platform.Data.Doublets.Xml
         }
         public TLinkAddress CreateString(string content)
         {
-            var @string = GetStringSequence(content);
+            var @string = CreateStringSequence(content);
             return Links.GetOrCreate(StringType, @string);
         }
         public TLinkAddress CreateStringValue(string content)
@@ -146,6 +159,96 @@ namespace Platform.Data.Doublets.Xml
             var numberLink = CreateNumber(number);
             return CreateValue(numberLink);
         }
+
+        public TLinkAddress CreateInteger(int integer)
+        {
+            var convertedInteger = AddressToNumberConverter.Convert(integer);
+        }
+
+        public bool IsInteger(TLinkAddress possibleIntegerLinkAddressType)
+        {
+            var possibleIntegerType = Links.GetSource(possibleIntegerLinkAddressType);
+            return EqualityComparer.Equals(possibleIntegerType, IntegerType);
+        }
+
+        public void EnsureIsInteger(TLinkAddress possibleIntegerLinkAddressType)
+        {
+            if (!IsInteger(possibleIntegerLinkAddressType))
+            {
+                throw new ArgumentException($"{possibleIntegerLinkAddressType} is not an integer link address type.");
+            }
+        }
+        
+        public bool IsDecimal(TLinkAddress possibleDecimalLinkAddressType)
+        {
+            var possibleDecimalType = Links.GetSource(possibleDecimalLinkAddressType);
+            return EqualityComparer.Equals(possibleDecimalType, DecimalType);
+        }
+
+        public void EnsureIsDecimal(TLinkAddress possibleDecimalLinkAddressType)
+        {
+            if (!IsDecimal(possibleDecimalLinkAddressType))
+            {
+                throw new ArgumentException($"{possibleDecimalLinkAddressType} is not an decimal link address type.");
+            }
+        }
+        
+        public bool IsDuration(TLinkAddress possibleDurationLinkAddressType)
+        {
+            var possibleDurationType = Links.GetSource(possibleDurationLinkAddressType);
+            return EqualityComparer.Equals(possibleDurationType, DurationType);
+        }
+
+        public void EnsureIsDuration(TLinkAddress possibleDurationLinkAddressType)
+        {
+            if (!IsDuration(possibleDurationLinkAddressType))
+            {
+                throw new ArgumentException($"{possibleDurationLinkAddressType} is not an duration link address type.");
+            }
+        }
+        
+        public bool IsDateTime(TLinkAddress possibleDateTimeLinkAddressType)
+        {
+            var possibleDateTimeType = Links.GetSource(possibleDateTimeLinkAddressType);
+            return EqualityComparer.Equals(possibleDateTimeType, DateTimeType);
+        }
+
+        public void EnsureIsDateTime(TLinkAddress possibleDateTimeLinkAddressType)
+        {
+            if (!IsDateTime(possibleDateTimeLinkAddressType))
+            {
+                throw new ArgumentException($"{possibleDateTimeLinkAddressType} is not an dateTime link address type.");
+            }
+        }
+        
+        public bool IsDate(TLinkAddress possibleDateLinkAddressType)
+        {
+            var possibleDateType = Links.GetSource(possibleDateLinkAddressType);
+            return EqualityComparer.Equals(possibleDateType, DateType);
+        }
+
+        public void EnsureIsDate(TLinkAddress possibleDateLinkAddressType)
+        {
+            if (!IsDate(possibleDateLinkAddressType))
+            {
+                throw new ArgumentException($"{possibleDateLinkAddressType} is not an date link address type.");
+            }
+        }
+        
+        public bool IsTime(TLinkAddress possibleTimeLinkAddressType)
+        {
+            var possibleTimeType = Links.GetSource(possibleTimeLinkAddressType);
+            return EqualityComparer.Equals(possibleTimeType, TimeType);
+        }
+
+        public void EnsureIsTime(TLinkAddress possibleTimeLinkAddressType)
+        {
+            if (!IsTime(possibleTimeLinkAddressType))
+            {
+                throw new ArgumentException($"{possibleTimeLinkAddressType} is not an time link address type.");
+            }
+        }
+        
         public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
         public TLinkAddress CreateNullValue() => CreateValue(NullType);
 
@@ -177,14 +280,19 @@ namespace Platform.Data.Doublets.Xml
             var elementName = CreateString(name);
             return Links.GetOrCreate(ElementType, elementName);
         }
+        
+        public void EnsureIsElementLinkAddress(TLinkAddress possibleElementLinkAddress)
+        {
+            if (!IsElementLinkAddress(possibleElementLinkAddress))
+            {
+                throw new ArgumentException($"The passed link address is not an element link address", nameof(possibleElementLinkAddress));
+            }
+        }
 
         public string GetElementName(TLinkAddress elementLinkAddress)
         {
-            var elementType = Links.GetSource(elementLinkAddress);
-            if (!EqualityComparer.Equals(elementType, ElementType))
-            {
-                throw new Exception("The passed link address is not an element link address.");
-            }
+            EnsureIsElementLinkAddress(elementLinkAddress);
+            GetString()
             var elementNameLinkAddress = Links.GetTarget(elementLinkAddress);
             return UnicodeSequenceToStringConverter.Convert(elementNameLinkAddress);
         }
@@ -239,7 +347,7 @@ namespace Platform.Data.Doublets.Xml
 
         public bool IsNode(TLinkAddress possibleXmlNode)
         {
-            var isElement = IsElement(possibleXmlNode);
+            var isElement = IsElementLinkAddress(possibleXmlNode);
             var isTextNode = IsTextNode(possibleXmlNode);
             var isAttributeNode = IsAttributeNode(possibleXmlNode);
             return isElement || isTextNode || isAttributeNode;
@@ -252,12 +360,13 @@ namespace Platform.Data.Doublets.Xml
                 throw new ArgumentException("The passed link address is not a document link address.", nameof(documentLinkAddress));
             }
             TLinkAddress childrenNodesLinkAddress = default;
-            Links.Each(new Link<TLinkAddress>(documentLinkAddress, Links.Constants.Any), link =>
+            Links.Each(new Link<TLinkAddress>(Links.Constants.Any, documentLinkAddress, Links.Constants.Any), link =>
             {
                 var possibleChildrenNodesLinkAddress = Links.GetTarget(link);
                 if (IsDocumentChildrenNodesLinkAddress(possibleChildrenNodesLinkAddress))
                 {
                     childrenNodesLinkAddress = possibleChildrenNodesLinkAddress;
+                    return Links.Constants.Break;
                 }
                 return Links.Constants.Continue;
             });
@@ -396,7 +505,7 @@ namespace Platform.Data.Doublets.Xml
             return EqualityComparer.Equals(possibleAttributeNodeType, AttributeNodeType);
         }
         
-        public bool IsElement(TLinkAddress elementLinkAddress)
+        public bool IsElementLinkAddress(TLinkAddress elementLinkAddress)
         {
             var possibleElementType = Links.GetSource(elementLinkAddress);
             return EqualityComparer.Equals(possibleElementType, ElementType);
@@ -447,19 +556,27 @@ namespace Platform.Data.Doublets.Xml
             throw new NotSupportedException($"Type {Type} is not supported");
         }
 
-        private TLinkAddress GetStringSequence(string content) => content == "" ? EmptyStringType : StringToUnicodeSequenceConverter.Convert(content);
+        private TLinkAddress CreateStringSequence(string content) => content == "" ? EmptyStringType : StringToUnicodeSequenceConverter.Convert(content);
 
-        public bool IsString(TLinkAddress stringLinkAddress)
+        public bool IsString(TLinkAddress possibleStringLinkAddress)
         {
-            var stringType = Links.GetSource(stringLinkAddress);
-            return EqualityComparer.Equals(stringType, StringType);
+            var possibleStringType = Links.GetSource(possibleStringLinkAddress);
+            return EqualityComparer.Equals(possibleStringType, StringType);
         }
-        
-        public string GetStringValue(TLinkAddress stringValue)
+
+        public void EnsureIsString(TLinkAddress possibleStringLinkAddress)
         {
-            var stringSequence = Links.GetTarget(stringValue);
-            var stringSequenceString = UnicodeSequenceToStringConverter.Convert(stringSequence);
-            return stringSequenceString;
+            if(!IsString(possibleStringLinkAddress))
+            {
+                throw new ArgumentException($"{possibleStringLinkAddress} is not a string");
+            }
+        }
+
+        public string GetString(TLinkAddress stringLinkAddress)
+        {
+            EnsureIsString(stringLinkAddress);
+            var stringSequence = Links.GetTarget(stringLinkAddress);
+            return UnicodeSequenceToStringConverter.Convert(stringSequence);
         }
         public decimal GetNumber(TLinkAddress valueLink)
         {
