@@ -35,6 +35,7 @@ namespace Platform.Data.Doublets.Xml
 
             public bool MightContain(IList<TLinkAddress>? sequence) => true;
         }
+
         public readonly TLinkAddress Any;
         public readonly BalancedVariantConverter<TLinkAddress> BalancedVariantConverter;
         public readonly IConverter<IList<TLinkAddress>?, TLinkAddress> ListToSequenceConverter;
@@ -59,34 +60,57 @@ namespace Platform.Data.Doublets.Xml
         public readonly DefaultSequenceRightHeightProvider<TLinkAddress> DefaultSequenceRightHeightProvider;
 
         public TLinkAddress DocumentType { get; }
+
         public TLinkAddress DocumentNameType { get; }
 
         public TLinkAddress ElementType { get; }
-        
+
         public TLinkAddress DocumentChildrenNodesType { get; }
+
         public TLinkAddress ElementChildrenNodesType { get; }
+
         public TLinkAddress EmptyElementChildrenNodesType { get; }
 
         public TLinkAddress TextNodeType { get; }
+
         public TLinkAddress AttributeNodeType { get; }
+
         public TLinkAddress ObjectType { get; }
+
         public TLinkAddress MemberType { get; }
+
         public TLinkAddress ValueType { get; }
+
         public TLinkAddress StringType { get; }
+
         private TLinkAddress IntegerType { get; }
+
         private TLinkAddress DecimalType { get; }
+
         private TLinkAddress DurationType { get; }
+
         private TLinkAddress DateTimeType { get; }
+
         private TLinkAddress DateType { get; }
+
         private TLinkAddress TimeType { get; }
+
         public TLinkAddress EmptyStringType { get; }
+
         public TLinkAddress NumberType { get; }
+
         public TLinkAddress NegativeNumberType { get; }
+
         public TLinkAddress ArrayType { get; }
+
         public TLinkAddress EmptyArrayType { get; }
+
         public TLinkAddress TrueType { get; }
+
         public TLinkAddress FalseType { get; }
+
         public TLinkAddress NullType { get; }
+
         public DefaultXmlStorage(ILinks<TLinkAddress> links, IConverter<IList<TLinkAddress>?, TLinkAddress> listToSequenceConverter)
         {
             Links = links;
@@ -139,11 +163,13 @@ namespace Platform.Data.Doublets.Xml
             DecimalToRationalConverter = new(links, BigIntegerToRawNumberSequenceConverter);
             RationalToDecimalConverter = new(links, RawNumberSequenceToBigIntegerConverter);
         }
+
         public TLinkAddress CreateNumber(decimal number)
         {
             var numberSequence = DecimalToRationalConverter.Convert(number);
             return Links.GetOrCreate(NumberType, numberSequence);
         }
+
         public TLinkAddress CreateNumberValue(decimal number)
         {
             var numberLink = CreateNumber(number);
@@ -160,7 +186,7 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
 
         #endregion
-        
+
         #region Integer
 
         public bool IsInteger(TLinkAddress possibleIntegerLinkAddressType)
@@ -168,7 +194,7 @@ namespace Platform.Data.Doublets.Xml
             var possibleIntegerType = Links.GetSource(possibleIntegerLinkAddressType);
             return EqualityComparer.Equals(possibleIntegerType, IntegerType);
         }
-        
+
         public void EnsureIsInteger(TLinkAddress possibleIntegerLinkAddressType)
         {
             if (!IsInteger(possibleIntegerLinkAddressType))
@@ -198,12 +224,13 @@ namespace Platform.Data.Doublets.Xml
         #endregion
 
         #region String
-        
+
         public TLinkAddress CreateString(string content)
         {
             var @string = ConvertStringToSequence(content);
             return Links.GetOrCreate(StringType, @string);
         }
+
         public TLinkAddress CreateStringValue(string content)
         {
             var @string = CreateString(content);
@@ -220,7 +247,7 @@ namespace Platform.Data.Doublets.Xml
 
         public void EnsureIsString(TLinkAddress possibleStringLinkAddress)
         {
-            if(!IsString(possibleStringLinkAddress))
+            if (!IsString(possibleStringLinkAddress))
             {
                 throw new ArgumentException($"{possibleStringLinkAddress} is not a string");
             }
@@ -306,14 +333,8 @@ namespace Platform.Data.Doublets.Xml
         }
 
         #endregion
-        
-        
-        
 
-        
 
-        
-        
         public TLinkAddress CreateNullValue() => CreateValue(NullType);
 
         public TLinkAddress CreateDocument(string name, TLinkAddress childrenNodesLink)
@@ -344,7 +365,7 @@ namespace Platform.Data.Doublets.Xml
             var elementName = CreateString(name);
             return Links.GetOrCreate(ElementType, elementName);
         }
-        
+
         public void EnsureIsElementLinkAddress(TLinkAddress possibleElementLinkAddress)
         {
             if (!IsElementLinkAddress(possibleElementLinkAddress))
@@ -394,7 +415,7 @@ namespace Platform.Data.Doublets.Xml
             var possibleElementChildrenNodesType = Links.GetSource(possibleElementChildrenNodesLinkAddress);
             return EqualityComparer.Equals(possibleElementChildrenNodesType, ElementChildrenNodesType);
         }
-        
+
         public TLinkAddress GetDocumentChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
             if (!IsDocumentChildrenNodesLinkAddress(childrenNodesLinkAddress))
@@ -403,7 +424,7 @@ namespace Platform.Data.Doublets.Xml
             }
             return Links.GetTarget(childrenNodesLinkAddress);
         }
-        
+
         public TLinkAddress GetElementChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
             return Links.GetTarget(childrenNodesLinkAddress);
@@ -467,72 +488,86 @@ namespace Platform.Data.Doublets.Xml
             });
             return childrenNodes;
         }
-        
+
         public TLinkAddress CreateObject()
         {
             var @object = Links.Create();
             return Links.Update(@object, newSource: ObjectType, newTarget: @object);
         }
+
         public TLinkAddress CreateObjectValue()
         {
             var @object = CreateObject();
             return CreateValue(@object);
         }
+
         public TLinkAddress CreateArray(IList<TLinkAddress>? array)
         {
             var arraySequence = array.Count == 0 ? EmptyArrayType : BalancedVariantConverter.Convert(array);
             return CreateArray(arraySequence);
         }
+
         public TLinkAddress CreateArray(TLinkAddress sequence) => Links.GetOrCreate(ArrayType, sequence);
+
         public TLinkAddress CreateArrayValue(IList<TLinkAddress>? array)
         {
             var arrayLink = CreateArray(array);
             return CreateValue(arrayLink);
         }
+
         public TLinkAddress CreateArrayValue(TLinkAddress sequence)
         {
             var array = CreateArray(sequence);
             return CreateValue(array);
         }
+
         public TLinkAddress CreateMember(string name)
         {
             var nameLink = CreateString(name);
             return Links.GetOrCreate(MemberType, nameLink);
         }
+
         public TLinkAddress CreateValue(TLinkAddress value) => Links.GetOrCreate(ValueType, value);
         public TLinkAddress AttachObject(TLinkAddress parent) => Attach(parent, CreateObjectValue());
+
         public TLinkAddress AttachString(TLinkAddress parent, string content)
         {
             var @string = CreateString(content);
             var stringValue = CreateValue(@string);
             return Attach(parent, stringValue);
         }
+
         public TLinkAddress AttachNumber(TLinkAddress parent, decimal number)
         {
             var numberLink = CreateNumber(number);
             var numberValue = CreateValue(numberLink);
             return Attach(parent, numberValue);
         }
+
         public TLinkAddress AttachBoolean(TLinkAddress parent, bool value)
         {
             var booleanValue = CreateBooleanValue(value);
             return Attach(parent, booleanValue);
         }
+
         public TLinkAddress AttachNull(TLinkAddress parent)
         {
             var nullValue = CreateNullValue();
             return Attach(parent, nullValue);
         }
+
         public TLinkAddress AttachArray(TLinkAddress parent, IList<TLinkAddress>? array)
         {
             var arrayValue = CreateArrayValue(array);
             return Attach(parent, arrayValue);
         }
+
         public TLinkAddress AttachMemberToObject(TLinkAddress @object, string keyName)
         {
             var member = CreateMember(keyName);
             return Attach(@object, member);
         }
+
         public TLinkAddress Attach(TLinkAddress child, TLinkAddress parent) => Links.GetOrCreate(child, parent);
 
         public TLinkAddress GetDocumentNameLinkAddress(string name)
@@ -568,7 +603,7 @@ namespace Platform.Data.Doublets.Xml
             var possibleAttributeNodeType = Links.GetSource(attributeNodeLinkAddress);
             return EqualityComparer.Equals(possibleAttributeNodeType, AttributeNodeType);
         }
-        
+
         public bool IsElementLinkAddress(TLinkAddress elementLinkAddress)
         {
             var possibleElementType = Links.GetSource(elementLinkAddress);
@@ -599,7 +634,7 @@ namespace Platform.Data.Doublets.Xml
             });
             return documentLinkAddress;
         }
-        
+
 
         private bool IsDocument(TLinkAddress possibleDocumentLinkAddress)
         {
@@ -638,6 +673,7 @@ namespace Platform.Data.Doublets.Xml
             }
             throw new Exception("The passed link does not contain a number.");
         }
+
         public TLinkAddress GetObject(TLinkAddress objectValueLink)
         {
             var current = objectValueLink;
@@ -653,6 +689,7 @@ namespace Platform.Data.Doublets.Xml
             }
             throw new Exception("The passed link does not contain an object.");
         }
+
         public TLinkAddress GetArray(TLinkAddress arrayValueLink)
         {
             var current = arrayValueLink;
@@ -668,7 +705,9 @@ namespace Platform.Data.Doublets.Xml
             }
             throw new Exception("The passed link does not contain an array.");
         }
+
         public TLinkAddress GetArraySequence(TLinkAddress array) => Links.GetTarget(array);
+
         public TLinkAddress GetValueLink(TLinkAddress parent)
         {
             var query = new Link<TLinkAddress>(index: Any, source: parent, target: Any);
@@ -693,6 +732,7 @@ namespace Platform.Data.Doublets.Xml
                     throw new InvalidOperationException("The list elements length is negative.");
             }
         }
+
         public TLinkAddress GetValueType(TLinkAddress value)
         {
             var target = Links.GetTarget(value);
@@ -703,6 +743,7 @@ namespace Platform.Data.Doublets.Xml
             }
             return targetSource;
         }
+
         public List<TLinkAddress> GetMembersLinks(TLinkAddress @object)
         {
             Link<TLinkAddress> query = new(index: Any, source: @object, target: Any);
@@ -768,7 +809,7 @@ namespace Platform.Data.Doublets.Xml
             var attributeValueValueLinkAddress = Links.GetSource(attributeValueLinkAddress);
             return UnicodeSequenceToStringConverter.Convert(attributeValueValueLinkAddress);
         }
-        
+
         public TLinkAddress CreateTextNode(string text)
         {
             var contentLink = CreateString(text);
