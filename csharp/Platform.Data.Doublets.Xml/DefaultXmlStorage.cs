@@ -157,7 +157,7 @@ namespace Platform.Data.Doublets.Xml
 
         #region Boolean
 
-        
+        public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
 
         #endregion
         
@@ -313,7 +313,7 @@ namespace Platform.Data.Doublets.Xml
         
 
         
-        public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
+        
         public TLinkAddress CreateNullValue() => CreateValue(NullType);
 
         public TLinkAddress CreateDocument(string name, TLinkAddress childrenNodesLink)
