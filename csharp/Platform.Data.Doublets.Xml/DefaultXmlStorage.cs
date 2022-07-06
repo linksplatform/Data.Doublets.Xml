@@ -323,15 +323,6 @@ namespace Platform.Data.Doublets.Xml
         //
         // #endregion
 
-
-
-
-
-
-
-
-
-
         public bool IsNode(TLinkAddress possibleXmlNode)
         {
             var isElement = IsElementNode(possibleXmlNode);
@@ -339,13 +330,9 @@ namespace Platform.Data.Doublets.Xml
             var isAttributeNode = IsAttributeNode(possibleXmlNode);
             return isElement || isTextNode || isAttributeNode;
         }
-
-
-
-
-
-        #region Document
         
+        #region Document
+
         public IList<TLinkAddress> GetDocumentChildNodeLinkAddresses(TLinkAddress documentLinkAddress)
         {
             if (!IsDocument(documentLinkAddress))
@@ -374,7 +361,7 @@ namespace Platform.Data.Doublets.Xml
             var childNodeLinkAddressList = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
             return childNodeLinkAddressList;
         }
-        
+
         public TLinkAddress GetDocumentChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
             if (!IsDocumentChildrenNodesLinkAddress(childrenNodesLinkAddress))
@@ -383,8 +370,8 @@ namespace Platform.Data.Doublets.Xml
             }
             return Links.GetTarget(childrenNodesLinkAddress);
         }
-        
-                public TLinkAddress CreateDocument(string name, TLinkAddress childrenNodesLink)
+
+        public TLinkAddress CreateDocument(string name, TLinkAddress childrenNodesLink)
         {
             if (!IsDocumentChildrenNodesLinkAddress(childrenNodesLink))
             {
@@ -415,13 +402,13 @@ namespace Platform.Data.Doublets.Xml
                 throw new ArgumentException($"{possibleDocumentChildrenNodes} is not a document children nodes link address");
             }
         }
-        
+
         public TLinkAddress AttachDocumentChildrenNodes(TLinkAddress documentLinkAddress, TLinkAddress documentChildrenNodes)
         {
             EnsureIsDocument(documentLinkAddress);
             EnsureIsDocumentChildrenNodes(documentChildrenNodes);
             return Links.GetOrCreate(documentLinkAddress, documentChildrenNodes);
-        } 
+        }
 
         public TLinkAddress CreateDocument(string name)
         {
@@ -470,7 +457,7 @@ namespace Platform.Data.Doublets.Xml
             }
             return childrenNodesLinkAddress;
         }
-        
+
         public bool IsDocumentChildrenNodesLinkAddress(TLinkAddress possibleDocumentChildrenNodesLinkAddress)
         {
             var possibleDocumentChildrenNodesType = Links.GetSource(possibleDocumentChildrenNodesLinkAddress);
@@ -572,7 +559,7 @@ namespace Platform.Data.Doublets.Xml
         #endregion
 
         #region ElementNode
-        
+
         public TLinkAddress CreateElement(string name, TLinkAddress childrenNodesSequenceLinkAddress)
         {
             var elementLinkAddress = CreateElement(name);
@@ -586,12 +573,12 @@ namespace Platform.Data.Doublets.Xml
             var possibleElementChildrenNodesType = Links.GetSource(possibleElementChildrenNodesLinkAddress);
             return EqualityComparer.Equals(possibleElementChildrenNodesType, ElementChildrenNodesType);
         }
-        
+
         public TLinkAddress GetElementChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
             return Links.GetTarget(childrenNodesLinkAddress);
         }
-        
+
         public IList<TLinkAddress> GetElementChildrenNodes(TLinkAddress elementLinkAddress)
         {
             if (!IsDocument(elementLinkAddress))
