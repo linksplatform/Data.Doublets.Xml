@@ -340,6 +340,20 @@ namespace Platform.Data.Doublets.Xml
             return Links.GetOrCreate(DocumentChildrenNodesType, documentChildrenNodesSequenceLinkAddress);
         }
 
+        public void EnsureIsDocument(TLinkAddress possibleDocumentLinkAddressLink)
+        {
+            if (!IsDocument(possibleDocumentLinkAddressLink))
+            {
+                throw new ArgumentException($"{possibleDocumentLinkAddressLink} is not a document link address");
+            }
+        }
+        
+        public TLinkAddress AttachDocumentChildrenNodes(TLinkAddress documentLinkAddress, TLinkAddress documentChildrenNodes)
+        {
+            EnsureIsDocument(documentLinkAddress);
+            return Links.GetOrCreate(documentLinkAddress, documentChildrenNodes);
+        } 
+
         public TLinkAddress CreateDocument(string name)
         {
             var documentNameLinkAddress = CreateDocumentName(name);

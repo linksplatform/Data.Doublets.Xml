@@ -53,7 +53,7 @@ namespace Platform.Data.Doublets.Xml {
             var childNodeLinkAddressList = ImportNodes(reader, token);
             var childrenNodesSequenceLinkAddress = _storage.ListToSequenceConverter.Convert(childNodeLinkAddressList);
             var childrenNodesLinkAddress = _storage.CreateDocumentChildrenNodesLinkAddress(childrenNodesSequenceLinkAddress);
-            _storage.Links.GetOrCreate(documentLinkAddress, childrenNodesLinkAddress); 
+            _storage.AttachDocumentChildrenNodes(documentLinkAddress, childrenNodesLinkAddress);
             return documentLinkAddress;
         }
 
