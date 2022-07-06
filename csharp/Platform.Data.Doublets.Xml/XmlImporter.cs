@@ -38,17 +38,17 @@ namespace Platform.Data.Doublets.Xml {
         public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
         {
             TLinkAddress documentLinkAddress = _storage.CreateDocument(documentName);
-            return Read(reader, token, documentLinkAddress);
+            return Import(reader, documentLinkAddress, token);
         }
 
         public TLinkAddress Import(string file, CancellationToken token)
         {
             var documentLinkAddress = _storage.CreateDocument(file);
             using var reader = XmlReader.Create(file);
-            return Read(reader, token,  documentLinkAddress);
+            return Import(reader,  documentLinkAddress, token);
         }
 
-        private TLinkAddress Read(XmlReader reader, CancellationToken token, TLinkAddress documentLinkAddress)
+        private TLinkAddress Import(XmlReader reader, TLinkAddress documentLinkAddress, CancellationToken token)
         {
             var childNodeLinkAddressList = ImportNodes(reader, token);
             var childrenNodesSequenceLinkAddress = _storage.ListToSequenceConverter.Convert(childNodeLinkAddressList);
