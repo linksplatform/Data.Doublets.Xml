@@ -226,12 +226,6 @@ namespace Platform.Data.Doublets.Xml
             return Links.GetOrCreate(StringType, @string);
         }
 
-        public TLinkAddress CreateStringValue(string content)
-        {
-            var @string = CreateString(content);
-            return CreateValue(@string);
-        }
-
         private TLinkAddress ConvertStringToSequence(string content) => content == "" ? EmptyStringType : StringToUnicodeSequenceConverter.Convert(content);
 
         public bool IsString(TLinkAddress possibleStringLinkAddress)
