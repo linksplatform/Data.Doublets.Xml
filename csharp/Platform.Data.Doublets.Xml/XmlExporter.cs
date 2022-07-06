@@ -55,7 +55,7 @@ namespace Platform.Data.Doublets.Xml
             }
             else
             {
-                throw new ArgumentException("The passed link address is not a text, attribute or element.", nameof(nodeLinkAddress));
+                throw new ArgumentException("The passed link address is not a node.", nameof(nodeLinkAddress));
             }
         }
         
@@ -79,7 +79,7 @@ namespace Platform.Data.Doublets.Xml
 
         public void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
         {
-            var text = _storage.GetTextNodeValue(textNodeLinkAddress);
+            var text = _storage.GetTextNode(textNodeLinkAddress);
             xmlWriter.WriteString(text);
         }
     }

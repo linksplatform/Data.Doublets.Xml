@@ -539,15 +539,20 @@ namespace Platform.Data.Doublets.Xml
             return Links.GetOrCreate(TextNodeType, contentLink);
         }
 
-        public string GetTextNodeValue(TLinkAddress textNodeLinkAddress)
+        public void EnsureIsTextNode(TLinkAddress possibleTextNodeLinkAddress)
         {
-            var textNodeType = Links.GetSource(textNodeLinkAddress);
-            if (!EqualityComparer.Equals(textNodeType, TextNodeType))
+            if(!IsTextNode(possibleTextNodeLinkAddress))
             {
-                throw new Exception("The passed link address is not a text element link address.");
+                throw new ArgumentException($"{possibleTextNodeLinkAddress} is not a text node link address");
             }
+        }
+      
+        
+        public string GetTextNode(TLinkAddress textNodeLinkAddress)
+        {
+            EnsureIsTextNode(textNodeLinkAddress);
             var contentLink = Links.GetTarget(textNodeLinkAddress);
-            return UnicodeSequenceToStringConverter.Convert(contentLink);
+            return GetString(contentLink);
         }
 
         #endregion
