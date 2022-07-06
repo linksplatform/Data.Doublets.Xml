@@ -328,14 +328,7 @@ namespace Platform.Data.Doublets.Xml
 
 
 
-        public TLinkAddress GetDocumentChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
-        {
-            if (!IsDocumentChildrenNodesLinkAddress(childrenNodesLinkAddress))
-            {
-                throw new ArgumentException("The passed link address is not a document children nodes link address", nameof(childrenNodesLinkAddress));
-            }
-            return Links.GetTarget(childrenNodesLinkAddress);
-        }
+
 
 
 
@@ -347,6 +340,12 @@ namespace Platform.Data.Doublets.Xml
             return isElement || isTextNode || isAttributeNode;
         }
 
+
+
+
+
+        #region Document
+        
         public IList<TLinkAddress> GetDocumentChildNodeLinkAddresses(TLinkAddress documentLinkAddress)
         {
             if (!IsDocument(documentLinkAddress))
@@ -375,10 +374,15 @@ namespace Platform.Data.Doublets.Xml
             var childNodeLinkAddressList = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
             return childNodeLinkAddressList;
         }
-
-
-
-        #region Document
+        
+        public TLinkAddress GetDocumentChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
+        {
+            if (!IsDocumentChildrenNodesLinkAddress(childrenNodesLinkAddress))
+            {
+                throw new ArgumentException("The passed link address is not a document children nodes link address", nameof(childrenNodesLinkAddress));
+            }
+            return Links.GetTarget(childrenNodesLinkAddress);
+        }
         
                 public TLinkAddress CreateDocument(string name, TLinkAddress childrenNodesLink)
         {
