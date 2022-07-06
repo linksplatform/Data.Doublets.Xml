@@ -21,7 +21,7 @@ namespace Platform.Data.Doublets.Xml
 
         public void Export(XmlWriter xmlWriter, string documentName, CancellationToken cancellationToken)
         {
-            var documentAddress = _storage.GetDocumentLinkAddress(documentName); 
+            var documentAddress = _storage.GetDocument(documentName); 
             Export(xmlWriter, documentAddress, cancellationToken);
         }
 
@@ -49,7 +49,7 @@ namespace Platform.Data.Doublets.Xml
             {
                 ExportAttributeNode(xmlWriter, nodeLinkAddress);
             }
-            else if (_storage.IsElementLinkAddress(nodeLinkAddress))
+            else if (_storage.IsElementNode(nodeLinkAddress))
             {
                 ExportElement(xmlWriter, nodeLinkAddress);
             }
