@@ -171,6 +171,8 @@ namespace Platform.Data.Doublets.Xml
 
         #endregion
 
+        #region ValueTypes
+
         // #region Boolean
         //
         // public TLinkAddress CreateBooleanValue(bool value) => CreateValue(value ? TrueType : FalseType);
@@ -322,6 +324,8 @@ namespace Platform.Data.Doublets.Xml
         // }
         //
         // #endregion
+
+        #endregion
 
         public bool IsNode(TLinkAddress possibleXmlNode)
         {
