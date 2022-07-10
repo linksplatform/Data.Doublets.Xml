@@ -28,6 +28,7 @@ namespace Platform.Data.Doublets.Xml
         public void Export(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
             Write(xmlWriter, documentLinkAddress, cancellationToken);
+            xmlWriter.Flush();
         }
 
         private void Write(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
