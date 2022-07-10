@@ -51,7 +51,7 @@ namespace Platform.Data.Doublets.Xml
             }
             else
             {
-                throw new ArgumentException("The passed link address is not a node.", nameof(nodeLinkAddress));
+                throw new ArgumentException($"{nodeLinkAddress} is not a node link address.");
             }
         }
         
