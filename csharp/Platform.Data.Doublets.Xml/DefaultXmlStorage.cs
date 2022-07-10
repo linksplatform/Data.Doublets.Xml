@@ -441,7 +441,7 @@ namespace Platform.Data.Doublets.Xml
             }
         }
 
-        public string GetElementNameC(TLinkAddress elementLinkAddress)
+        public string GetElementName(TLinkAddress elementLinkAddress)
         {
             EnsureIsElementLinkAddress(elementLinkAddress);
             var elementNameLinkAddress = Links.GetTarget(elementLinkAddress);
@@ -647,7 +647,7 @@ namespace Platform.Data.Doublets.Xml
 
         public IList<TLinkAddress> GetElementChildrenNodes(TLinkAddress elementLinkAddress)
         {
-            if (!IsDocument(elementLinkAddress))
+            if (!IsElementNode(elementLinkAddress))
             {
                 throw new ArgumentException("The passed link address is not an element link address.", nameof(elementLinkAddress));
             }
