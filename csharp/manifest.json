@@ -1,173 +1,8 @@
 {
   "homepages": [],
-  "source_base_path": "/home/runner/work/Data.Doublets.Xml/Data.Doublets.Xml",
+  "source_base_path": "/home/runner/work/Data.Doublets.Xml/Data.Doublets.Xml/csharp",
   "xrefmap": "xrefmap.yml",
   "files": [
-    {
-      "type": "Resource",
-      "output": {
-        "resource": {
-          "relative_path": "index.json"
-        }
-      },
-      "is_incremental": false
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "README.md",
-      "output": {
-        ".html": {
-          "relative_path": "README.html",
-          "hash": "OTt3lj9Ik1THnRCMQ7E9JA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.DefaultXmlStorage-1.html",
-          "hash": "rHDj6UmD/Uh38Cnh4c8fzw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.ICommandLineInterface.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.ICommandLineInterface.html",
-          "hash": "igA3Fld5bMcL3WNQ85Xvzg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.IXmlStorage-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.IXmlStorage-1.html",
-          "hash": "liI38HOsOVMBR/h/RQ9/Cg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlElementCounter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.XmlElementCounter.html",
-          "hash": "vkug4cxX4ENs479ST7nYoA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlElementCounterCLI.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.XmlElementCounterCLI.html",
-          "hash": "ggDHjpetZiD+vnHj0vQhtQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlExporter-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.XmlExporter-1.html",
-          "hash": "BaOChZGA/a1R6EyabXDyJw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlExporterCLI.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.XmlExporterCLI.html",
-          "hash": "T97dY0JebKcrSqupKSe6vw=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlImporter-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.XmlImporter-1.html",
-          "hash": "SywHJWnlG0XhETHbPvLUFA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlImporterCLI.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.XmlImporterCLI.html",
-          "hash": "BWGjN5+DxxZnngj9LEa0kQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.XmlIndexer-1.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.XmlIndexer-1.html",
-          "hash": "x0XOPT7//nk9NoNmWeaZ0g=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "obj/api/Platform.Data.Doublets.Xml.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Platform.Data.Doublets.Xml.html",
-          "hash": "2Vw8/45scyjkyHlTH5dX0A=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "Toc",
-      "source_relative_path": "obj/api/toc.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/toc.html",
-          "hash": "U7mFY0KwatzNn9Kwdp9V0w=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
     {
       "log_codes": [
         "InvalidFileLink"
@@ -177,7 +12,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "5ugfHq7LsjZ6YPrItuWYrg=="
+          "hash": "LWkA3GCsSrNvDrz0Uvp7fg=="
         }
       },
       "is_incremental": false,
@@ -195,18 +30,6 @@
         "full_build_reason_code": "NoAvailableBuildCache"
       },
       "processors": {
-        "ConceptualDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 1,
-          "skipped_file_count": 0
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 11,
-          "skipped_file_count": 0
-        },
         "TocDocumentProcessor": {
           "can_incremental": false,
           "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
