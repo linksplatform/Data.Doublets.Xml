@@ -24,15 +24,13 @@ namespace Platform.Data.Doublets.Xml {
     {
         private readonly DefaultXmlStorage<TLinkAddress> _storage;
         private readonly LinksListToSequenceConverterBase<TLinkAddress> _listToSequenceConverter;
-        private readonly IEqualityComparer _equalityComparer;
-
+        
         public XmlImporter(DefaultXmlStorage<TLinkAddress> storage) : this(storage, new BalancedVariantConverter<TLinkAddress>(storage.Links)) {}
 
         public XmlImporter(DefaultXmlStorage<TLinkAddress> storage, LinksListToSequenceConverterBase<TLinkAddress> listToSequenceConverter)
         {
             _storage = storage;
             _listToSequenceConverter = listToSequenceConverter;
-            _equalityComparer = EqualityComparer<TLinkAddress>.Default;
         }
 
         public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
