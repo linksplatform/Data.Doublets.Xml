@@ -37,22 +37,46 @@ namespace Platform.Data.Doublets.Xml.Tests
 
         private DefaultXmlStorage<TLinkAddress> CreateXmlStorage(ILinks<TLinkAddress> links, BalancedVariantConverter<TLinkAddress> balancedVariantConverter) => new DefaultXmlStorage<TLinkAddress>(links, balancedVariantConverter);
 
-        private TLinkAddress Import(DefaultXmlStorage<TLinkAddress> xmlStorage, string documentName, Stream xmlStream)
+        private Stream GetUtf8Stream(string @string)
         {
-            var utf8XmlReader = XmlReader.Create(xmlStream);
-            XmlImporter<TLinkAddress> jsonImporter = new(xmlStorage);
+            var utf8Encoding = Encoding.UTF8;
+            var encodedXmlBytes = utf8Encoding.GetBytes(@string);
+            var encodedXmlStream = new MemoryStream(encodedXmlBytes);
+            return encodedXmlStream;
+        }
+        
+        private TLinkAddress Import(DefaultXmlStorage<TLinkAddress> xmlStorage, string documentName, string xml)
+        {
+            var encodedStream = GetUtf8Stream(xml); 
+            var xmlReader = XmlReader.Create(encodedStream);
+            XmlImporter<TLinkAddress> xmlImporter = new(xmlStorage);
             CancellationTokenSource importCancellationTokenSource = new();
             CancellationToken cancellationToken = importCancellationTokenSource.Token;
-            return jsonImporter.Import(utf8XmlReader, documentName, cancellationToken);
+            return xmlImporter.Import(xmlReader, documentName, cancellationToken);
         }
 
-        private void Export(TLinkAddress documentLink, DefaultXmlStorage<TLinkAddress> xmlStorage, MemoryStream stream)
+        private string Export(TLinkAddress documentLink, DefaultXmlStorage<TLinkAddress> xmlStorage)
         {
-            XmlExporter<TLinkAddress> xmlExporter = new(xmlStorage);
-            CancellationTokenSource exportCancellationTokenSource = new();
-            CancellationToken exportCancellationToken = exportCancellationTokenSource.Token;
-            var xmlWriter = XmlWriter.Create(stream, new XmlWriterSettings{Indent = false});
+            var xmlExporter = new XmlExporter<TLinkAddress>(xmlStorage);
+            var exportCancellationTokenSource = new CancellationTokenSource();
+            var exportCancellationToken = exportCancellationTokenSource.Token;
+            var memoryStream = new MemoryStream();
+            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings{Indent = false});
             xmlExporter.Export(xmlWriter, documentLink, exportCancellationToken);
+            var exportedXml = Encoding.UTF8.GetString(memoryStream.ToArray());
+            string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            if (exportedXml.StartsWith(byteOrderMarkUtf8))
+            {
+                exportedXml = exportedXml.Remove(0, byteOrderMarkUtf8.Length);
+            }
+            return exportedXml;
+        }
+
+        private string MinimizeXml(string xml)
+        {
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(xml);
+            return xmlDocument.InnerXml;
         }
 
         [Theory]
@@ -61,22 +85,9 @@ namespace Platform.Data.Doublets.Xml.Tests
         [InlineData($"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>")]
         public void Test(string initialXml)
         {
-            var utf8Encoding = Encoding.UTF8;
-            var encodedXmlBytes = utf8Encoding.GetBytes(initialXml);
-            var encodedXmlStream = new MemoryStream(encodedXmlBytes);
-            var documentLink = Import(_xmlStorage, "documentName", encodedXmlStream);
-            var exportedXmlStream = new MemoryStream(initialXml.Length);
-            Export(documentLink, _xmlStorage, exportedXmlStream);
-            var exportedXml = utf8Encoding.GetString(exportedXmlStream.ToArray());
-            string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
-            if (exportedXml.StartsWith(byteOrderMarkUtf8))
-            {
-                exportedXml = exportedXml.Remove(0, byteOrderMarkUtf8.Length);
-            }
-            var xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(exportedXml);
-            var minimizedInitialXml = xmlDocument.InnerXml;
-            Assert.Equal(exportedXml, minimizedInitialXml);
+            var documentLink = Import(_xmlStorage, "documentName", initialXml);
+            var exportedXml = Export(documentLink, _xmlStorage);
+            Assert.Equal(exportedXml, exportedXml);
         }
     }
 }
