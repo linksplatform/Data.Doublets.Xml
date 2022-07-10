@@ -47,9 +47,9 @@ namespace Platform.Data.Doublets.Xml.Tests
         }
 
         [Theory]
-        [InlineData($"{XmlPrefixTag}<catalog></catalog>")]
-        [InlineData($"{XmlPrefixTag}<book><author>Gambardella</author><author>Matthew</author></book>")]
-        [InlineData($"{XmlPrefixTag}<catalog><book><author>Gambardella, Matthew</author></book></catalog>")]
+        [InlineData($"{XmlPrefixTag}<users></users>")]
+        [InlineData($"{XmlPrefixTag}<users><user>Gambardella</user><user>Matthew</user></users>")]
+        [InlineData($"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>")]
         public void Test(string initialXml)
         {
             var links = CreateLinks();
