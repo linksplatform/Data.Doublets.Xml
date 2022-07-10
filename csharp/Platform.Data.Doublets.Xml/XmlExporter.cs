@@ -16,7 +16,7 @@ namespace Platform.Data.Doublets.Xml
     public class XmlExporter<TLinkAddress> where TLinkAddress : struct
     {
         private readonly DefaultXmlStorage<TLinkAddress> _storage;
-        public readonly EqualityComparer<TLinkAddress> DefaultEqualityComparer = EqualityComparer<TLinkAddress>.Default;
+        private readonly EqualityComparer<TLinkAddress> _defaultEqualityComparer = EqualityComparer<TLinkAddress>.Default;
         public XmlExporter(DefaultXmlStorage<TLinkAddress> storage) => _storage = storage;
 
         public void Export(XmlWriter xmlWriter, string documentName, CancellationToken cancellationToken)
@@ -35,7 +35,7 @@ namespace Platform.Data.Doublets.Xml
             xmlWriter.Flush();
         }
 
-        public void ExportNode(XmlWriter xmlWriter, TLinkAddress nodeLinkAddress)
+        private void ExportNode(XmlWriter xmlWriter, TLinkAddress nodeLinkAddress)
         {
             if (_storage.IsTextNode(nodeLinkAddress))
             {
@@ -73,7 +73,7 @@ namespace Platform.Data.Doublets.Xml
             xmlWriter.WriteAttributeString(attribute.Name, attribute.Value);
         }
 
-        public void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
+        private void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
         {
             var text = _storage.GetTextNode(textNodeLinkAddress);
             xmlWriter.WriteString(text);
