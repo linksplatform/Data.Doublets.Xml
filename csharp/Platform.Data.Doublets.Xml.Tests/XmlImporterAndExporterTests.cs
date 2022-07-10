@@ -61,8 +61,11 @@ namespace Platform.Data.Doublets.Xml.Tests
             var exportedXmlStream = new MemoryStream();
             Export(documentLink, storage, exportedXmlStream);
             var exportedXml = Encoding.UTF8.GetString(encodedXmlStream.ToArray());
-            var minimizedInitialXml = Regex.Replace(initialXml, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
-            Assert.Equal(minimizedInitialXml, exportedXml);
+            // var minimizedInitialXml = Regex.Replace(initialXml, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(exportedXml);
+            var minimizedInitialXml = xmlDocument.InnerXml;
+            Assert.Equal(exportedXml, minimizedInitialXml);
         }
     }
 }
