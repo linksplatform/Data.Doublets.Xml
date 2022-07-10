@@ -16,33 +16,42 @@ namespace Platform.Data.Doublets.Xml.Tests
     public class XmlImportAndExportTests
     {
         private const string XmlPrefixTag = "<?xml version=\"1.0\"?>";
-        private static Platform.Data.Doublets.Sequences.Converters.BalancedVariantConverter<TLinkAddress> _balancedVariantConverter;
+        private readonly BalancedVariantConverter<TLinkAddress> _balancedVariantConverter;
+        private readonly ILinks<TLinkAddress> _links;
+        private readonly DefaultXmlStorage<TLinkAddress> _xmlStorage;
 
-        public static ILinks<TLinkAddress> CreateLinks() => CreateLinks<TLinkAddress>(new IO.TemporaryFile());
+        public XmlImportAndExportTests()
+        {
+            _links = CreateLinksStorage();
+            _balancedVariantConverter = new BalancedVariantConverter<TLinkAddress>(_links);
+            _xmlStorage = CreateXmlStorage(_links, _balancedVariantConverter);
+        }
 
-        public static ILinks<TLinkAddress> CreateLinks<TLinkAddress>(string dataDbFilename)
+        private static ILinks<TLinkAddress> CreateLinksStorage() => CreateLinksStorage<TLinkAddress>(new IO.TemporaryFile());
+
+        private static ILinks<TLinkAddress> CreateLinksStorage<TLinkAddress>(string dataDbFilename)
         {
             var linksConstants = new LinksConstants<TLinkAddress>(enableExternalReferencesSupport: true);
             return new UnitedMemoryLinks<TLinkAddress>(new FileMappedResizableDirectMemory(dataDbFilename), UnitedMemoryLinks<TLinkAddress>.DefaultLinksSizeStep, linksConstants, IndexTreeType.Default);
         }
 
-        public static DefaultXmlStorage<TLinkAddress> CreateXmlStorage(ILinks<TLinkAddress> links) => new (links, _balancedVariantConverter);
+        private DefaultXmlStorage<TLinkAddress> CreateXmlStorage(ILinks<TLinkAddress> links, BalancedVariantConverter<TLinkAddress> balancedVariantConverter) => new DefaultXmlStorage<TLinkAddress>(links, balancedVariantConverter);
 
-        public TLinkAddress Import(DefaultXmlStorage<TLinkAddress> storage, string documentName, Stream xmlStream)
+        private TLinkAddress Import(DefaultXmlStorage<TLinkAddress> xmlStorage, string documentName, Stream xmlStream)
         {
             var utf8XmlReader = XmlReader.Create(xmlStream);
-            XmlImporter<TLinkAddress> jsonImporter = new(storage);
+            XmlImporter<TLinkAddress> jsonImporter = new(xmlStorage);
             CancellationTokenSource importCancellationTokenSource = new();
             CancellationToken cancellationToken = importCancellationTokenSource.Token;
             return jsonImporter.Import(utf8XmlReader, documentName, cancellationToken);
         }
 
-        public void Export(TLinkAddress documentLink, DefaultXmlStorage<TLinkAddress> storage, MemoryStream stream)
+        private void Export(TLinkAddress documentLink, DefaultXmlStorage<TLinkAddress> xmlStorage, MemoryStream stream)
         {
-            XmlExporter<TLinkAddress> xmlExporter = new(storage);
+            XmlExporter<TLinkAddress> xmlExporter = new(xmlStorage);
             CancellationTokenSource exportCancellationTokenSource = new();
             CancellationToken exportCancellationToken = exportCancellationTokenSource.Token;
-            var xmlWriter = XmlWriter.Create(stream);
+            var xmlWriter = XmlWriter.Create(stream, new XmlWriterSettings{Indent = false});
             xmlExporter.Export(xmlWriter, documentLink, exportCancellationToken);
         }
 
@@ -52,16 +61,18 @@ namespace Platform.Data.Doublets.Xml.Tests
         [InlineData($"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>")]
         public void Test(string initialXml)
         {
-            var links = CreateLinks();
-            _balancedVariantConverter = new(links);
-            var storage = CreateXmlStorage(links);
-            var encodedXml = Encoding.UTF8.GetBytes(initialXml);
-            var encodedXmlStream = new MemoryStream(encodedXml);
-            var documentLink = Import(storage, "documentName", encodedXmlStream);
-            var exportedXmlStream = new MemoryStream();
-            Export(documentLink, storage, exportedXmlStream);
-            var exportedXml = Encoding.UTF8.GetString(encodedXmlStream.ToArray());
-            // var minimizedInitialXml = Regex.Replace(initialXml, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
+            var utf8Encoding = Encoding.UTF8;
+            var encodedXmlBytes = utf8Encoding.GetBytes(initialXml);
+            var encodedXmlStream = new MemoryStream(encodedXmlBytes);
+            var documentLink = Import(_xmlStorage, "documentName", encodedXmlStream);
+            var exportedXmlStream = new MemoryStream(initialXml.Length);
+            Export(documentLink, _xmlStorage, exportedXmlStream);
+            var exportedXml = utf8Encoding.GetString(exportedXmlStream.ToArray());
+            string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            if (exportedXml.StartsWith(byteOrderMarkUtf8))
+            {
+                exportedXml = exportedXml.Remove(0, byteOrderMarkUtf8.Length);
+            }
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(exportedXml);
             var minimizedInitialXml = xmlDocument.InnerXml;
