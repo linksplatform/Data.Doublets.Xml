@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Data.Doublets.Xml"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Data.Doublets.Xml.Tests", "Platform.Data.Doublets.Xml.Tests\Platform.Data.Doublets.Xml.Tests.csproj", "{795DFCBA-54B4-4EC2-BC2D-C1A461864118}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform.Data.Doublets.Xml.Importer", "Platform.Data.Doublets.Xml.Importer\Platform.Data.Doublets.Xml.Importer.csproj", "{55FAC6EE-9CFB-450C-8388-AAB6DE53456E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform.Data.Doublets.Xml.Exporter", "Platform.Data.Doublets.Xml.Exporter\Platform.Data.Doublets.Xml.Exporter.csproj", "{AE116FF1-A892-4341-8365-55FEC32E50BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{795DFCBA-54B4-4EC2-BC2D-C1A461864118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{795DFCBA-54B4-4EC2-BC2D-C1A461864118}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{795DFCBA-54B4-4EC2-BC2D-C1A461864118}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55FAC6EE-9CFB-450C-8388-AAB6DE53456E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55FAC6EE-9CFB-450C-8388-AAB6DE53456E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55FAC6EE-9CFB-450C-8388-AAB6DE53456E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55FAC6EE-9CFB-450C-8388-AAB6DE53456E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE116FF1-A892-4341-8365-55FEC32E50BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE116FF1-A892-4341-8365-55FEC32E50BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE116FF1-A892-4341-8365-55FEC32E50BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE116FF1-A892-4341-8365-55FEC32E50BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
