@@ -48,36 +48,35 @@ namespace Platform.Data.Doublets.Xml {
 
         private TLinkAddress Import(XmlReader reader, TLinkAddress documentLinkAddress, CancellationToken token)
         {
-            var childNodeLinkAddressList = ImportNodes(reader, token);
-            var childrenNodesSequenceLinkAddress = _storage.ListToSequenceConverter.Convert(childNodeLinkAddressList);
-            var childrenNodesLinkAddress = _storage.CreateDocumentChildrenNodesLinkAddress(childrenNodesSequenceLinkAddress);
-            _storage.AttachDocumentChildrenNodes(documentLinkAddress, childrenNodesLinkAddress);
+            var rootElementLinkAddress = ImportNodes(reader, token);
+            _storage.CreateRootElement(documentLinkAddress, rootElementLinkAddress);
             return documentLinkAddress;
         }
 
-        private IList<TLinkAddress> ImportNodes(XmlReader reader, CancellationToken token)
+        private TLinkAddress ImportNodes(XmlReader reader, CancellationToken token)
         {
-            var nodes = new List<TLinkAddress>();
             var elements = new Stack<XmlElement<TLinkAddress>>();
             while (reader.Read())
             {
                 if (token.IsCancellationRequested)
                 {
-                    return nodes;
+                    break;
                 }
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.Element:
                     {
                         var element = new XmlElement<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
-                        elements.Push(element);
+                        if (!reader.IsEmptyElement)
+                        {
+                            elements.Push(element);
+                        }
                         break;
                     }
                     case XmlNodeType.EndElement:
                     {
                         var element = elements.Pop();
-                        var childrenSequence = _listToSequenceConverter.Convert(element.Children);
-                        var xmlElementAddress = _storage.CreateElement(reader.Name, childrenSequence);
+                        var xmlElementAddress = _storage.CreateElement(reader.Name, element.Children);
                         var hasParent = elements.Count > 0;
                         if (hasParent)
                         {
@@ -86,7 +85,7 @@ namespace Platform.Data.Doublets.Xml {
                         }
                         else
                         {
-                            nodes.Add(xmlElementAddress);
+                            return xmlElementAddress;
                         }
                         break;
                     }
@@ -136,7 +135,7 @@ namespace Platform.Data.Doublets.Xml {
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            return nodes;
+            throw new Exception("Could not import XML document");
         }
     }
 }

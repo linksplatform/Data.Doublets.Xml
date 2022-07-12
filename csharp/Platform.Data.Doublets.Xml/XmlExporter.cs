@@ -27,11 +27,8 @@ namespace Platform.Data.Doublets.Xml
 
         public void Export(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
-            var childrenNodes = _storage.GetDocumentChildNodeLinkAddresses(documentLinkAddress);
-            foreach (var childNode in childrenNodes)
-            {
-                ExportNode(xmlWriter, childNode);
-            }
+            var rootElementLinkAddress = _storage.GetRootElement(documentLinkAddress);
+            ExportElement(xmlWriter, rootElementLinkAddress);
             xmlWriter.Flush();
         }
 
