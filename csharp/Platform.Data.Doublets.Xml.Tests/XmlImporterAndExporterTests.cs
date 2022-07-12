@@ -55,6 +55,23 @@ namespace Platform.Data.Doublets.Xml.Tests
             return xmlImporter.Import(xmlReader, documentName, cancellationToken);
         }
 
+        private string Export(string documentName, DefaultXmlStorage<TLinkAddress> xmlStorage)
+        {
+            var xmlExporter = new XmlExporter<TLinkAddress>(xmlStorage);
+            var exportCancellationTokenSource = new CancellationTokenSource();
+            var exportCancellationToken = exportCancellationTokenSource.Token;
+            var memoryStream = new MemoryStream();
+            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings{Indent = false});
+            xmlExporter.Export(xmlWriter, documentName, exportCancellationToken);
+            var exportedXml = Encoding.UTF8.GetString(memoryStream.ToArray());
+            string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            if (exportedXml.StartsWith(byteOrderMarkUtf8))
+            {
+                exportedXml = exportedXml.Remove(0, byteOrderMarkUtf8.Length);
+            }
+            return exportedXml;
+        }
+        
         private string Export(TLinkAddress documentLink, DefaultXmlStorage<TLinkAddress> xmlStorage)
         {
             var xmlExporter = new XmlExporter<TLinkAddress>(xmlStorage);
@@ -85,9 +102,12 @@ namespace Platform.Data.Doublets.Xml.Tests
         [InlineData($"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>")]
         public void Test(string initialXml)
         {
-            var documentLink = Import(_xmlStorage, "documentName", initialXml);
-            var exportedXml = Export(documentLink, _xmlStorage);
-            Assert.Equal(exportedXml, exportedXml);
+            var documentName = "documentName";
+            var documentLink = Import(_xmlStorage, documentName, initialXml);
+            var exportedXmlByDocumentLink = Export(documentLink, _xmlStorage);
+            var exportedXmlByName = Export(documentName, _xmlStorage);
+            Assert.Equal(exportedXmlByDocumentLink, exportedXmlByDocumentLink);
+            Assert.Equal(exportedXmlByName, exportedXmlByDocumentLink);
         }
     }
 }
