@@ -98,6 +98,8 @@ namespace Platform.Data.Doublets.Xml.Tests
 
         [Theory]
         [InlineData($"{XmlPrefixTag}<users></users>")]
+        [InlineData($"{XmlPrefixTag}<user name=\"Gambardella\"/>")]
+        [InlineData($"{XmlPrefixTag}<users><user name=\"Gambardella\"/></users>")]
         [InlineData($"{XmlPrefixTag}<users><user>Gambardella</user><user>Matthew</user></users>")]
         [InlineData($"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>")]
         public void Test(string initialXml)

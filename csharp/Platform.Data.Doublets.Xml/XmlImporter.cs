@@ -67,9 +67,10 @@ namespace Platform.Data.Doublets.Xml {
                     case XmlNodeType.Element:
                     {
                         var element = new XmlElement<TLinkAddress> { Name = reader.Name, Type = XmlNodeType.Element };
-                        if (!reader.IsEmptyElement)
+                        elements.Push(element);
+                        if (reader.IsEmptyElement)
                         {
-                            elements.Push(element);
+                            goto case XmlNodeType.EndElement;
                         }
                         break;
                     }

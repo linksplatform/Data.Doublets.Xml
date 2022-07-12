@@ -351,15 +351,12 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress GetRootElement(TLinkAddress documentLinkAddress)
         {
-            if (!IsDocument(documentLinkAddress))
-            {
-                throw new ArgumentException("The passed link address is not a document link address.", nameof(documentLinkAddress));
-            }
+            EnsureIsDocument(documentLinkAddress);
             TLinkAddress rootElement = default;
             Links.Each(new Link<TLinkAddress>(Links.Constants.Any, documentLinkAddress, Links.Constants.Any), link =>
             {
                 var possibleRootElementLinkAddress = Links.GetTarget(link);
-                if (!IsRootElement(possibleRootElementLinkAddress))
+                if (!IsElementNode(possibleRootElementLinkAddress))
                 {
                     return Links.Constants.Continue;
                 }
@@ -370,7 +367,7 @@ namespace Platform.Data.Doublets.Xml
             {
                 throw new Exception("Root element is not found.");
             }
-            return Links.GetTarget(rootElement);
+            return rootElement;
             // var childrenNodesSequenceLinkAddress = GetDocumentChildrenNodesSequence(rootElement);
             // if (EqualityComparer.Equals(childrenNodesSequenceLinkAddress, EmptyElementChildrenNodesSequenceType))
             // {
@@ -380,6 +377,20 @@ namespace Platform.Data.Doublets.Xml
             // var childNodeLinkAddressList = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
             // return childNodeLinkAddressList;
         }
+
+        // public void EnsureIsRootElement(TLinkAddress possibleRootElementLinkAddress)
+        // {
+        //     if (!IsRootElement(possibleRootElementLinkAddress))
+        //     {
+        //         throw new ArgumentException($"{possibleRootElementLinkAddress} is not a root element link address.");
+        //     }
+        // }
+        //
+        // public TLinkAddress GetElementFromRootElement(TLinkAddress rootElementLinkAddress)
+        // {
+        //     EnsureIsRootElement(rootElementLinkAddress);
+        //     return Links.GetTarget(rootElementLinkAddress);
+        // }
 
         public TLinkAddress GetDocumentChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
@@ -405,7 +416,7 @@ namespace Platform.Data.Doublets.Xml
         
         public TLinkAddress CreateRootElement(TLinkAddress documentLinkAddress, TLinkAddress rootElementLinkAddress)
         {
-            return Links.GetOrCreate(documentLinkAddress, CreateRootElement(rootElementLinkAddress));
+            return Links.GetOrCreate(documentLinkAddress, rootElementLinkAddress);
         }
         public TLinkAddress CreateRootElement(TLinkAddress rootElementLinkAddress)
         {
