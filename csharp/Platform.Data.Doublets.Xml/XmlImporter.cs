@@ -76,6 +76,12 @@ namespace Platform.Data.Doublets.Xml {
                     }
                     case XmlNodeType.EndElement:
                     {
+                        while (reader.MoveToNextAttribute())
+                        {
+                            var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
+                            var parent = elements.Peek();
+                            parent.Children.Add(attributeNodeAddress); 
+                        }
                         var element = elements.Pop();
                         var xmlElementAddress = _storage.CreateElement(element.Name, element.Children);
                         var hasParent = elements.Count > 0;
@@ -97,43 +103,11 @@ namespace Platform.Data.Doublets.Xml {
                         parent.Children.Add(textNodeAddress);
                         break;
                     }
-                    case XmlNodeType.None:
-                        break;
                     case XmlNodeType.Attribute:
                     {
-                        var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
-                        var parent = elements.Peek();
-                        parent.Children.Add(attributeNodeAddress);
+                        
                         break;
                     }
-                    case XmlNodeType.CDATA:
-                        break;
-                    case XmlNodeType.EntityReference:
-                        break;
-                    case XmlNodeType.Entity:
-                        break;
-                    case XmlNodeType.ProcessingInstruction:
-                        break;
-                    case XmlNodeType.Comment:
-                        break;
-                    case XmlNodeType.Document:
-                        break;
-                    case XmlNodeType.DocumentType:
-                        break;
-                    case XmlNodeType.DocumentFragment:
-                        break;
-                    case XmlNodeType.Notation:
-                        break;
-                    case XmlNodeType.Whitespace:
-                        break;
-                    case XmlNodeType.SignificantWhitespace:
-                        break;
-                    case XmlNodeType.EndEntity:
-                        break;
-                    case XmlNodeType.XmlDeclaration:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             }
             throw new Exception("Could not import XML document");

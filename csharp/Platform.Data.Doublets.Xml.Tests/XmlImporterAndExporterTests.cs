@@ -15,7 +15,7 @@ namespace Platform.Data.Doublets.Xml.Tests
 {
     public class XmlImportAndExportTests
     {
-        private const string XmlPrefixTag = "<?xml version=\"1.0\"?>";
+        private const string XmlPrefixTag = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         private readonly BalancedVariantConverter<TLinkAddress> _balancedVariantConverter;
         private readonly ILinks<TLinkAddress> _links;
         private readonly DefaultXmlStorage<TLinkAddress> _xmlStorage;
@@ -97,7 +97,7 @@ namespace Platform.Data.Doublets.Xml.Tests
         }
 
         [Theory]
-        [InlineData($"{XmlPrefixTag}<users></users>")]
+        [InlineData($"{XmlPrefixTag}<users />")]
         [InlineData($"{XmlPrefixTag}<user name=\"Gambardella\"/>")]
         [InlineData($"{XmlPrefixTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>")]
         [InlineData($"{XmlPrefixTag}<users><user name=\"Gambardella\"/></users>")]

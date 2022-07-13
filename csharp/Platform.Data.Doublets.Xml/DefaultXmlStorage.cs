@@ -521,53 +521,33 @@ namespace Platform.Data.Doublets.Xml
             }
         }
 
-        private TLinkAddress CreateAttributeNode(XmlAttribute xmlAttribute)
+        // private TLinkAddress CreateAttributeNode(XmlAttribute xmlAttribute)
+        // {
+        //     var attributeName = ConvertStringToSequence(xmlAttribute.Name);
+        //     var attributeValue = ConvertStringToSequence(xmlAttribute.Value);
+        //     var attribute = Links.GetOrCreate(attributeName, attributeValue);
+        //     return Links.GetOrCreate(AttributeNodeType, attribute);
+        // }
+
+        public TLinkAddress CreateAttributeNode(string name, string value)
         {
-            var attributeName = _stringToUnicodeSequenceConverter.Convert(xmlAttribute.Name);
-            var attributeValue = _stringToUnicodeSequenceConverter.Convert(xmlAttribute.Value);
+            var attributeName = CreateString(name);
+            var attributeValue = CreateString(value);
             var attribute = Links.GetOrCreate(attributeName, attributeValue);
             return Links.GetOrCreate(AttributeNodeType, attribute);
         }
 
-        public TLinkAddress CreateAttributeNode(string name, string value)
-        {
-            var nameLinkAddress = CreateString(name);
-            var valueLinkAddress = CreateString(value);
-            var attributeValueLinkAddress = Links.GetOrCreate(nameLinkAddress, valueLinkAddress);
-            return Links.GetOrCreate(AttributeNodeType, attributeValueLinkAddress);
-        }
-
         public XmlAttribute GetAttribute(TLinkAddress attributeLinkAddress)
         {
+            EnsureIsAttributeNode(attributeLinkAddress);
+            var attributeNameToAttributeValueLinkAddress = Links.GetTarget(attributeLinkAddress);
+            var attributeNameLinkAddress = Links.GetSource(attributeNameToAttributeValueLinkAddress);
+            var attributeValueLinkAddress = Links.GetTarget(attributeNameToAttributeValueLinkAddress);
             return new XmlAttribute
             {
-                Name = GetAttributeName(attributeLinkAddress),
-                Value = GetAttributeValue(attributeLinkAddress)
+                Name = GetString(attributeNameLinkAddress),
+                Value = GetString(attributeValueLinkAddress)
             };
-        }
-
-        public string GetAttributeName(TLinkAddress attributeLinkAddress)
-        {
-            var attributeType = Links.GetSource(attributeLinkAddress);
-            if (!EqualityComparer.Equals(attributeType, AttributeNodeType))
-            {
-                throw new Exception("The passed link address is not an attribute link address.");
-            }
-            var attributeValueLinkAddress = Links.GetTarget(attributeLinkAddress);
-            var attributeNameLinkAddress = Links.GetSource(attributeValueLinkAddress);
-            return UnicodeSequenceToStringConverter.Convert(attributeNameLinkAddress);
-        }
-
-        public string GetAttributeValue(TLinkAddress attributeLinkAddress)
-        {
-            var attributeType = Links.GetSource(attributeLinkAddress);
-            if (!EqualityComparer.Equals(attributeType, AttributeNodeType))
-            {
-                throw new Exception("The passed link address is not an attribute link address.");
-            }
-            var attributeValueLinkAddress = Links.GetTarget(attributeLinkAddress);
-            var attributeValueValueLinkAddress = Links.GetSource(attributeValueLinkAddress);
-            return UnicodeSequenceToStringConverter.Convert(attributeValueValueLinkAddress);
         }
 
         #endregion
