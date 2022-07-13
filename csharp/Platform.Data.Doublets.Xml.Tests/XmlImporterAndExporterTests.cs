@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.IO;
 using Xunit;
@@ -44,10 +45,10 @@ namespace Platform.Data.Doublets.Xml.Tests
             var encodedXmlStream = new MemoryStream(encodedXmlBytes);
             return encodedXmlStream;
         }
-        
+
         private TLinkAddress Import(DefaultXmlStorage<TLinkAddress> xmlStorage, string documentName, string xml)
         {
-            var encodedStream = GetUtf8Stream(xml); 
+            var encodedStream = GetUtf8Stream(xml);
             var xmlReader = XmlReader.Create(encodedStream);
             XmlImporter<TLinkAddress> xmlImporter = new(xmlStorage);
             CancellationTokenSource importCancellationTokenSource = new();
@@ -61,7 +62,7 @@ namespace Platform.Data.Doublets.Xml.Tests
             var exportCancellationTokenSource = new CancellationTokenSource();
             var exportCancellationToken = exportCancellationTokenSource.Token;
             var memoryStream = new MemoryStream();
-            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings{Indent = false});
+            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings { Indent = false });
             xmlExporter.Export(xmlWriter, documentName, exportCancellationToken);
             var exportedXml = Encoding.UTF8.GetString(memoryStream.ToArray());
             string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
@@ -71,14 +72,14 @@ namespace Platform.Data.Doublets.Xml.Tests
             }
             return exportedXml;
         }
-        
+
         private string Export(TLinkAddress documentLink, DefaultXmlStorage<TLinkAddress> xmlStorage)
         {
             var xmlExporter = new XmlExporter<TLinkAddress>(xmlStorage);
             var exportCancellationTokenSource = new CancellationTokenSource();
             var exportCancellationToken = exportCancellationTokenSource.Token;
             var memoryStream = new MemoryStream();
-            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings{Indent = false});
+            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings { Indent = false });
             xmlExporter.Export(xmlWriter, documentLink, exportCancellationToken);
             var exportedXml = Encoding.UTF8.GetString(memoryStream.ToArray());
             string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
@@ -96,20 +97,34 @@ namespace Platform.Data.Doublets.Xml.Tests
             return xmlDocument.InnerXml;
         }
 
+        public static IEnumerable<object[]> Data =>
+            new List<object[]>
+            {
+                new object[] { $"{XmlPrefixTag}<users />" },
+                new object[] { $"{XmlPrefixTag}<user name=\"Gambardella\" />" },
+                new object[] { $"{XmlPrefixTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>" },
+                new object[] { $"{XmlPrefixTag}<users><user name=\"Gambardella\" /></users>" },
+                new object[] { $"{XmlPrefixTag}<users><user>Gambardella</user><user>Matthew</user></users>" },
+                new object[] { $"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
+            };
+
         [Theory]
-        [InlineData($"{XmlPrefixTag}<users />")]
-        [InlineData($"{XmlPrefixTag}<user name=\"Gambardella\" />")]
-        [InlineData($"{XmlPrefixTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>")]
-        [InlineData($"{XmlPrefixTag}<users><user name=\"Gambardella\" /></users>")]
-        [InlineData($"{XmlPrefixTag}<users><user>Gambardella</user><user>Matthew</user></users>")]
-        [InlineData($"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>")]
-        public void Test(string initialXml)
+        [MemberData(nameof(Data))]
+        public void ExportByDocumentLink(string initialXml)
         {
             var documentName = "documentName";
             var documentLink = Import(_xmlStorage, documentName, initialXml);
             var exportedXmlByDocumentLink = Export(documentLink, _xmlStorage);
-            var exportedXmlByName = Export(documentName, _xmlStorage);
             Assert.Equal(initialXml, exportedXmlByDocumentLink);
+        }
+
+        [Theory]
+        [MemberData(nameof(Data))]
+        public void ExportByDocumentName(string initialXml)
+        {
+            var documentName = "documentName";
+            var documentLink = Import(_xmlStorage, documentName, initialXml);
+            var exportedXmlByName = Export(documentName, _xmlStorage);
             Assert.Equal(initialXml, exportedXmlByName);
         }
     }
