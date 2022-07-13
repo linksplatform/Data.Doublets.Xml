@@ -67,7 +67,17 @@ namespace Platform.Data.Doublets.Xml
         private void ExportAttributeNode(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
         {
             var attribute = _storage.GetAttribute(xmlNodeLinkAddress);
-            xmlWriter.WriteAttributeString(attribute.Name, attribute.Value);
+            var attributeNameSemicolonIndex = attribute.Name.IndexOf(':');
+            if(attributeNameSemicolonIndex == -1)
+            {
+                xmlWriter.WriteAttributeString(attribute.Name, attribute.Value);
+            }
+            else
+            {
+                var attributeNamespace = attribute.Name.Substring(0, attributeNameSemicolonIndex);
+                var attributeName = attribute.Name.Substring(attributeNameSemicolonIndex + 1);
+                xmlWriter.WriteAttributeString(attributeName, attributeNamespace, attribute.Value);
+            }
         }
 
         private void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
