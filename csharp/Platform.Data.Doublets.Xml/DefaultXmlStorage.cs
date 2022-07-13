@@ -66,9 +66,7 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress ElementType { get; }
 
-        public TLinkAddress RootElementType { get; }
-
-        public TLinkAddress ElementChildrenNodesType { get; }
+        public TLinkAddress ElementChildrenNodesSequenceType { get; }
 
         public TLinkAddress EmptyElementChildrenNodesSequenceType { get; }
 
@@ -137,9 +135,8 @@ namespace Platform.Data.Doublets.Xml
             DocumentType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentType)));
             DocumentNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentNameType)));
             ElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementType)));
-            ElementChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementChildrenNodesType)));
+            ElementChildrenNodesSequenceType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementChildrenNodesSequenceType)));
             EmptyElementChildrenNodesSequenceType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(EmptyElementChildrenNodesSequenceType)));
-            RootElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(RootElementType)));
             TextNodeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TextNodeType)));
             AttributeNodeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeNodeType)));
             ObjectType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ObjectType)));
@@ -368,59 +365,24 @@ namespace Platform.Data.Doublets.Xml
                 throw new Exception("Root element is not found.");
             }
             return rootElement;
-            // var childrenNodesSequenceLinkAddress = GetDocumentChildrenNodesSequence(rootElement);
-            // if (EqualityComparer.Equals(childrenNodesSequenceLinkAddress, EmptyElementChildrenNodesSequenceType))
-            // {
-            //     return new List<TLinkAddress>();
-            // }
-            // RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
-            // var childNodeLinkAddressList = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
-            // return childNodeLinkAddressList;
         }
 
-        // public void EnsureIsRootElement(TLinkAddress possibleRootElementLinkAddress)
-        // {
-        //     if (!IsRootElement(possibleRootElementLinkAddress))
-        //     {
-        //         throw new ArgumentException($"{possibleRootElementLinkAddress} is not a root element link address.");
-        //     }
-        // }
-        //
-        // public TLinkAddress GetElementFromRootElement(TLinkAddress rootElementLinkAddress)
-        // {
-        //     EnsureIsRootElement(rootElementLinkAddress);
-        //     return Links.GetTarget(rootElementLinkAddress);
-        // }
-
-        public TLinkAddress GetDocumentChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
+        public TLinkAddress GetChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
         {
-            if (!IsRootElement(childrenNodesLinkAddress))
-            {
-                throw new ArgumentException("The passed link address is not a document children nodes link address", nameof(childrenNodesLinkAddress));
-            }
+            EnsureIsChildrenNodes(childrenNodesLinkAddress);
             return Links.GetTarget(childrenNodesLinkAddress);
         }
         
 
         public TLinkAddress CreateDocument(string name, TLinkAddress childrenNodesLink)
         {
-            if (!IsRootElement(childrenNodesLink))
+            if (!IsElementNode(childrenNodesLink))
             {
                 throw new ArgumentException($"The passed link address is not a document children nodes link address", nameof(childrenNodesLink));
             }
             var documentLinkAddress = CreateDocument(name);
             Links.GetOrCreate(documentLinkAddress, childrenNodesLink);
             return documentLinkAddress;
-        }
-
-        
-        public TLinkAddress CreateRootElement(TLinkAddress documentLinkAddress, TLinkAddress rootElementLinkAddress)
-        {
-            return Links.GetOrCreate(documentLinkAddress, rootElementLinkAddress);
-        }
-        public TLinkAddress CreateRootElement(TLinkAddress rootElementLinkAddress)
-        {
-            return Links.GetOrCreate(RootElementType, rootElementLinkAddress);
         }
 
         public void EnsureIsDocument(TLinkAddress possibleDocumentLinkAddressLink)
@@ -431,19 +393,11 @@ namespace Platform.Data.Doublets.Xml
             }
         }
 
-        public void EnsureIsDocumentChildrenNodes(TLinkAddress possibleDocumentChildrenNodes)
-        {
-            if (!IsRootElement(possibleDocumentChildrenNodes))
-            {
-                throw new ArgumentException($"{possibleDocumentChildrenNodes} is not a document children nodes link address");
-            }
-        }
-
-        public TLinkAddress AttachDocumentChildrenNodes(TLinkAddress documentLinkAddress, TLinkAddress documentChildrenNodes)
+        public TLinkAddress AttachElementToDocument(TLinkAddress documentLinkAddress, TLinkAddress elementLinkAddress)
         {
             EnsureIsDocument(documentLinkAddress);
-            EnsureIsDocumentChildrenNodes(documentChildrenNodes);
-            return Links.GetOrCreate(documentLinkAddress, documentChildrenNodes);
+            EnsureIsElement(elementLinkAddress);
+            return Links.GetOrCreate(documentLinkAddress, elementLinkAddress);
         }
 
         public TLinkAddress CreateDocument(string name)
@@ -457,12 +411,6 @@ namespace Platform.Data.Doublets.Xml
             var documentNameStringLinkAddress = CreateString(name);
             var documentNameLinkAddress = Links.GetOrCreate(DocumentNameType, documentNameStringLinkAddress);
             return documentNameLinkAddress;
-        }
-
-        public bool IsRootElement(TLinkAddress possibleRootElement)
-        {
-            var posslbeRootElementType = Links.GetSource(possibleRootElement);
-            return EqualityComparer.Equals(posslbeRootElementType, RootElementType);
         }
 
         public bool IsDocumentName(TLinkAddress possibleDocumentNameLinkAddress)
@@ -524,7 +472,7 @@ namespace Platform.Data.Doublets.Xml
         #endregion
 
         #region Node
-
+        
         #region TextNode
 
         public bool IsTextNode(TLinkAddress textNodeLinkAddress)
@@ -632,7 +580,7 @@ namespace Platform.Data.Doublets.Xml
             return Links.GetOrCreate(ElementType, elementNameStringLinkAddress);
         }
 
-        public void EnsureIsElementLinkAddress(TLinkAddress possibleElementLinkAddress)
+        public void EnsureIsElement(TLinkAddress possibleElementLinkAddress)
         {
             if (!IsElementNode(possibleElementLinkAddress))
             {
@@ -642,61 +590,66 @@ namespace Platform.Data.Doublets.Xml
 
         public string GetElementName(TLinkAddress elementLinkAddress)
         {
-            EnsureIsElementLinkAddress(elementLinkAddress);
+            EnsureIsElement(elementLinkAddress);
             var elementNameLinkAddress = Links.GetTarget(elementLinkAddress);
             return GetString(elementNameLinkAddress);
         }
 
-        public TLinkAddress CreateElementChildrenNodes(TLinkAddress elementLinkAddress, List<TLinkAddress> childrenNodesLinkAddresses)
+        public TLinkAddress AttachNodesToElement(TLinkAddress elementLinkAddress, List<TLinkAddress> nodesLinkAddresses)
         {
-            if (childrenNodesLinkAddresses.Count == 0)
+            if (nodesLinkAddresses.Count == 0)
             {
-                return CreateElementChildrenNodes(elementLinkAddress, EmptyElementChildrenNodesSequenceType);
+                AttachNodesToElement(elementLinkAddress, EmptyElementChildrenNodesSequenceType);
             }
-            return CreateElementChildrenNodes(elementLinkAddress, ListToSequenceConverter.Convert(childrenNodesLinkAddresses));
+            return AttachNodesToElement(elementLinkAddress, ListToSequenceConverter.Convert(nodesLinkAddresses));
         }
 
         
-        public TLinkAddress CreateElementChildrenNodes(TLinkAddress elementLinkAddress, TLinkAddress childrenNodesSequenceLinkAddress)
+        public TLinkAddress AttachNodesToElement(TLinkAddress elementLinkAddress, TLinkAddress nodesSequenceLinkAddress)
         {
-            TLinkAddress childrenNodesLinkAddress;
-            if (EqualityComparer.Equals(childrenNodesSequenceLinkAddress, default))
+            if (EqualityComparer.Equals(nodesSequenceLinkAddress, default))
             {
-                childrenNodesSequenceLinkAddress = EmptyElementChildrenNodesSequenceType;
+                nodesSequenceLinkAddress = EmptyElementChildrenNodesSequenceType;
             }
-            childrenNodesLinkAddress = Links.GetOrCreate(ElementChildrenNodesType, childrenNodesSequenceLinkAddress);
-            Links.GetOrCreate(elementLinkAddress, childrenNodesLinkAddress);
-            return childrenNodesLinkAddress;
+            var elementChildrenNodesLinkAddress = Links.GetOrCreate(ElementChildrenNodesSequenceType, nodesSequenceLinkAddress);
+            return Links.GetOrCreate(elementLinkAddress, elementChildrenNodesLinkAddress);
         }
 
-        public TLinkAddress CreateElement(string name, List<TLinkAddress> childrenNodesLinkAddresses)
+        public TLinkAddress CreateElement(string name, List<TLinkAddress> nodesLinkAddresses)
         {
             var elementLinkAddress = CreateElement(name);
-            var childrenNodesSequenceLinkAddress = ListToSequenceConverter.Convert(childrenNodesLinkAddresses);
-            var elementChildrenNodesLinkAddress = CreateElementChildrenNodes(elementLinkAddress, childrenNodesSequenceLinkAddress);
-            Links.GetOrCreate(elementLinkAddress, elementChildrenNodesLinkAddress);
+            AttachNodesToElement(elementLinkAddress, nodesLinkAddresses);
             return elementLinkAddress;
         }
-        public TLinkAddress CreateElement(string name, TLinkAddress childrenNodesSequenceLinkAddress)
+        public TLinkAddress CreateElement(string name, TLinkAddress nodesSequenceLinkAddress)
         {
             var elementLinkAddress = CreateElement(name);
-            var elementChildrenNodesLinkAddress = CreateElementChildrenNodes(elementLinkAddress, childrenNodesSequenceLinkAddress);
-            Links.GetOrCreate(elementLinkAddress, elementChildrenNodesLinkAddress);
+            AttachNodesToElement(elementLinkAddress, nodesSequenceLinkAddress);
             return elementLinkAddress;
         }
-
-        public bool IsElementChildrenNodes(TLinkAddress possibleElementChildrenNodesLinkAddress)
+        
+        public bool IsChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
         {
-            var possibleElementChildrenNodesType = Links.GetSource(possibleElementChildrenNodesLinkAddress);
-            return EqualityComparer.Equals(possibleElementChildrenNodesType, ElementChildrenNodesType);
+            var possibleChildrenNodesType = Links.GetSource(possibleChildrenNodesLinkAddress);
+            return EqualityComparer.Equals(possibleChildrenNodesType, ElementChildrenNodesSequenceType);
         }
 
-        public TLinkAddress GetElementChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
+        public void EnsureIsChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
         {
-            return Links.GetTarget(childrenNodesLinkAddress);
+            if (!IsChildrenNodes(possibleChildrenNodesLinkAddress))
+            {
+                throw new ArgumentException($"{possibleChildrenNodesLinkAddress} is not a children nodes link address");
+            }
+        }
+        
+        public bool IsEmptyChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
+        {
+            EnsureIsChildrenNodes(possibleChildrenNodesLinkAddress);
+            var childrenNodesSequenceLinkAddress = Links.GetTarget(possibleChildrenNodesLinkAddress);
+            return EqualityComparer.Equals(childrenNodesSequenceLinkAddress, EmptyElementChildrenNodesSequenceType);
         }
 
-        public IList<TLinkAddress> GetElementChildrenNodes(TLinkAddress elementLinkAddress)
+        public IList<TLinkAddress> GetChildrenNodes(TLinkAddress elementLinkAddress)
         {
             if (!IsElementNode(elementLinkAddress))
             {
@@ -706,11 +659,15 @@ namespace Platform.Data.Doublets.Xml
             Links.Each(new Link<TLinkAddress>(Links.Constants.Any, elementLinkAddress, Links.Constants.Any), elementToAnyLink =>
             {
                 var possibleChildrenNodesLinkAddress = Links.GetTarget(elementToAnyLink);
-                if (!IsRootElement(possibleChildrenNodesLinkAddress))
+                if (!IsChildrenNodes(possibleChildrenNodesLinkAddress))
                 {
                     return Links.Constants.Continue;
                 }
-                var childrenNodesSequenceLinkAddress = GetDocumentChildrenNodesSequence(possibleChildrenNodesLinkAddress);
+                if (IsEmptyChildrenNodes(possibleChildrenNodesLinkAddress))
+                {
+                    return Links.Constants.Break;
+                }
+                var childrenNodesSequenceLinkAddress = GetChildrenNodesSequence(possibleChildrenNodesLinkAddress);
                 RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
                 childrenNodes = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
                 return Links.Constants.Continue;

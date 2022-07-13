@@ -56,7 +56,7 @@ namespace Platform.Data.Doublets.Xml
         {
             var elementName = _storage.GetElementName(elementLinkAddress);
             xmlWriter.WriteStartElement(elementName);
-            var childrenNodesLinkAddressList = _storage.GetElementChildrenNodes(elementLinkAddress);    
+            var childrenNodesLinkAddressList = _storage.GetChildrenNodes(elementLinkAddress);    
             foreach (var childNodeLinkAddress in childrenNodesLinkAddressList)
             {
                 ExportNode(xmlWriter, childNodeLinkAddress);

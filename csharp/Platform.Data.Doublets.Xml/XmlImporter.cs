@@ -49,7 +49,7 @@ namespace Platform.Data.Doublets.Xml {
         private TLinkAddress Import(XmlReader reader, TLinkAddress documentLinkAddress, CancellationToken token)
         {
             var rootElementLinkAddress = ImportNodes(reader, token);
-            _storage.CreateRootElement(documentLinkAddress, rootElementLinkAddress);
+            _storage.AttachElementToDocument(documentLinkAddress, rootElementLinkAddress);
             return documentLinkAddress;
         }
 
@@ -77,7 +77,7 @@ namespace Platform.Data.Doublets.Xml {
                     case XmlNodeType.EndElement:
                     {
                         var element = elements.Pop();
-                        var xmlElementAddress = _storage.CreateElement(reader.Name, element.Children);
+                        var xmlElementAddress = _storage.CreateElement(element.Name, element.Children);
                         var hasParent = elements.Count > 0;
                         if (hasParent)
                         {
