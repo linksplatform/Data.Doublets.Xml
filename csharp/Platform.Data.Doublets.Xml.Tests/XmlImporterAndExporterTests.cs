@@ -109,8 +109,8 @@ namespace Platform.Data.Doublets.Xml.Tests
             var documentLink = Import(_xmlStorage, documentName, initialXml);
             var exportedXmlByDocumentLink = Export(documentLink, _xmlStorage);
             var exportedXmlByName = Export(documentName, _xmlStorage);
-            Assert.Equal(exportedXmlByDocumentLink, exportedXmlByDocumentLink);
-            Assert.Equal(exportedXmlByName, exportedXmlByDocumentLink);
+            Assert.Equal(initialXml, exportedXmlByDocumentLink);
+            Assert.Equal(initialXml, exportedXmlByName);
         }
     }
 }
