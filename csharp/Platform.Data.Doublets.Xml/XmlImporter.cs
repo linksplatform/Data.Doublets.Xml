@@ -68,12 +68,14 @@ namespace Platform.Data.Doublets.Xml {
                     {
                         var element = new XmlElement<TLinkAddress> { Name = reader.Name };
                         elements.Push(element);
+                        // Save IsEmptyElement field before moving to the next attribute (reader value will change)
+                        var isEmptyElement = reader.IsEmptyElement;
                         while (reader.MoveToNextAttribute())
                         {
                             var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
                             element.Children.Add(attributeNodeAddress); 
                         }
-                        if (reader.IsEmptyElement)
+                        if (isEmptyElement)
                         {
                             goto case XmlNodeType.EndElement;
                         }
