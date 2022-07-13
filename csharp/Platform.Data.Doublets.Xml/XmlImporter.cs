@@ -68,6 +68,11 @@ namespace Platform.Data.Doublets.Xml {
                     {
                         var element = new XmlElement<TLinkAddress> { Name = reader.Name };
                         elements.Push(element);
+                        while (reader.MoveToNextAttribute())
+                        {
+                            var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
+                            element.Children.Add(attributeNodeAddress); 
+                        }
                         if (reader.IsEmptyElement)
                         {
                             goto case XmlNodeType.EndElement;
@@ -76,12 +81,7 @@ namespace Platform.Data.Doublets.Xml {
                     }
                     case XmlNodeType.EndElement:
                     {
-                        while (reader.MoveToNextAttribute())
-                        {
-                            var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
-                            var parent = elements.Peek();
-                            parent.Children.Add(attributeNodeAddress); 
-                        }
+                        
                         var element = elements.Pop();
                         var xmlElementAddress = _storage.CreateElement(element.Name, element.Children);
                         var hasParent = elements.Count > 0;
