@@ -367,12 +367,6 @@ namespace Platform.Data.Doublets.Xml
             return rootElement;
         }
 
-        public TLinkAddress GetChildrenNodesSequence(TLinkAddress childrenNodesLinkAddress)
-        {
-            EnsureIsChildrenNodes(childrenNodesLinkAddress);
-            return Links.GetTarget(childrenNodesLinkAddress);
-        }
-        
 
         public TLinkAddress CreateDocument(string name, TLinkAddress childrenNodesLink)
         {
@@ -554,11 +548,6 @@ namespace Platform.Data.Doublets.Xml
 
         #region ElementNode
         
-        public TLinkAddress CreateElement(string name)
-        {
-            var elementNameStringLinkAddress = CreateString(name);
-            return Links.GetOrCreate(ElementType, elementNameStringLinkAddress);
-        }
 
         public void EnsureIsElement(TLinkAddress possibleElementLinkAddress)
         {
@@ -571,7 +560,8 @@ namespace Platform.Data.Doublets.Xml
         public string GetElementName(TLinkAddress elementLinkAddress)
         {
             EnsureIsElement(elementLinkAddress);
-            var elementNameLinkAddress = Links.GetTarget(elementLinkAddress);
+            var elementNameToChildNodesSequenceLinkAddress = Links.GetTarget(elementLinkAddress);
+            var elementNameLinkAddress = Links.GetSource(elementNameToChildNodesSequenceLinkAddress);
             return GetString(elementNameLinkAddress);
         }
 
@@ -591,21 +581,18 @@ namespace Platform.Data.Doublets.Xml
             {
                 nodesSequenceLinkAddress = EmptyElementChildrenNodesSequenceType;
             }
-            var elementChildrenNodesLinkAddress = Links.GetOrCreate(ElementChildrenNodesSequenceType, nodesSequenceLinkAddress);
-            return Links.GetOrCreate(elementLinkAddress, elementChildrenNodesLinkAddress);
+            return Links.GetOrCreate(elementLinkAddress, nodesSequenceLinkAddress);
         }
 
         public TLinkAddress CreateElement(string name, List<TLinkAddress> nodesLinkAddresses)
         {
-            var elementLinkAddress = CreateElement(name);
-            AttachNodesToElement(elementLinkAddress, nodesLinkAddresses);
-            return elementLinkAddress;
+            return CreateElement(name, ListToSequenceConverter.Convert(nodesLinkAddresses));
         }
         public TLinkAddress CreateElement(string name, TLinkAddress nodesSequenceLinkAddress)
         {
-            var elementLinkAddress = CreateElement(name);
-            AttachNodesToElement(elementLinkAddress, nodesSequenceLinkAddress);
-            return elementLinkAddress;
+            var elementNameLinkAddress = CreateString(name);
+            var elementLinkAddress = Links.GetOrCreate(elementNameLinkAddress, nodesSequenceLinkAddress);
+            return Links.GetOrCreate(ElementType, elementLinkAddress);
         }
         
         public bool IsChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
@@ -631,28 +618,17 @@ namespace Platform.Data.Doublets.Xml
 
         public IList<TLinkAddress> GetChildrenNodes(TLinkAddress elementLinkAddress)
         {
-            if (!IsElementNode(elementLinkAddress))
-            {
-                throw new ArgumentException("The passed link address is not an element link address.", nameof(elementLinkAddress));
-            }
+            
             var childrenNodes = new List<TLinkAddress>();
-            Links.Each(new Link<TLinkAddress>(Links.Constants.Any, elementLinkAddress, Links.Constants.Any), elementToAnyLink =>
+            EnsureIsElement(elementLinkAddress);
+            var elementNameToChildNodesSequenceLinkAddress = Links.GetTarget(elementLinkAddress);
+            var childrenNodesSequenceLinkAddress = Links.GetTarget(elementNameToChildNodesSequenceLinkAddress);
+            if (EqualityComparer.Equals(childrenNodesSequenceLinkAddress, EmptyElementChildrenNodesSequenceType))
             {
-                var possibleChildrenNodesLinkAddress = Links.GetTarget(elementToAnyLink);
-                if (!IsChildrenNodes(possibleChildrenNodesLinkAddress))
-                {
-                    return Links.Constants.Continue;
-                }
-                if (IsEmptyChildrenNodes(possibleChildrenNodesLinkAddress))
-                {
-                    return Links.Constants.Break;
-                }
-                var childrenNodesSequenceLinkAddress = GetChildrenNodesSequence(possibleChildrenNodesLinkAddress);
-                RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
-                childrenNodes = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
-                return Links.Constants.Continue;
-            });
-            return childrenNodes;
+                return childrenNodes;
+            }
+            RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
+            return childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
         }
 
         public bool IsElementNode(TLinkAddress elementLinkAddress)
