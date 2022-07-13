@@ -565,24 +565,24 @@ namespace Platform.Data.Doublets.Xml
             return GetString(elementNameLinkAddress);
         }
 
-        public TLinkAddress AttachNodesToElement(TLinkAddress elementLinkAddress, List<TLinkAddress> nodesLinkAddresses)
-        {
-            if (nodesLinkAddresses.Count == 0)
-            {
-                AttachNodesToElement(elementLinkAddress, EmptyElementChildrenNodesSequenceType);
-            }
-            return AttachNodesToElement(elementLinkAddress, ListToSequenceConverter.Convert(nodesLinkAddresses));
-        }
-
-        
-        public TLinkAddress AttachNodesToElement(TLinkAddress elementLinkAddress, TLinkAddress nodesSequenceLinkAddress)
-        {
-            if (EqualityComparer.Equals(nodesSequenceLinkAddress, default))
-            {
-                nodesSequenceLinkAddress = EmptyElementChildrenNodesSequenceType;
-            }
-            return Links.GetOrCreate(elementLinkAddress, nodesSequenceLinkAddress);
-        }
+        // public TLinkAddress AttachNodesToElement(TLinkAddress elementLinkAddress, List<TLinkAddress> nodesLinkAddresses)
+        // {
+        //     if (nodesLinkAddresses.Count == 0)
+        //     {
+        //         AttachNodesToElement(elementLinkAddress, EmptyElementChildrenNodesSequenceType);
+        //     }
+        //     return AttachNodesToElement(elementLinkAddress, ListToSequenceConverter.Convert(nodesLinkAddresses));
+        // }
+        //
+        //
+        // public TLinkAddress AttachNodesToElement(TLinkAddress elementLinkAddress, TLinkAddress nodesSequenceLinkAddress)
+        // {
+        //     if (EqualityComparer.Equals(nodesSequenceLinkAddress, default))
+        //     {
+        //         nodesSequenceLinkAddress = EmptyElementChildrenNodesSequenceType;
+        //     }
+        //     return Links.GetOrCreate(elementLinkAddress, nodesSequenceLinkAddress);
+        // }
 
         public TLinkAddress CreateElement(string name, List<TLinkAddress> nodesLinkAddresses)
         {
@@ -590,6 +590,10 @@ namespace Platform.Data.Doublets.Xml
         }
         public TLinkAddress CreateElement(string name, TLinkAddress nodesSequenceLinkAddress)
         {
+            if(EqualityComparer.Equals(nodesSequenceLinkAddress, default))
+            {
+                nodesSequenceLinkAddress = EmptyElementChildrenNodesSequenceType;
+            }
             var elementNameLinkAddress = CreateString(name);
             var elementLinkAddress = Links.GetOrCreate(elementNameLinkAddress, nodesSequenceLinkAddress);
             return Links.GetOrCreate(ElementType, elementLinkAddress);
@@ -601,34 +605,23 @@ namespace Platform.Data.Doublets.Xml
             return EqualityComparer.Equals(possibleChildrenNodesType, ElementChildrenNodesSequenceType);
         }
 
-        public void EnsureIsChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
-        {
-            if (!IsChildrenNodes(possibleChildrenNodesLinkAddress))
-            {
-                throw new ArgumentException($"{possibleChildrenNodesLinkAddress} is not a children nodes link address");
-            }
-        }
-        
         public bool IsEmptyChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
         {
-            EnsureIsChildrenNodes(possibleChildrenNodesLinkAddress);
-            var childrenNodesSequenceLinkAddress = Links.GetTarget(possibleChildrenNodesLinkAddress);
-            return EqualityComparer.Equals(childrenNodesSequenceLinkAddress, EmptyElementChildrenNodesSequenceType);
+            return EqualityComparer.Equals(possibleChildrenNodesLinkAddress, EmptyElementChildrenNodesSequenceType);
         }
 
         public IList<TLinkAddress> GetChildrenNodes(TLinkAddress elementLinkAddress)
         {
-            
             var childrenNodes = new List<TLinkAddress>();
             EnsureIsElement(elementLinkAddress);
             var elementNameToChildNodesSequenceLinkAddress = Links.GetTarget(elementLinkAddress);
-            var childrenNodesSequenceLinkAddress = Links.GetTarget(elementNameToChildNodesSequenceLinkAddress);
-            if (EqualityComparer.Equals(childrenNodesSequenceLinkAddress, EmptyElementChildrenNodesSequenceType))
+            var childrenNodesLinkAddress = Links.GetTarget(elementNameToChildNodesSequenceLinkAddress);
+            if (IsEmptyChildrenNodes(childrenNodesLinkAddress))
             {
                 return childrenNodes;
             }
             RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
-            return childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
+            return childrenNodesRightSequenceWalker.Walk(childrenNodesLinkAddress).ToList();
         }
 
         public bool IsElementNode(TLinkAddress elementLinkAddress)
