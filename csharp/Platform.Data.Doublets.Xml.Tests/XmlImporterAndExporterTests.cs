@@ -98,9 +98,9 @@ namespace Platform.Data.Doublets.Xml.Tests
 
         [Theory]
         [InlineData($"{XmlPrefixTag}<users />")]
-        [InlineData($"{XmlPrefixTag}<user name=\"Gambardella\"/>")]
+        [InlineData($"{XmlPrefixTag}<user name=\"Gambardella\" />")]
         [InlineData($"{XmlPrefixTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>")]
-        [InlineData($"{XmlPrefixTag}<users><user name=\"Gambardella\"/></users>")]
+        [InlineData($"{XmlPrefixTag}<users><user name=\"Gambardella\" /></users>")]
         [InlineData($"{XmlPrefixTag}<users><user>Gambardella</user><user>Matthew</user></users>")]
         [InlineData($"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>")]
         public void Test(string initialXml)
