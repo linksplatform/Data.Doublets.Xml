@@ -100,13 +100,12 @@ namespace Platform.Data.Doublets.Xml.Tests
         public static IEnumerable<object[]> Data =>
             new List<object[]>
             {
-                new object[] { $"{XmlDeclarationTag}<emptyElement />" },
-                new object[] { $"{XmlDeclarationTag}<elementWithChildNode>TextNode</elementWithChildNode>" },
-                new object[] { $"{XmlDeclarationTag}<emptyElementWithAttribute name=\"Gambardella\" />" },
+                new object[] { $"{XmlDeclarationTag}<users />" },
+                new object[] { $"{XmlDeclarationTag}<user name=\"Gambardella\" />" },
                 new object[] { $"{XmlDeclarationTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>" },
-                new object[] { $"{XmlDeclarationTag}<elementWithChildElement><user name=\"Gambardella\" /></users>" },
-                new object[] { $"{XmlDeclarationTag}<elementWithChildElements><user>Gambardella</user><user>Matthew</user></users>" },
-                new object[] { $"{XmlDeclarationTag}<elementWithChildElements><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
+                new object[] { $"{XmlDeclarationTag}<users><user name=\"Gambardella\" /></users>" },
+                new object[] { $"{XmlDeclarationTag}<users><user>Gambardella</user><user>Matthew</user></users>" },
+                new object[] { $"{XmlDeclarationTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
                 new object[]
                 {
                     $@"
