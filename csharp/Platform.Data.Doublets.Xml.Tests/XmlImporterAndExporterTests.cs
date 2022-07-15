@@ -108,8 +108,7 @@ namespace Platform.Data.Doublets.Xml.Tests
                 new object[] { $"{XmlDeclarationTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
                 new object[]
                 {
-                    $@"
-${XmlDeclarationTag}
+                    $@"{XmlDeclarationTag}
 <root>
     <h:table xmlns:h=""http://www.w3.org/TR/html4/"">
       <h:tr>
@@ -127,8 +126,7 @@ ${XmlDeclarationTag}
                 },
                 new object[]
                 {
-                    $@"
-${XmlDeclarationTag}
+                    $@"{XmlDeclarationTag}
 <root xmlns:h=""http://www.w3.org/TR/html4/""
 xmlns:f=""https://www.w3schools.com/furniture"">
     <h:table>
@@ -147,8 +145,7 @@ xmlns:f=""https://www.w3schools.com/furniture"">
                 },
                 new object[]
                 {
-                    $@"
-${XmlDeclarationTag}
+                    $@"{XmlDeclarationTag}
 <table xmlns=""http://www.w3.org/TR/html4/"">
   <tr>
     <td>Apples</td>
