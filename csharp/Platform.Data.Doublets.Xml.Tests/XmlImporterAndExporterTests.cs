@@ -16,7 +16,7 @@ namespace Platform.Data.Doublets.Xml.Tests
 {
     public class XmlImportAndExportTests
     {
-        private const string XmlPrefixTag = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+        private const string XmlDeclarationTag = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
         private readonly BalancedVariantConverter<TLinkAddress> _balancedVariantConverter;
         private readonly ILinks<TLinkAddress> _links;
         private readonly DefaultXmlStorage<TLinkAddress> _xmlStorage;
@@ -100,12 +100,62 @@ namespace Platform.Data.Doublets.Xml.Tests
         public static IEnumerable<object[]> Data =>
             new List<object[]>
             {
-                new object[] { $"{XmlPrefixTag}<users />" },
-                new object[] { $"{XmlPrefixTag}<user name=\"Gambardella\" />" },
-                new object[] { $"{XmlPrefixTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>" },
-                new object[] { $"{XmlPrefixTag}<users><user name=\"Gambardella\" /></users>" },
-                new object[] { $"{XmlPrefixTag}<users><user>Gambardella</user><user>Matthew</user></users>" },
-                new object[] { $"{XmlPrefixTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
+                new object[] { $"{XmlDeclarationTag}<users />" },
+                new object[] { $"{XmlDeclarationTag}<user name=\"Gambardella\" />" },
+                new object[] { $"{XmlDeclarationTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>" },
+                new object[] { $"{XmlDeclarationTag}<users><user name=\"Gambardella\" /></users>" },
+                new object[] { $"{XmlDeclarationTag}<users><user>Gambardella</user><user>Matthew</user></users>" },
+                new object[] { $"{XmlDeclarationTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
+                new object[]
+                {
+                    $@"
+${XmlDeclarationTag}
+
+<root>
+    <h:table xmlns:h=""http://www.w3.org/TR/html4/"">
+      <h:tr>
+        <h:td>Apples</h:td>
+        <h:td>Bananas</h:td>
+      </h:tr>
+    </h:table>
+
+    <f:table xmlns:f=""https://www.w3schools.com/furniture"">
+      <f:name>African Coffee Table</f:name>
+      <f:width>80</f:width>
+      <f:length>120</f:length>
+    </f:table>
+</root> ",
+                    $@"
+<root xmlns:h=""http://www.w3.org/TR/html4/""
+xmlns:f=""https://www.w3schools.com/furniture"">
+    <h:table>
+      <h:tr>
+        <h:td>Apples</h:td>
+        <h:td>Bananas</h:td>
+      </h:tr>
+    </h:table>
+
+    <f:table>
+      <f:name>African Coffee Table</f:name>
+      <f:width>80</f:width>
+      <f:length>120</f:length>
+    </f:table>
+</root> ",
+                    $@"
+
+<table xmlns=""http://www.w3.org/TR/html4/"">
+  <tr>
+    <td>Apples</td>
+    <td>Bananas</td>
+  </tr>
+</table> 
+
+<table xmlns=""https://www.w3schools.com/furniture"">
+  <name>African Coffee Table</name>
+  <width>80</width>
+  <length>120</length>
+</table> "
+                }
             };
 
         [Theory]
