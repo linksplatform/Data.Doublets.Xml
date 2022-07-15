@@ -100,17 +100,17 @@ namespace Platform.Data.Doublets.Xml.Tests
         public static IEnumerable<object[]> Data =>
             new List<object[]>
             {
-                new object[] { $"{XmlDeclarationTag}<users />" },
-                new object[] { $"{XmlDeclarationTag}<user name=\"Gambardella\" />" },
+                new object[] { $"{XmlDeclarationTag}<emptyElement />" },
+                new object[] { $"{XmlDeclarationTag}<elementWithChildNode>TextNode</elementWithChildNode>" },
+                new object[] { $"{XmlDeclarationTag}<emptyElementWithAttribute name=\"Gambardella\" />" },
                 new object[] { $"{XmlDeclarationTag}<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"><uses-permission android:name=\"android.permission.READ_CONTACTS\" /></manifest>" },
-                new object[] { $"{XmlDeclarationTag}<users><user name=\"Gambardella\" /></users>" },
-                new object[] { $"{XmlDeclarationTag}<users><user>Gambardella</user><user>Matthew</user></users>" },
-                new object[] { $"{XmlDeclarationTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
+                new object[] { $"{XmlDeclarationTag}<elementWithChildElement><user name=\"Gambardella\" /></users>" },
+                new object[] { $"{XmlDeclarationTag}<elementWithChildElements><user>Gambardella</user><user>Matthew</user></users>" },
+                new object[] { $"{XmlDeclarationTag}<elementWithChildElements><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
                 new object[]
                 {
                     $@"
 ${XmlDeclarationTag}
-
 <root>
     <h:table xmlns:h=""http://www.w3.org/TR/html4/"">
       <h:tr>
@@ -124,8 +124,12 @@ ${XmlDeclarationTag}
       <f:width>80</f:width>
       <f:length>120</f:length>
     </f:table>
-</root> ",
+</root> "
+                },
+                new object[]
+                {
                     $@"
+${XmlDeclarationTag}
 <root xmlns:h=""http://www.w3.org/TR/html4/""
 xmlns:f=""https://www.w3schools.com/furniture"">
     <h:table>
@@ -140,9 +144,12 @@ xmlns:f=""https://www.w3schools.com/furniture"">
       <f:width>80</f:width>
       <f:length>120</f:length>
     </f:table>
-</root> ",
+</root> "
+                },
+                new object[]
+                {
                     $@"
-
+${XmlDeclarationTag}
 <table xmlns=""http://www.w3.org/TR/html4/"">
   <tr>
     <td>Apples</td>
