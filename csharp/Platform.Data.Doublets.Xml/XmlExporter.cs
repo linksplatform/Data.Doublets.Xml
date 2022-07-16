@@ -74,9 +74,8 @@ namespace Platform.Data.Doublets.Xml
             }
             else
             {
-                var attributeNamespace = attribute.Name.Substring(0, attributeNameSemicolonIndex);
                 var attributeName = attribute.Name.Substring(attributeNameSemicolonIndex + 1);
-                xmlWriter.WriteAttributeString(attributeName, attributeNamespace, attribute.Value);
+                xmlWriter.WriteAttributeString("xmlns", attributeName, null, attribute.Value);
             }
         }
 
