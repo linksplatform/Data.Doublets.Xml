@@ -35,7 +35,7 @@ namespace Platform.Data.Doublets.Xml
         private static readonly TLinkAddress _one = Arithmetic.Increment(_zero);
         public readonly TLinkAddress Any;
         public readonly BalancedVariantConverter<TLinkAddress> BalancedVariantConverter;
-        public readonly IConverter<IList<TLinkAddress>?, TLinkAddress> ListToSequenceConverter;
+        public readonly IConverter<IList<TLinkAddress>, TLinkAddress> ListToSequenceConverter;
         public readonly TLinkAddress Type;
         public readonly EqualityComparer<TLinkAddress> EqualityComparer = EqualityComparer<TLinkAddress>.Default;
         private readonly StringToUnicodeSequenceConverter<TLinkAddress> _stringToUnicodeSequenceConverter;
