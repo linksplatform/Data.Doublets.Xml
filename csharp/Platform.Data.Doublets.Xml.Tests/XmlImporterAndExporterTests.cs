@@ -108,7 +108,7 @@ namespace Platform.Data.Doublets.Xml.Tests
                 new object[] { $"{XmlDeclarationTag}<users><user role=\"admin\">Gambardella</user><user role=\"moderator\">Matthew</user></users>" },
                 new object[]
                 {
-                    $@"{XmlDeclarationTag}
+$@"{XmlDeclarationTag}
 <root>
     <h:table xmlns:h=""http://www.w3.org/TR/html4/"">
       <h:tr>
@@ -126,7 +126,7 @@ namespace Platform.Data.Doublets.Xml.Tests
                 },
                 new object[]
                 {
-                    $@"{XmlDeclarationTag}
+$@"{XmlDeclarationTag}
 <root xmlns:h=""http://www.w3.org/TR/html4/""
 xmlns:f=""https://www.w3schools.com/furniture"">
     <h:table>
@@ -145,19 +145,21 @@ xmlns:f=""https://www.w3schools.com/furniture"">
                 },
                 new object[]
                 {
-                    $@"{XmlDeclarationTag}
-<table xmlns=""http://www.w3.org/TR/html4/"">
-  <tr>
-    <td>Apples</td>
-    <td>Bananas</td>
-  </tr>
-</table> 
+$@"{XmlDeclarationTag}
+<root>
+    <table xmlns=""http://www.w3.org/TR/html4/"">
+      <tr>
+        <td>Apples</td>
+        <td>Bananas</td>
+      </tr>
+    </table> 
 
-<table xmlns=""https://www.w3schools.com/furniture"">
-  <name>African Coffee Table</name>
-  <width>80</width>
-  <length>120</length>
-</table> "
+    <table xmlns=""https://www.w3schools.com/furniture"">
+      <name>African Coffee Table</name>
+      <width>80</width>
+      <length>120</length>
+    </table>
+</root> "
                 }
             };
 
