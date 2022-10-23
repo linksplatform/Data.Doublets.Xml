@@ -38,9 +38,9 @@ namespace Platform.Data.Doublets.Xml
             {
                 ExportTextNode(xmlWriter, nodeLinkAddress);
             }
-            else if (_storage.IsAttributeNode(nodeLinkAddress))
+            else if (_storage.IsAttribute(nodeLinkAddress))
             {
-                ExportAttributeNode(xmlWriter, nodeLinkAddress);
+                ExportAttribute(xmlWriter, nodeLinkAddress);
             }
             else if (_storage.IsElementNode(nodeLinkAddress))
             {
@@ -64,7 +64,7 @@ namespace Platform.Data.Doublets.Xml
             xmlWriter.WriteEndElement();
         }
 
-        private void ExportAttributeNode(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
+        private void ExportAttribute(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
         {
             var attribute = _storage.GetAttribute(xmlNodeLinkAddress);
             var attributeNameSemicolonIndex = attribute.Name.IndexOf(':');

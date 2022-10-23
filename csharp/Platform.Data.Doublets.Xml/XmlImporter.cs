@@ -72,8 +72,8 @@ namespace Platform.Data.Doublets.Xml {
                         var isEmptyElement = reader.IsEmptyElement;
                         while (reader.MoveToNextAttribute())
                         {
-                            var attributeNodeAddress = _storage.CreateAttributeNode(reader.Name, reader.Value);
-                            element.Children.Add(attributeNodeAddress); 
+                            var AttributeAddress = _storage.CreateAttribute(reader.Name, reader.Value);
+                            element.Children.Add(AttributeAddress); 
                         }
                         if (isEmptyElement)
                         {
