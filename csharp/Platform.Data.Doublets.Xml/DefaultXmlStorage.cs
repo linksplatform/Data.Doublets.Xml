@@ -73,6 +73,10 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress TextNodeType { get; }
 
         public TLinkAddress AttributeType { get; }
+        public TLinkAddress AttributeNamePrefixType { get; }
+        public TLinkAddress AttributeLocalNameType { get; }
+        public TLinkAddress AttributeFullNameType { get; }
+        public TLinkAddress AttributeValueType { get; }
 
         public TLinkAddress ObjectType { get; }
 
@@ -523,12 +527,37 @@ namespace Platform.Data.Doublets.Xml
         //     return Links.GetOrCreate(AttributeType, attribute);
         // }
 
-        public TLinkAddress CreateAttribute(string name, string value)
+        public TLinkAddress CreateAttributeNamePrefix(string? prefix)
         {
-            var attributeName = CreateString(name);
-            var attributeValue = CreateString(value);
-            var attribute = Links.GetOrCreate(attributeName, attributeValue);
-            return Links.GetOrCreate(AttributeType, attribute);
+            var stringLinkAddress = CreateString(prefix ?? "");
+            return Links.GetOrCreate(AttributeNamePrefixType, stringLinkAddress);
+        }
+
+        public TLinkAddress CreateAttributeLocalName(string localName)
+        {
+            var stringLinkAddress = CreateString(localName);
+            return Links.GetOrCreate(AttributeLocalNameType, stringLinkAddress);
+        }
+
+        public TLinkAddress CreateAttributeFullName(string? prefix, string localName)
+        {
+            var prefixLinkAddress = CreateAttributeNamePrefix(prefix);
+            var localNameLinkAddress = CreateAttributeLocalName(localName);
+            return Links.GetOrCreate(AttributeFullNameType, Links.GetOrCreate(prefixLinkAddress, localNameLinkAddress));
+        }
+
+        public TLinkAddress CreateAttributeValue(string value)
+        {
+            var stringLinkAddress = CreateString(value);
+            return Links.GetOrCreate(AttributeValueType, stringLinkAddress);
+        }
+
+        public TLinkAddress CreateAttribute(string? prefix, string localName, string value)
+        {
+            var attributeFullName = CreateAttributeFullName(prefix, localName);
+            var attributeValue = CreateAttributeValue(value);
+            var attributeOptions = Links.GetOrCreate(attributeFullName, attributeValue);
+            return Links.GetOrCreate(AttributeType, attributeOptions);
         }
 
         public XmlAttribute GetAttribute(TLinkAddress attributeLinkAddress)
