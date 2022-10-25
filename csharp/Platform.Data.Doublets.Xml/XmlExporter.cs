@@ -54,29 +54,22 @@ namespace Platform.Data.Doublets.Xml
         
         private void ExportElement(XmlWriter xmlWriter, TLinkAddress elementLinkAddress)
         {
-            var elementName = _storage.GetElementName(elementLinkAddress);
-            xmlWriter.WriteStartElement(elementName);
-            var childrenNodesLinkAddressList = _storage.GetChildrenNodes(elementLinkAddress);    
-            foreach (var childNodeLinkAddress in childrenNodesLinkAddressList)
+            var element = _storage.GetElement(elementLinkAddress);
+            xmlWriter.WriteStartElement(element.NamePrefix, element.LocalName, String.Empty);
+            var childrenNodesLinkAddresses = element.Children;    
+            foreach (var childNodeLinkAddress in childrenNodesLinkAddresses)
             {
                 ExportNode(xmlWriter, childNodeLinkAddress);
             }
             xmlWriter.WriteEndElement();
         }
 
-        private void ExportAttribute(XmlWriter xmlWriter, TLinkAddress xmlNodeLinkAddress)
+
+
+        private void ExportAttribute(XmlWriter xmlWriter, TLinkAddress attributeLinkAddress)
         {
-            var attribute = _storage.GetAttribute(xmlNodeLinkAddress);
-            var attributeNameSemicolonIndex = attribute.Name.IndexOf(':');
-            if(attributeNameSemicolonIndex == -1)
-            {
-                xmlWriter.WriteAttributeString(attribute.Name, attribute.Value);
-            }
-            else
-            {
-                var attributeName = attribute.Name.Substring(attributeNameSemicolonIndex + 1);
-                xmlWriter.WriteAttributeString("xmlns", attributeName, null, attribute.Value);
-            }
+            var attribute = _storage.GetAttribute(attributeLinkAddress);
+            xmlWriter.WriteAttributeString(attribute.NamePrefix, attribute.LocalName, null, attribute.Value);
         }
 
         private void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
