@@ -5,7 +5,7 @@ namespace Platform.Data.Doublets.Xml;
 
 public class XmlElement<TLinkAddress>: XmlNode
 {
-    public string NamePrefix;
+    public XmlPrefix? Prefix;
     public string LocalName;
     public List<TLinkAddress> Children = new List<TLinkAddress>();
 }

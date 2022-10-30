@@ -79,7 +79,7 @@ namespace Platform.Data.Doublets.Xml.Tests
             var exportCancellationTokenSource = new CancellationTokenSource();
             var exportCancellationToken = exportCancellationTokenSource.Token;
             var memoryStream = new MemoryStream();
-            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings { Indent = false });
+            var xmlWriter = XmlWriter.Create(memoryStream, new XmlWriterSettings { Indent = false});
             xmlExporter.Export(xmlWriter, documentLink, exportCancellationToken);
             var exportedXml = Encoding.UTF8.GetString(memoryStream.ToArray());
             string byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
@@ -109,7 +109,7 @@ namespace Platform.Data.Doublets.Xml.Tests
                 new object[]
                 {
 $@"{XmlDeclarationTag}
-<root>
+<root1>
     <h:table xmlns:h=""http://www.w3.org/TR/html4/"">
       <h:tr>
         <h:td>Apples</h:td>
@@ -122,12 +122,12 @@ $@"{XmlDeclarationTag}
       <f:width>80</f:width>
       <f:length>120</f:length>
     </f:table>
-</root> "
+</root1> "
                 },
                 new object[]
                 {
 $@"{XmlDeclarationTag}
-<root xmlns:h=""http://www.w3.org/TR/html4/""
+<root2 xmlns:h=""http://www.w3.org/TR/html4/""
 xmlns:f=""https://www.w3schools.com/furniture"">
     <h:table>
       <h:tr>
@@ -141,25 +141,7 @@ xmlns:f=""https://www.w3schools.com/furniture"">
       <f:width>80</f:width>
       <f:length>120</f:length>
     </f:table>
-</root> "
-                },
-                new object[]
-                {
-$@"{XmlDeclarationTag}
-<root>
-    <table xmlns=""http://www.w3.org/TR/html4/"">
-      <tr>
-        <td>Apples</td>
-        <td>Bananas</td>
-      </tr>
-    </table> 
-
-    <table xmlns=""https://www.w3schools.com/furniture"">
-      <name>African Coffee Table</name>
-      <width>80</width>
-      <length>120</length>
-    </table>
-</root> "
+</root2> "
                 }
             };
 
@@ -167,20 +149,26 @@ $@"{XmlDeclarationTag}
         [MemberData(nameof(Data))]
         public void ExportByDocumentLink(string initialXml)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(initialXml);
+            
             var documentName = "documentName";
             var documentLink = Import(_xmlStorage, documentName, initialXml);
             var exportedXmlByDocumentLink = Export(documentLink, _xmlStorage);
-            Assert.Equal(initialXml, exportedXmlByDocumentLink);
+            Assert.Equal(xmlDoc.InnerXml, exportedXmlByDocumentLink);
         }
 
         [Theory]
         [MemberData(nameof(Data))]
         public void ExportByDocumentName(string initialXml)
         {
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(initialXml);
+            
             var documentName = "documentName";
             var documentLink = Import(_xmlStorage, documentName, initialXml);
             var exportedXmlByName = Export(documentName, _xmlStorage);
-            Assert.Equal(initialXml, exportedXmlByName);
+            Assert.Equal(xmlDoc.InnerXml, exportedXmlByName);
         }
     }
 }

@@ -22,20 +22,26 @@ namespace Platform.Data.Doublets.Xml
 {
     /*
      * (Element: ElementType -> (ElementFullName -> ElementChildrenNodes) )
-     * (ElementFullName: ElementFullNameType -> (ElementNamePrefix -> ElementLocalName) )
-     * (ElementNamePrefix: ElementNamePrefixName -> (StringType -> "") )
-     * (ElementLocalName: ElementLocalNameName -> (StringType -> "") )
+     * (ElementFullName: ElementFullNameType -> (Prefix -> ElementLocalName) )
+     * (Prefix: PrefixType -> (NamespaceUri -> PrefixValue)| NullType)
+            // (PrefixValue: PrefixValueType -> (StringType -> ""))
+// 
+     * (NamespaceUri: NamespaceUriType -> (StringType -> "") )
+     * 
+     * (ElementLocalName: ElementLocalNameType -> (StringType -> "") )
      * (ElementChildrenNodes: ElementChildrenNodesType -> ([] | EmptyElementChildrenNodesType))
      *
      * (Attribute: AttributeType -> AttributeOptions)
      * (AttributeOptions: AttributeFullName -> AttributeValue)
-     * (AttributeFullName: AttributeFullNameType -> (AttributeNamePrefix -> AttributeLocalName) )
-     * (AttributeNamePrefixAndAttributeLocalName: AttributeNamePrefix -> AttributeLocalName)
-     * (AttributeNamePrefix: AttributeNamePrefixType -> (StringType -> "") )
+     * (AttributeFullName: AttributeFullNameType -> (AttributePrefix -> AttributeLocalName) )
+     * (AttributePrefixAndAttributeLocalName: AttributePrefix -> AttributeLocalName)
+     * (AttributePrefix: AttributePrefixType -> (StringType -> "") )
      * (AttributeLocalName: AttributeLocalNameType -> (StringType -> "") )
      * (AttributeValue: AttributeValueType -> (StringType -> "") )
-     */ 
-    public class DefaultXmlStorage<TLinkAddress>  /* : IXmlStorage<TLinkAddress> */ where TLinkAddress : struct
+     *
+     * (TextNode: TextNodeType -> (StringType -> "") )
+     */
+    public class DefaultXmlStorage<TLinkAddress> /* : IXmlStorage<TLinkAddress> */ where TLinkAddress : struct
     {
         private class Unindex : ISequenceIndex<TLinkAddress>
         {
@@ -80,9 +86,17 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress DocumentNameType { get; }
 
         public TLinkAddress ElementType { get; }
+
         public TLinkAddress ElementFullNameType { get; }
-        public TLinkAddress ElementNamePrefixType { get; }
+
+        public TLinkAddress PrefixType { get; }
+
+        public TLinkAddress NamespaceUriType { get; }
+
+        public TLinkAddress PrefixValueType { get; }
+
         public TLinkAddress ElementLocalNameType { get; }
+
         public TLinkAddress ElementChildrenNodesType { get; }
 
         public TLinkAddress EmptyElementChildrenNodesType { get; }
@@ -90,9 +104,13 @@ namespace Platform.Data.Doublets.Xml
         public TLinkAddress TextNodeType { get; }
 
         public TLinkAddress AttributeType { get; }
-        public TLinkAddress AttributeNamePrefixType { get; }
+
+        public TLinkAddress AttributePrefixType { get; }
+
         public TLinkAddress AttributeLocalNameType { get; }
+
         public TLinkAddress AttributeFullNameType { get; }
+
         public TLinkAddress AttributeValueType { get; }
 
         public TLinkAddress ObjectType { get; }
@@ -157,19 +175,20 @@ namespace Platform.Data.Doublets.Xml
             DocumentNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(DocumentNameType)));
             ElementType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementType)));
             ElementFullNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementFullNameType)));
-            ElementNamePrefixType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementNamePrefixType)));
+            PrefixType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(PrefixType)));
+            NamespaceUriType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(NamespaceUriType)));
+            PrefixValueType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(PrefixValueType)));
             ElementLocalNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementLocalNameType)));
             ElementChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementChildrenNodesType)));
             EmptyElementChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(EmptyElementChildrenNodesType)));
             TextNodeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TextNodeType)));
-            
+
             // Attribute
             AttributeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeType)));
-            AttributeNamePrefixType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeNamePrefixType)));
+            AttributePrefixType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributePrefixType)));
             AttributeLocalNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeLocalNameType)));
             AttributeFullNameType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeFullNameType)));
             AttributeValueType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeValueType)));
-            
             ObjectType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ObjectType)));
             MemberType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(MemberType)));
             ValueType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ValueType)));
@@ -445,7 +464,7 @@ namespace Platform.Data.Doublets.Xml
             var possibleDocumentNameType = Links.GetSource(possibleDocumentNameLinkAddress);
             return EqualityComparer.Equals(possibleDocumentNameType, DocumentNameType);
         }
-        
+
         public TLinkAddress GetDocumentNameOrDefault(string name)
         {
             var stringSequenceLinkAddress = GetStringOrDefault(name);
@@ -459,14 +478,14 @@ namespace Platform.Data.Doublets.Xml
                 throw new ArgumentException($"{possibleDocumentNameLinkAddress} is not a document name link address");
             }
         }
-        
-        public string GetDocumentNameByDocumentLinkAddress(TLinkAddress documentNameLinkAddress)
+
+        public string GetDocument(TLinkAddress documentNameLinkAddress)
         {
             EnsureIsDocumentName(documentNameLinkAddress);
             var documentNameStringLinkAddress = Links.GetTarget(documentNameLinkAddress);
             return GetString(documentNameStringLinkAddress);
         }
-        
+
         public string GetDocumentNameByDocumentNameLinkAddress(TLinkAddress documentNameLinkAddress)
         {
             EnsureIsDocumentName(documentNameLinkAddress);
@@ -499,7 +518,7 @@ namespace Platform.Data.Doublets.Xml
         #endregion
 
         #region Node
-        
+
         #region TextNode
 
         public bool IsTextNode(TLinkAddress textNodeLinkAddress)
@@ -553,10 +572,10 @@ namespace Platform.Data.Doublets.Xml
             }
         }
 
-        public TLinkAddress CreateAttributeNamePrefix(string prefix)
+        public TLinkAddress CreateAttributePrefix(string prefix)
         {
             var stringLinkAddress = CreateString(prefix);
-            return Links.GetOrCreate(AttributeNamePrefixType, stringLinkAddress);
+            return Links.GetOrCreate(AttributePrefixType, stringLinkAddress);
         }
 
         public TLinkAddress CreateAttributeLocalName(string localName)
@@ -567,7 +586,7 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress CreateAttributeFullName(string prefix, string localName)
         {
-            var prefixLinkAddress = CreateAttributeNamePrefix(prefix);
+            var prefixLinkAddress = CreateAttributePrefix(prefix);
             var localNameLinkAddress = CreateAttributeLocalName(localName);
             return Links.GetOrCreate(AttributeFullNameType, Links.GetOrCreate(prefixLinkAddress, localNameLinkAddress));
         }
@@ -577,20 +596,64 @@ namespace Platform.Data.Doublets.Xml
             var stringLinkAddress = CreateString(value);
             return Links.GetOrCreate(AttributeValueType, stringLinkAddress);
         }
-        
+
         public TLinkAddress CreateAttribute(string prefix, string localName, string value)
         {
+            /*
+             * (Attribute: AttributeType -> AttributeOptions)
+             * (AttributeOptions: AttributeFullName -> AttributeValue)
+             * (AttributeFullName: AttributeFullNameType -> (AttributePrefix -> AttributeLocalName) )
+             * (AttributePrefixAndAttributeLocalName: AttributePrefix -> AttributeLocalName)
+             * (AttributePrefix: AttributePrefixType -> (StringType -> "") )
+             * (AttributeLocalName: AttributeLocalNameType -> (StringType -> "") )
+             * (AttributeValue: AttributeValueType -> (StringType -> "") )
+             */
+            // (AttributeFullName: AttributeFullNameType -> (AttributePrefix -> AttributeLocalName) )
             var attributeFullName = CreateAttributeFullName(prefix, localName);
+            // (AttributeValue: AttributeValueType -> (StringType -> "") )
             var attributeValue = CreateAttributeValue(value);
+            // (AttributeOptions: AttributeFullName -> AttributeValue)
             var attributeOptions = Links.GetOrCreate(attributeFullName, attributeValue);
+            // (Attribute: AttributeType -> AttributeOptions)
             return Links.GetOrCreate(AttributeType, attributeOptions);
         }
+
+        // public XmlAttribute GetAttribute(TLinkAddress documentLinkAddress, string prefix, string localName)
+        // {
+        //     /*
+        //      * (Attribute: AttributeType -> AttributeOptions)
+        //      * (AttributeOptions: AttributeFullName -> AttributeValue)
+        //      * (AttributeFullName: AttributeFullNameType -> (AttributePrefix -> AttributeLocalName) )
+        //      * (AttributePrefixAndAttributeLocalName: AttributePrefix -> AttributeLocalName)
+        //      * (AttributePrefix: AttributePrefixType -> (StringType -> "") )
+        //      * (AttributeLocalName: AttributeLocalNameType -> (StringType -> "") )
+        //      * (AttributeValue: AttributeValueType -> (StringType -> "") )
+        //      */
+        //     EnsureIsDocument(documentLinkAddress);
+        //     var documentAndRootElement = Links.SearchOrDefault(documentLinkAddress, Any);
+        //     var documentAndRootElementLink = new Link<TLinkAddress>(Links.GetLink(documentAndRootElement));
+        //     EnsureIsElement(documentAndRootElementLink.Target);
+        //     var rootElement = GetElement(documentAndRootElementLink.Target);
+        //     foreach (var linkAddress in rootElement.Children)
+        //     {
+        //         if (!IsAttribute(linkAddress))
+        //         {
+        //             continue;
+        //         }
+        //         var attribute = GetAttribute(linkAddress);
+        //         if (attribute.Prefix == prefix && attribute.LocalName == localName)
+        //         {
+        //             return attribute;
+        //         }
+        //     }
+        //     throw new Exception("Attribute not found");
+        // }
 
         public bool IsAttributeLocalName(TLinkAddress linkAddress)
         {
             return EqualityComparer.Equals(Links.GetSource(linkAddress), AttributeLocalNameType);
         }
-        
+
 
         public void EnsureIsAttributeLocalName(TLinkAddress linkAddress)
         {
@@ -600,16 +663,16 @@ namespace Platform.Data.Doublets.Xml
             }
         }
 
-        public bool IsAttributeNamePrefix(TLinkAddress linkAddress)
+        public bool IsAttributePrefix(TLinkAddress linkAddress)
         {
-            return EqualityComparer.Equals(Links.GetSource(linkAddress), AttributeNamePrefixType);
+            return EqualityComparer.Equals(Links.GetSource(linkAddress), AttributePrefixType);
         }
 
-        public void EnsureIsAttributeNamePrefix(TLinkAddress linkAddress)
+        public void EnsureIsAttributePrefix(TLinkAddress linkAddress)
         {
-            if (!IsAttributeNamePrefix(linkAddress))
+            if (!IsAttributePrefix(linkAddress))
             {
-                throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {AttributeNamePrefixType}");
+                throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {AttributePrefixType}");
             }
         }
 
@@ -617,7 +680,7 @@ namespace Platform.Data.Doublets.Xml
         {
             return EqualityComparer.Equals(Links.GetSource(linkAddress), AttributeFullNameType);
         }
-        
+
         public void EnsureIsAttributeFullName(TLinkAddress linkAddress)
         {
             if (!IsAttributeFullName(linkAddress))
@@ -625,12 +688,12 @@ namespace Platform.Data.Doublets.Xml
                 throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {AttributeFullNameType}");
             }
         }
-        
+
         public bool IsAttributeValue(TLinkAddress linkAddress)
         {
             return EqualityComparer.Equals(Links.GetSource(linkAddress), AttributeValueType);
         }
-        
+
         public void EnsureIsAttributeValue(TLinkAddress linkAddress)
         {
             if (!IsAttributeFullName(linkAddress))
@@ -644,9 +707,9 @@ namespace Platform.Data.Doublets.Xml
             /*
              * (Attribute: AttributeType -> AttributeOptions)
              * (AttributeOptions: AttributeFullName -> AttributeValue)
-             * (AttributeFullName: AttributeFullNameType -> (AttributeNamePrefix -> AttributeLocalName) )
-             * (AttributeNamePrefixAndAttributeLocalName: AttributeNamePrefix -> AttributeLocalName)
-             * (AttributeNamePrefix: AttributeNamePrefixType -> (StringType -> "") )
+             * (AttributeFullName: AttributeFullNameType -> (AttributePrefix -> AttributeLocalName) )
+             * (AttributePrefixAndAttributeLocalName: AttributePrefix -> AttributeLocalName)
+             * (AttributePrefix: AttributePrefixType -> (StringType -> "") )
              * (AttributeLocalName: AttributeLocalNameType -> (StringType -> "") )
              * (AttributeValue: AttributeValueType -> (StringType -> "") )
              */
@@ -655,22 +718,22 @@ namespace Platform.Data.Doublets.Xml
             EnsureIsAttribute(attributeLinkAddress);
             // (AttributeOptions: AttributeFullName -> AttributeValue)
             var optionsLinkAddress = Links.GetTarget(attributeLinkAddress);
-            // (AttributeFullName: AttributeFullNameType -> (AttributeNamePrefix -> AttributeLocalName) )
+            // (AttributeFullName: AttributeFullNameType -> (AttributePrefix -> AttributeLocalName) )
             var fullNameLinkAddress = Links.GetSource(optionsLinkAddress);
             EnsureIsAttributeFullName(fullNameLinkAddress);
-            // (AttributeNamePrefixAndAttributeLocalName: AttributeNamePrefix -> AttributeLocalName)
-            var namePrefixAndLocalNameLinkAddress = Links.GetTarget(fullNameLinkAddress);
-            // (AttributeNamePrefix: AttributeNamePrefixType -> (StringType -> "") )
-            var namePrefixLinkAddress = Links.GetSource(namePrefixAndLocalNameLinkAddress);
-            EnsureIsAttributeNamePrefix(namePrefixLinkAddress);
+            // (AttributePrefixAndAttributeLocalName: AttributePrefix -> AttributeLocalName)
+            var prefixAndLocalNameLinkAddress = Links.GetTarget(fullNameLinkAddress);
+            // (AttributePrefix: AttributePrefixType -> (StringType -> "") )
+            var prefixLinkAddress = Links.GetSource(prefixAndLocalNameLinkAddress);
+            EnsureIsAttributePrefix(prefixLinkAddress);
             // (AttributeLocalName: AttributeLocalNameType -> (StringType -> "") )
-            var localNameLinkAddress = Links.GetTarget(namePrefixAndLocalNameLinkAddress);
+            var localNameLinkAddress = Links.GetTarget(prefixAndLocalNameLinkAddress);
             EnsureIsAttributeLocalName(localNameLinkAddress);
             // (AttributeValue: AttributeValueType -> (StringType -> "") )
             var valueLinkAddress = Links.GetTarget(optionsLinkAddress);
             return new XmlAttribute
             {
-                NamePrefix = GetString(Links.GetTarget(namePrefixLinkAddress)),
+                Prefix = GetString(Links.GetTarget(prefixLinkAddress)),
                 LocalName = GetString(Links.GetTarget(localNameLinkAddress)),
                 Value = GetString(Links.GetTarget(valueLinkAddress))
             };
@@ -679,7 +742,6 @@ namespace Platform.Data.Doublets.Xml
         #endregion
 
         #region ElementNode
-        
 
         public void EnsureIsElement(TLinkAddress possibleElementLinkAddress)
         {
@@ -701,7 +763,7 @@ namespace Platform.Data.Doublets.Xml
         {
             return EqualityComparer.Equals(Links.GetSource(linkAddress), ElementFullNameType);
         }
-        
+
         public void EnsureIsElementFullName(TLinkAddress linkAddress)
         {
             if (!IsElementFullName(linkAddress))
@@ -709,25 +771,51 @@ namespace Platform.Data.Doublets.Xml
                 throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {ElementFullNameType}");
             }
         }
-        
-        public bool IsElementNamePrefix(TLinkAddress linkAddress)
+
+        public bool IsPrefix(TLinkAddress linkAddress)
         {
-            return EqualityComparer.Equals(Links.GetSource(linkAddress), ElementNamePrefixType);
+            return EqualityComparer.Equals(Links.GetSource(linkAddress), PrefixType);
         }
-        
-        public void EnsureIsElementNamePrefix(TLinkAddress linkAddress)
+
+        public void EnsureIsPrefix(TLinkAddress linkAddress)
         {
-            if (!IsElementNamePrefix(linkAddress))
+            if (!IsPrefix(linkAddress))
             {
-                throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {ElementNamePrefixType}");
+                throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {PrefixType}");
             }
         }
-        
+
+        public bool IsNamespaceUri(TLinkAddress linkAddress)
+        {
+            return EqualityComparer.Equals(Links.GetSource(linkAddress), NamespaceUriType);
+        }
+
+        public void EnsureIsNamespaceUri(TLinkAddress linkAddress)
+        {
+            if (!IsNamespaceUri(linkAddress))
+            {
+                throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {NamespaceUriType}");
+            }
+        }
+
+        public bool IsPrefixValue(TLinkAddress linkAddress)
+        {
+            return EqualityComparer.Equals(Links.GetSource(linkAddress), PrefixValueType);
+        }
+
+        public void EnsureIsPrefixValue(TLinkAddress linkAddress)
+        {
+            if (!IsPrefixValue(linkAddress))
+            {
+                throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {PrefixValueType}");
+            }
+        }
+
         public bool IsElementLocalName(TLinkAddress linkAddress)
         {
             return EqualityComparer.Equals(Links.GetSource(linkAddress), ElementLocalNameType);
         }
-        
+
         public void EnsureIsElementLocalName(TLinkAddress linkAddress)
         {
             if (!IsElementLocalName(linkAddress))
@@ -735,12 +823,12 @@ namespace Platform.Data.Doublets.Xml
                 throw new Exception($"The source link address of {Links.Format(linkAddress)} must be {ElementLocalNameType}");
             }
         }
-        
+
         public bool IsElementChildrenNodes(TLinkAddress linkAddress)
         {
             return EqualityComparer.Equals(Links.GetSource(linkAddress), ElementChildrenNodesType);
         }
-        
+
         public void EnsureIsElementChildrenNodes(TLinkAddress linkAddress)
         {
             if (!IsElementChildrenNodes(linkAddress))
@@ -753,31 +841,34 @@ namespace Platform.Data.Doublets.Xml
         {
             /*
              * (Element: ElementType -> (ElementFullName -> ElementChildrenNodes) )
-             * (ElementFullName: ElementFullNameType -> (ElementNamePrefix -> ElementLocalName) )
-             * (ElementNamePrefix: ElementNamePrefixName -> (StringType -> "") )
-             * (ElementLocalName: ElementLocalNameName -> (StringType -> "") )
+             * (ElementFullName: ElementFullNameType -> (Prefix -> ElementLocalName) )
+             * (Prefix: PrefixType -> (NamespaceUri -> PrefixValue)| NullType)
+            // (PrefixValue: PrefixValueType -> (StringType -> ""))
+// 
+             * (NamespaceUri: NamespaceUriType -> (StringType -> "") )
+             * 
+             * (ElementLocalName: ElementLocalNameType -> (StringType -> "") )
              * (ElementChildrenNodes: ElementChildrenNodesType -> ([] | EmptyElementChildrenNodesType))
-             */ 
+             */
             // elementLinkAddress
             EnsureIsElement(elementLinkAddress);
             // (ElementFullName -> ElementChildrenNodes)
             var optionsLinkAddress = Links.GetTarget(elementLinkAddress);
-            // (ElementFullName: ElementFullNameType -> (ElementNamePrefix -> ElementLocalName) )
+            // (ElementFullName: ElementFullNameType -> (Prefix -> ElementLocalName) )
             var fullNameLinkAddress = Links.GetSource(optionsLinkAddress);
             EnsureIsElementFullName(fullNameLinkAddress);
-            // (ElementNamePrefix -> ElementLocalName)
-            var namePrefixAndLocalNameLinkAddress = Links.GetTarget(fullNameLinkAddress);
-            // (ElementNamePrefix: ElementNamePrefixName -> (StringType -> "") )
-            var namePrefixLinkAddress = Links.GetSource(namePrefixAndLocalNameLinkAddress);
-            EnsureIsElementNamePrefix(namePrefixLinkAddress);
-            // (ElementLocalName: ElementLocalNameName -> (StringType -> "") )
-            var localNameLinkAddress = Links.GetTarget(namePrefixAndLocalNameLinkAddress);
+            // (Prefix -> ElementLocalName)
+            var prefixAndLocalNameLinkAddress = Links.GetTarget(fullNameLinkAddress);
+            // (Prefix: PrefixType -> (NamespaceUri -> PrefixValue)| NullType)
+            // (PrefixValue: PrefixValueType -> (StringType -> ""))
+            // 
+            var prefixLinkAddress = Links.GetSource(prefixAndLocalNameLinkAddress);
+            var localNameLinkAddress = Links.GetTarget(prefixAndLocalNameLinkAddress);
             EnsureIsElementLocalName(localNameLinkAddress);
             // (ElementChildrenNodes: ElementChildrenNodesType -> ([] | EmptyElementChildrenNodesType))
             var childrenNodesLinkAddress = Links.GetTarget(optionsLinkAddress);
             EnsureIsElementChildrenNodes(childrenNodesLinkAddress);
-
-            List<TLinkAddress> children; 
+            List<TLinkAddress> children;
             // ([] | EmptyElementChildrenNodesType)
             var childrenNodesSequenceLinkAddress = Links.GetTarget(childrenNodesLinkAddress);
             if (EqualityComparer.Equals(childrenNodesSequenceLinkAddress, EmptyElementChildrenNodesType))
@@ -788,15 +879,51 @@ namespace Platform.Data.Doublets.Xml
             {
                 RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
                 children = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
+                foreach (var linkAddress in childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress))
+                {
+                    Console.WriteLine(linkAddress);
+                }
             }
-            
-
             return new XmlElement<TLinkAddress>
             {
-                NamePrefix = GetString(Links.GetTarget(namePrefixLinkAddress)),
+                Prefix = GetPrefix(prefixLinkAddress),
                 LocalName = GetString(Links.GetTarget(localNameLinkAddress)),
                 Children = children
             };
+        }
+
+        public XmlPrefix? GetPrefix(TLinkAddress prefixLinkAddress)
+        {
+            // (Prefix: PrefixType -> (NamespaceUri -> PrefixValue)| NullType)
+            // (PrefixValue: PrefixValueType -> (StringType -> ""))
+            // (NamespaceUri: NamespaceUriType -> (StringType -> "") )
+            EnsureIsPrefix(prefixLinkAddress);
+            var targetLinkAddress = Links.GetTarget(prefixLinkAddress);
+            if (EqualityComparer.Equals(targetLinkAddress, NullType))
+            {
+                return null;
+            }
+            else
+            {
+                var namespaceUriAndPrefixValueLinkAddress = targetLinkAddress;
+                var namespaceUriLinkAddress = Links.GetSource(namespaceUriAndPrefixValueLinkAddress);
+                var prefixValueLinkAddress = Links.GetTarget(namespaceUriAndPrefixValueLinkAddress);
+                EnsureIsPrefixValue(prefixValueLinkAddress);
+                return new XmlPrefix()
+                    {
+                        Prefix = GetString(Links.GetTarget(prefixValueLinkAddress)),
+                        NamespaceUri = GetNamespaceUri(namespaceUriLinkAddress)
+                    };
+            }
+            
+        }
+
+        public string GetNamespaceUri(TLinkAddress namespaceUriLinkAddress)
+        {
+            // (NamespaceUri: NamespaceUriType -> (StringType -> "") )
+            EnsureIsNamespaceUri(namespaceUriLinkAddress);
+            var namespaceValueLinkAddress = Links.GetTarget(namespaceUriLinkAddress);
+            return GetString(namespaceValueLinkAddress);
         }
 
         // public TLinkAddress AttachNodesToElement(TLinkAddress elementLinkAddress, List<TLinkAddress> nodesLinkAddresses)
@@ -818,10 +945,10 @@ namespace Platform.Data.Doublets.Xml
         //     return Links.GetOrCreate(elementLinkAddress, nodesSequenceLinkAddress);
         // }
 
-        public TLinkAddress CreateElement(string namePrefix, string localName, List<TLinkAddress> nodesLinkAddresses)
+        public TLinkAddress CreateElement(XmlPrefix? prefix, string localName, List<TLinkAddress> nodesLinkAddresses)
         {
-            TLinkAddress childrenNodesSequenceLinkAddress = default;
-            if(nodesLinkAddresses.Count == 0)
+            TLinkAddress childrenNodesSequenceLinkAddress;
+            if (nodesLinkAddresses.Count == 0)
             {
                 childrenNodesSequenceLinkAddress = EmptyElementChildrenNodesType;
             }
@@ -829,41 +956,57 @@ namespace Platform.Data.Doublets.Xml
             {
                 childrenNodesSequenceLinkAddress = ListToSequenceConverter.Convert(nodesLinkAddresses);
             }
-            return CreateElement(namePrefix, localName, childrenNodesSequenceLinkAddress);
+            return CreateElement(prefix, localName, childrenNodesSequenceLinkAddress);
         }
 
-        public TLinkAddress CreateElementNamePrefix(string namePrefix)
+        public TLinkAddress CreatePrefix(XmlPrefix? prefix)
         {
-            // (ElementNamePrefix: ElementNamePrefixType -> (StringType -> "") )
-            return Links.GetOrCreate(ElementNamePrefixType, CreateString(namePrefix));
+            // (Prefix: PrefixType -> (NamespaceUri -> PrefixValue)| NullType)
+            // (PrefixValue: PrefixValueType -> (StringType -> ""))
+            // (NamespaceUri: NamespaceUriType -> (StringType -> "") )
+            if (prefix == null)
+            {
+                return Links.GetOrCreate(PrefixType, NullType);
+            }
+            else
+            {
+                var namespaceLinkAddress = Links.GetOrCreate(NamespaceUriType, CreateString(prefix.NamespaceUri));
+                var valueLinkAddress = Links.GetOrCreate(PrefixValueType, CreateString(prefix.Prefix));
+                return Links.GetOrCreate(PrefixType, Links.GetOrCreate(namespaceLinkAddress, valueLinkAddress));
+            }
+            
         }
-        
+
         public TLinkAddress CreateElementLocalName(string localName)
         {
             // (ElementLocalName: ElementLocalNameType (StringType -> "") )
             return Links.GetOrCreate(ElementLocalNameType, CreateString(localName));
         }
-        
-        public TLinkAddress CreateElementFullName(string namePrefix, string localName)
+
+        public TLinkAddress CreateElementFullName(XmlPrefix? prefix, string localName)
         {
-            // (ElementNamePrefix: ElementNamePrefixType (StringType -> "") )
-            var elementNamePrefixLinkAddress = CreateElementNamePrefix(namePrefix);
-            // (ElementLocalName: ElementLocalNameType (StringType -> "") )
+            // (Prefix: PrefixType -> (NamespaceUri -> PrefixValue)| NullType)
+            // (PrefixValue: PrefixValueType -> (StringType -> ""))
+            // 
+            // (NamespaceUri: NamespaceUriType -> (StringType -> "") )
+            // 
+            var prefixLinkAddress = CreatePrefix(prefix);
+            // (ElementLocalName: ElementLocalNameType -> (StringType -> "") )
             var elementLocalNameLinkAddress = CreateElementLocalName(localName);
-            // (ElementFullName: ElementFullNameType -> (ElementNamePrefix -> ElementLocalName) )
-            return Links.GetOrCreate(ElementFullNameType, Links.GetOrCreate(elementNamePrefixLinkAddress, elementLocalNameLinkAddress));
+            // (ElementFullName: ElementFullNameType -> (Prefix -> ElementLocalName) )
+            return Links.GetOrCreate(ElementFullNameType, Links.GetOrCreate(prefixLinkAddress, elementLocalNameLinkAddress));
         }
-        
-        public TLinkAddress CreateElement(string namePrefix, string localName, TLinkAddress childrenNodesSequenceLinkAddress)
+
+        public TLinkAddress CreateElement(XmlPrefix? prefix, string localName, TLinkAddress childrenNodesSequenceLinkAddress)
         {
             // (ElementChildrenNodes: ElementChildrenNodesSequenceType -> ([] | EmptyElementChildrenNodesType) )
             var elementChildrenLinkAddress = Links.GetOrCreate(ElementChildrenNodesType, childrenNodesSequenceLinkAddress);
-            // (ElementFullName: ElementFullNameType -> (ElementNamePrefix -> ElementLocalName) )
-            var fullNameLinkAddress = CreateElementFullName(namePrefix, localName);
+            // (ElementFullName: ElementFullNameType -> (Prefix -> ElementLocalName) )
+            var fullNameLinkAddress = CreateElementFullName(prefix, localName);
             // (Element: ElementType -> ( ElementFullName -> ElementChildrenNodes )
             return Links.GetOrCreate(ElementType, Links.GetOrCreate(fullNameLinkAddress, elementChildrenLinkAddress));
         }
-        
+
         public bool IsChildrenNodes(TLinkAddress possibleChildrenNodesLinkAddress)
         {
             var possibleChildrenNodesType = Links.GetSource(possibleChildrenNodesLinkAddress);
@@ -885,7 +1028,6 @@ namespace Platform.Data.Doublets.Xml
             {
                 return childrenNodes;
             }
-            
             RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
             return childrenNodesRightSequenceWalker.Walk(childrenNodesLinkAddress).ToList();
         }

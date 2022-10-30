@@ -66,7 +66,7 @@ namespace Platform.Data.Doublets.Xml {
                 {
                     case XmlNodeType.Element:
                     {
-                        var element = new XmlElement<TLinkAddress> { LocalName = reader.LocalName, NamePrefix = reader.Prefix };
+                        var element = new XmlElement<TLinkAddress> { LocalName = reader.LocalName, Prefix = reader.NamespaceURI != null ? new XmlPrefix(){Prefix = reader.Prefix, NamespaceUri = reader.NamespaceURI} : null };
                         // var element = new XmlElement<TLinkAddress> { Name = reader.Name };
                         elements.Push(element);
                         // Save IsEmptyElement field before moving to the next attribute (reader value will change)
@@ -86,7 +86,7 @@ namespace Platform.Data.Doublets.Xml {
                     {
                         
                         var element = elements.Pop();
-                        var xmlElementAddress = _storage.CreateElement(element.NamePrefix, element.LocalName, element.Children);
+                        var xmlElementAddress = _storage.CreateElement(element.Prefix, element.LocalName, element.Children);
                         var hasParent = elements.Count > 0;
                         if (hasParent)
                         {

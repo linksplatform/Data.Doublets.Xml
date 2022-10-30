@@ -28,11 +28,11 @@ namespace Platform.Data.Doublets.Xml
         public void Export(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
             var rootElementLinkAddress = _storage.GetRootElement(documentLinkAddress);
-            ExportElement(xmlWriter, rootElementLinkAddress);
+            ExportElement(xmlWriter, documentLinkAddress, rootElementLinkAddress);
             xmlWriter.Flush();
         }
 
-        private void ExportNode(XmlWriter xmlWriter, TLinkAddress nodeLinkAddress)
+        private void ExportNode(XmlWriter xmlWriter, TLinkAddress documentLinkAddress,TLinkAddress nodeLinkAddress)
         {
             if (_storage.IsTextNode(nodeLinkAddress))
             {
@@ -44,7 +44,7 @@ namespace Platform.Data.Doublets.Xml
             }
             else if (_storage.IsElementNode(nodeLinkAddress))
             {
-                ExportElement(xmlWriter, nodeLinkAddress);
+                ExportElement(xmlWriter, documentLinkAddress, nodeLinkAddress);
             }
             else
             {
@@ -52,14 +52,21 @@ namespace Platform.Data.Doublets.Xml
             }
         }
         
-        private void ExportElement(XmlWriter xmlWriter, TLinkAddress elementLinkAddress)
+        private void ExportElement(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, TLinkAddress elementLinkAddress)
         {
             var element = _storage.GetElement(elementLinkAddress);
-            xmlWriter.WriteStartElement(element.NamePrefix, element.LocalName, String.Empty);
+            if (element.Prefix == null)
+            {
+                xmlWriter.WriteStartElement(element.LocalName);
+            }
+            else
+            {
+                xmlWriter.WriteStartElement(element.Prefix.Prefix, element.LocalName, element.Prefix.NamespaceUri);
+            }
             var childrenNodesLinkAddresses = element.Children;    
             foreach (var childNodeLinkAddress in childrenNodesLinkAddresses)
             {
-                ExportNode(xmlWriter, childNodeLinkAddress);
+                ExportNode(xmlWriter, documentLinkAddress, childNodeLinkAddress);
             }
             xmlWriter.WriteEndElement();
         }
@@ -69,7 +76,7 @@ namespace Platform.Data.Doublets.Xml
         private void ExportAttribute(XmlWriter xmlWriter, TLinkAddress attributeLinkAddress)
         {
             var attribute = _storage.GetAttribute(attributeLinkAddress);
-            xmlWriter.WriteAttributeString(attribute.NamePrefix, attribute.LocalName, null, attribute.Value);
+            xmlWriter.WriteAttributeString(attribute.Prefix, attribute.LocalName, null, attribute.Value);
         }
 
         private void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
