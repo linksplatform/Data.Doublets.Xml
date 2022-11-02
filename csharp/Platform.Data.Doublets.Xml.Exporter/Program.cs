@@ -8,7 +8,7 @@ using TLinkAddress = System.UInt64;
 
 namespace Platform.Data.Doublets.Xml.Exporter
 {
-    public class XmlExporter
+    public static class XmlExporter
     {
         public static void Main(params string[] args)
         {
