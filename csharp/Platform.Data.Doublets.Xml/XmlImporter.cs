@@ -33,32 +33,32 @@ namespace Platform.Data.Doublets.Xml {
             _listToSequenceConverter = listToSequenceConverter;
         }
 
-        public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken token)
+        public TLinkAddress Import(XmlReader reader, string documentName, CancellationToken cancellationToken)
         {
             TLinkAddress documentLinkAddress = _storage.CreateDocument(documentName);
-            return Import(reader, documentLinkAddress, token);
+            return Import(reader, documentLinkAddress, cancellationToken);
         }
 
-        public TLinkAddress Import(string file, CancellationToken token)
+        public TLinkAddress Import(string file, CancellationToken cancellationToken)
         {
             var documentLinkAddress = _storage.CreateDocument(file);
             using var reader = XmlReader.Create(file);
-            return Import(reader,  documentLinkAddress, token);
+            return Import(reader,  documentLinkAddress, cancellationToken);
         }
 
-        private TLinkAddress Import(XmlReader reader, TLinkAddress documentLinkAddress, CancellationToken token)
+        private TLinkAddress Import(XmlReader reader, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
-            var rootElementLinkAddress = ImportNodes(reader, token);
+            var rootElementLinkAddress = ImportNodes(reader, cancellationToken);
             _storage.AttachElementToDocument(documentLinkAddress, rootElementLinkAddress);
             return documentLinkAddress;
         }
 
-        private TLinkAddress ImportNodes(XmlReader reader, CancellationToken token)
+        private TLinkAddress ImportNodes(XmlReader reader, CancellationToken cancellationToken)
         {
             var elements = new Stack<XmlElement<TLinkAddress>>();
             while (reader.Read())
             {
-                if (token.IsCancellationRequested)
+                if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }

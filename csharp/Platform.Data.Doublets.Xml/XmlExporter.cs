@@ -28,12 +28,16 @@ namespace Platform.Data.Doublets.Xml
         public void Export(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, CancellationToken cancellationToken)
         {
             var rootElementLinkAddress = _storage.GetRootElement(documentLinkAddress);
-            ExportElement(xmlWriter, documentLinkAddress, rootElementLinkAddress);
+            ExportElement(xmlWriter, documentLinkAddress, rootElementLinkAddress, cancellationToken);
             xmlWriter.Flush();
         }
 
-        private void ExportNode(XmlWriter xmlWriter, TLinkAddress documentLinkAddress,TLinkAddress nodeLinkAddress)
+        private void ExportNode(XmlWriter xmlWriter, TLinkAddress documentLinkAddress,TLinkAddress nodeLinkAddress, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
             if (_storage.IsTextNode(nodeLinkAddress))
             {
                 ExportTextNode(xmlWriter, nodeLinkAddress);
@@ -44,7 +48,7 @@ namespace Platform.Data.Doublets.Xml
             }
             else if (_storage.IsElementNode(nodeLinkAddress))
             {
-                ExportElement(xmlWriter, documentLinkAddress, nodeLinkAddress);
+                ExportElement(xmlWriter, documentLinkAddress, nodeLinkAddress, cancellationToken);
             }
             else
             {
@@ -52,7 +56,7 @@ namespace Platform.Data.Doublets.Xml
             }
         }
         
-        private void ExportElement(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, TLinkAddress elementLinkAddress)
+        private void ExportElement(XmlWriter xmlWriter, TLinkAddress documentLinkAddress, TLinkAddress elementLinkAddress, CancellationToken cancellationToken)
         {
             var element = _storage.GetElement(elementLinkAddress);
             if (element.Prefix == null)
@@ -66,7 +70,7 @@ namespace Platform.Data.Doublets.Xml
             var childrenNodesLinkAddresses = element.Children;    
             foreach (var childNodeLinkAddress in childrenNodesLinkAddresses)
             {
-                ExportNode(xmlWriter, documentLinkAddress, childNodeLinkAddress);
+                ExportNode(xmlWriter, documentLinkAddress, childNodeLinkAddress, cancellationToken);
             }
             xmlWriter.WriteEndElement();
         }
