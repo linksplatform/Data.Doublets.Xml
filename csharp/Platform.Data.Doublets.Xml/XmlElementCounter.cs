@@ -41,11 +41,11 @@
 //         /// <para>The element name.</para>
 //         /// <para></para>
 //         /// </param>
-//         /// <param name="token">
-//         /// <para>The token.</para>
+//         /// <param name="cancellationToken">
+//         /// <para>The cancellationToken.</para>
 //         /// <para></para>
 //         /// </param>
-//         public Task Count(string file, string elementName, CancellationToken token)
+//         public Task Count(string file, string elementName, CancellationToken cancellationToken)
 //         {
 //             return Task.Factory.StartNew(() =>
 //             {
@@ -54,7 +54,7 @@
 //                     var context = new RootElementContext();
 //                     using (var reader = XmlReader.Create(file))
 //                     {
-//                         Count(reader, elementName, token, context);
+//                         Count(reader, elementName, cancellationToken, context);
 //                     }
 //                     Console.WriteLine($"Total elements with specified name: {context.TotalElements}, total content length: {context.TotalContentsLength}.");
 //                 }
@@ -62,10 +62,10 @@
 //                 {
 //                     Console.WriteLine(ex.ToStringWithAllInnerExceptions());
 //                 }
-//             }, token);
+//             }, cancellationToken);
 //         }
 //
-//         private void Count(XmlReader reader, string elementNameToCount, CancellationToken token, XmlElementContext context)
+//         private void Count(XmlReader reader, string elementNameToCount, CancellationToken cancellationToken, XmlElementContext context)
 //         {
 //             var rootContext = (RootElementContext)context;
 //             var parentContexts = new Stack<XmlElementContext>();
@@ -73,7 +73,7 @@
 //             // TODO: If path was loaded previously, skip it.
 //             while (reader.Read())
 //             {
-//                 if (token.IsCancellationRequested)
+//                 if (cancellationToken.IsCancellationRequested)
 //                 {
 //                     return;
 //                 }
