@@ -879,10 +879,6 @@ namespace Platform.Data.Doublets.Xml
             {
                 RightSequenceWalker<TLinkAddress> childrenNodesRightSequenceWalker = new(Links, new DefaultStack<TLinkAddress>(), IsNode);
                 children = childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress).ToList();
-                foreach (var linkAddress in childrenNodesRightSequenceWalker.Walk(childrenNodesSequenceLinkAddress))
-                {
-                    Console.WriteLine(linkAddress);
-                }
             }
             return new XmlElement<TLinkAddress>
             {
