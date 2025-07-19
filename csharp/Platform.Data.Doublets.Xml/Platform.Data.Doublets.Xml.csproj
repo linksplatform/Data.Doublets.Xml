@@ -6,7 +6,7 @@
     <AssemblyTitle>Platform.Data.Doublets.Xml</AssemblyTitle>
     <VersionPrefix>0.0.3</VersionPrefix>
     <Authors>Konstantin Diachenko;mrMask</Authors>
-    <TargetFramework>net7</TargetFramework>
+    <TargetFramework>net8</TargetFramework>
     <AssemblyName>Platform.Data.Doublets.Xml</AssemblyName>
     <PackageId>Platform.Data.Doublets.Xml</PackageId>
     <PackageTags>LinksPlatform;Data.Doublets.Xml</PackageTags>
@@ -23,7 +23,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <LangVersion>latest</LangVersion>
-    <PackageReleaseNotes>Platform.Data.Doublets.Sequences dependency is used instead of Platform.Data.Doublets.</PackageReleaseNotes>
+    <PackageReleaseNotes>Update target framework from net7 to net8.</PackageReleaseNotes>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
