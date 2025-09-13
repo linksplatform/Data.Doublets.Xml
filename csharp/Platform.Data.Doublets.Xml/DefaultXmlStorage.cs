@@ -103,6 +103,12 @@ namespace Platform.Data.Doublets.Xml
 
         public TLinkAddress TextNodeType { get; }
 
+        public TLinkAddress CommentType { get; }
+
+        public TLinkAddress ProcessingInstructionType { get; }
+
+        public TLinkAddress CDataType { get; }
+
         public TLinkAddress AttributeType { get; }
 
         public TLinkAddress AttributePrefixType { get; }
@@ -182,6 +188,9 @@ namespace Platform.Data.Doublets.Xml
             ElementChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ElementChildrenNodesType)));
             EmptyElementChildrenNodesType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(EmptyElementChildrenNodesType)));
             TextNodeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(TextNodeType)));
+            CommentType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(CommentType)));
+            ProcessingInstructionType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(ProcessingInstructionType)));
+            CDataType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(CDataType)));
 
             // Attribute
             AttributeType = links.GetOrCreate(Type, StringToUnicodeSequenceConverter.Convert(nameof(AttributeType)));
@@ -393,7 +402,10 @@ namespace Platform.Data.Doublets.Xml
             var isElement = IsElementNode(possibleXmlNode);
             var isTextNode = IsTextNode(possibleXmlNode);
             var isAttribute = IsAttribute(possibleXmlNode);
-            return isElement || isTextNode || isAttribute;
+            var isComment = IsComment(possibleXmlNode);
+            var isProcessingInstruction = IsProcessingInstruction(possibleXmlNode);
+            var isCData = IsCData(possibleXmlNode);
+            return isElement || isTextNode || isAttribute || isComment || isProcessingInstruction || isCData;
         }
 
         #region Document
@@ -551,6 +563,103 @@ namespace Platform.Data.Doublets.Xml
              */
             EnsureIsTextNode(textNodeLinkAddress);
             var contentLink = Links.GetTarget(textNodeLinkAddress);
+            return GetString(contentLink);
+        }
+
+        #endregion
+
+        #region Comment
+
+        public bool IsComment(TLinkAddress commentLinkAddress)
+        {
+            var possibleCommentType = Links.GetSource(commentLinkAddress);
+            return EqualityComparer.Equals(possibleCommentType, CommentType);
+        }
+
+        public TLinkAddress CreateComment(string text)
+        {
+            var contentLink = CreateString(text);
+            return Links.GetOrCreate(CommentType, contentLink);
+        }
+
+        public void EnsureIsComment(TLinkAddress possibleCommentLinkAddress)
+        {
+            if (!IsComment(possibleCommentLinkAddress))
+            {
+                throw new ArgumentException($"{possibleCommentLinkAddress} is not a comment node link address");
+            }
+        }
+
+        public string GetComment(TLinkAddress commentLinkAddress)
+        {
+            EnsureIsComment(commentLinkAddress);
+            var contentLink = Links.GetTarget(commentLinkAddress);
+            return GetString(contentLink);
+        }
+
+        #endregion
+
+        #region ProcessingInstruction
+
+        public bool IsProcessingInstruction(TLinkAddress processingInstructionLinkAddress)
+        {
+            var possibleProcessingInstructionType = Links.GetSource(processingInstructionLinkAddress);
+            return EqualityComparer.Equals(possibleProcessingInstructionType, ProcessingInstructionType);
+        }
+
+        public TLinkAddress CreateProcessingInstruction(string target, string data)
+        {
+            var targetLink = CreateString(target);
+            var dataLink = CreateString(data);
+            var contentLink = Links.GetOrCreate(targetLink, dataLink);
+            return Links.GetOrCreate(ProcessingInstructionType, contentLink);
+        }
+
+        public void EnsureIsProcessingInstruction(TLinkAddress possibleProcessingInstructionLinkAddress)
+        {
+            if (!IsProcessingInstruction(possibleProcessingInstructionLinkAddress))
+            {
+                throw new ArgumentException($"{possibleProcessingInstructionLinkAddress} is not a processing instruction node link address");
+            }
+        }
+
+        public (string target, string data) GetProcessingInstruction(TLinkAddress processingInstructionLinkAddress)
+        {
+            EnsureIsProcessingInstruction(processingInstructionLinkAddress);
+            var contentLink = Links.GetTarget(processingInstructionLinkAddress);
+            var targetLink = Links.GetSource(contentLink);
+            var dataLink = Links.GetTarget(contentLink);
+            return (GetString(targetLink), GetString(dataLink));
+        }
+
+        #endregion
+
+        #region CData
+
+        public bool IsCData(TLinkAddress cDataLinkAddress)
+        {
+            var possibleCDataType = Links.GetSource(cDataLinkAddress);
+            return EqualityComparer.Equals(possibleCDataType, CDataType);
+        }
+
+        public TLinkAddress CreateCData(string text)
+        {
+            var contentLink = CreateString(text);
+            return Links.GetOrCreate(CDataType, contentLink);
+        }
+
+        public void EnsureIsCData(TLinkAddress possibleCDataLinkAddress)
+        {
+            if (!IsCData(possibleCDataLinkAddress))
+            {
+                throw new ArgumentException($"{possibleCDataLinkAddress} is not a CDATA node link address");
+            }
+        }
+
+        public string GetCData(TLinkAddress cDataLinkAddress)
+        {
+            EnsureIsCData(cDataLinkAddress);
+            var contentLink = Links.GetTarget(cDataLinkAddress);
             return GetString(contentLink);
         }
 
