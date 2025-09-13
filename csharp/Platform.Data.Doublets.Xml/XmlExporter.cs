@@ -50,6 +50,18 @@ namespace Platform.Data.Doublets.Xml
             {
                 ExportElement(xmlWriter, documentLinkAddress, nodeLinkAddress, cancellationToken);
             }
+            else if (_storage.IsComment(nodeLinkAddress))
+            {
+                ExportComment(xmlWriter, nodeLinkAddress);
+            }
+            else if (_storage.IsProcessingInstruction(nodeLinkAddress))
+            {
+                ExportProcessingInstruction(xmlWriter, nodeLinkAddress);
+            }
+            else if (_storage.IsCData(nodeLinkAddress))
+            {
+                ExportCData(xmlWriter, nodeLinkAddress);
+            }
             else
             {
                 throw new ArgumentException($"{nodeLinkAddress} is not a node link address.");
@@ -87,6 +99,24 @@ namespace Platform.Data.Doublets.Xml
         {
             var text = _storage.GetTextNode(textNodeLinkAddress);
             xmlWriter.WriteString(text);
+        }
+
+        private void ExportComment(XmlWriter xmlWriter, TLinkAddress commentLinkAddress)
+        {
+            var comment = _storage.GetComment(commentLinkAddress);
+            xmlWriter.WriteComment(comment);
+        }
+
+        private void ExportProcessingInstruction(XmlWriter xmlWriter, TLinkAddress processingInstructionLinkAddress)
+        {
+            var (target, data) = _storage.GetProcessingInstruction(processingInstructionLinkAddress);
+            xmlWriter.WriteProcessingInstruction(target, data);
+        }
+
+        private void ExportCData(XmlWriter xmlWriter, TLinkAddress cDataLinkAddress)
+        {
+            var cData = _storage.GetCData(cDataLinkAddress);
+            xmlWriter.WriteCData(cData);
         }
     }
 }

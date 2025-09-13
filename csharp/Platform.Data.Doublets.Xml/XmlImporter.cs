@@ -106,6 +106,27 @@ namespace Platform.Data.Doublets.Xml {
                         parent.Children.Add(textNodeAddress);
                         break;
                     }
+                    case XmlNodeType.Comment:
+                    {
+                        var commentNodeAddress = _storage.CreateComment(reader.Value);
+                        var parent = elements.Peek();
+                        parent.Children.Add(commentNodeAddress);
+                        break;
+                    }
+                    case XmlNodeType.ProcessingInstruction:
+                    {
+                        var processingInstructionNodeAddress = _storage.CreateProcessingInstruction(reader.Name, reader.Value);
+                        var parent = elements.Peek();
+                        parent.Children.Add(processingInstructionNodeAddress);
+                        break;
+                    }
+                    case XmlNodeType.CDATA:
+                    {
+                        var cDataNodeAddress = _storage.CreateCData(reader.Value);
+                        var parent = elements.Peek();
+                        parent.Children.Add(cDataNodeAddress);
+                        break;
+                    }
                     case XmlNodeType.Attribute:
                     {
                         
