@@ -2,6 +2,7 @@
 // using System.IO;
 // using Platform.IO;
 // using Platform.Data.Doublets.Memory.United.Generic;
+// using Platform.Interfaces;
 //
 // #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 //
@@ -13,8 +14,8 @@
 //     /// </para>
 //     /// <para></para>
 //     /// </summary>
-//     /// <seealso cref="ICommandLineInterface"/>
-//     public class XmlImporterCLI : ICommandLineInterface
+//     /// <seealso cref="ICli"/>
+//     public class XmlImporterCLI : ICli
 //     {
 //         /// <summary>
 //         /// <para>
@@ -26,7 +27,7 @@
 //         /// <para>The args.</para>
 //         /// <para></para>
 //         /// </param>
-//         public void Run(params string[] args)
+//         public int Run(params string[] args)
 //         {
 //             var linksFile = ConsoleHelpers.GetOrReadArgument(0, "Links file", args);
 //             var file = ConsoleHelpers.GetOrReadArgument(1, "Xml file", args);
@@ -34,6 +35,7 @@
 //             if (!File.Exists(file))
 //             {
 //                 Console.WriteLine("Entered xml file does not exists.");
+//                 return 1;
 //             }
 //             else
 //             {
@@ -61,6 +63,7 @@
 //                     }
 //                 }
 //             }
+//             return 0;
 //         }
 //     }
 // }
