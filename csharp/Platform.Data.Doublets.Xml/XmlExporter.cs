@@ -80,7 +80,7 @@ namespace Platform.Data.Doublets.Xml
         private void ExportAttribute(XmlWriter xmlWriter, TLinkAddress attributeLinkAddress)
         {
             var attribute = _storage.GetAttribute(attributeLinkAddress);
-            xmlWriter.WriteAttributeString(attribute.Prefix, attribute.LocalName, null, attribute.Value);
+            xmlWriter.WriteAttributeString(attribute.Prefix, attribute.LocalName, attribute.Namespaceuri, attribute.Value);
         }
 
         private void ExportTextNode(XmlWriter xmlWriter, TLinkAddress textNodeLinkAddress)
